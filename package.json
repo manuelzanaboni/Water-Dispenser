@@ -1,31 +1,31 @@
 {
-  "name": "water-dispenser",
-  "version": "1.0.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
-  "dependencies": {
-    "@mantine/core": "^7.8.1",
-    "@mantine/hooks": "^7.8.1",
-    "framer-motion": "^11.1.7",
-    "next": "14.2.3",
-    "react": "^18",
-    "react-dom": "^18",
-    "sqlite3": "^5.1.7"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
-    "eslint": "^8",
-    "eslint-config-next": "14.2.1",
-    "postcss": "^8.4.38",
-    "postcss-preset-mantine": "^1.14.4",
-    "postcss-simple-vars": "^7.0.1",
-    "typescript": "^5"
-  }
+    "name": "water-dispenser",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "next dev",
+        "build": "next build",
+        "start": "next start",
+        "lint": "next lint"
+    },
+    "dependencies": {
+        "@mantine/core": "^7.8.1",
+        "@mantine/hooks": "^7.8.1",
+        "framer-motion": "^11.1.7",
+        "next": "14.2.3",
+        "react": "^18",
+        "react-dom": "^18",
+        "sqlite3": "^5.1.7"
+    },
+    "devDependencies": {
+        "@types/node": "^20",
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "eslint": "^8",
+        "eslint-config-next": "14.2.1",
+        "postcss": "^8.4.38",
+        "postcss-preset-mantine": "^1.14.4",
+        "postcss-simple-vars": "^7.0.1",
+        "typescript": "^5"
+    }
 }

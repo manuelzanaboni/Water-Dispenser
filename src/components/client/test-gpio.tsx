@@ -24,7 +24,6 @@ export default function TestGpio() {
             setOutput(data);
         });
 
-
     return (
         <>
             {/* <Button loading={isPending} onClick={() => handleRead(2)}>
@@ -44,6 +43,11 @@ export default function TestGpio() {
                         </Group>
                     )
                 )}
+
+                <Button key="touch" onTouchEnd={() => setOutput("TOUCH")}>
+                    TOUCH
+                </Button>
+
             </Stack>
 
             {`Output: ${output}`}

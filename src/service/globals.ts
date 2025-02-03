@@ -8,10 +8,9 @@ export enum GPIO_STATE {
     HIGH = "1",
 }
 
-
 export const RELAYS = {
     RELAY1: 2,
-    RELAY2: 5,
-    RELAY3: 7,
+    RELAY2: 4,
+    RELAY3: 5,
     RELAY4: 8,
 }
