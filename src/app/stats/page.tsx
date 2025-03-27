@@ -2,12 +2,14 @@
 
 import Link from "next/link";
 
-import { Button } from "@mantine/core";
-import { get_items } from "@/service/db";
+import { Button } from '@mantine/core';
 
-export default async function Settings() {
+import DispenseTable from "@/components/client/DispenseTable";
+import { getDispenses } from "@/service/db";
+
+export default async function Stats() {
     // server side data retrieval from DB
-    const items = await get_items();
+    const dispenses = await getDispenses();
 
     return (
         <>
@@ -15,8 +17,7 @@ export default async function Settings() {
             <Button component={Link} href="/">
                 Home
             </Button>
-            <br />
-            {JSON.stringify(items, null, 2)}
+            <DispenseTable dispenses={dispenses} />
         </>
     );
 }

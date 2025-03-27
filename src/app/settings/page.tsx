@@ -3,7 +3,8 @@
 import Link from "next/link";
 
 import { Button } from "@mantine/core";
-import ToggleTheme from "@/components/client/toggle-theme";
+
+import ToggleTheme from "@/components/client/ToggleTheme";
 
 export default async function Settings() {
     return (
@@ -14,6 +15,7 @@ export default async function Settings() {
             </Button>
             <br />
             <ToggleTheme />
+            <br />
         </>
     );
 }

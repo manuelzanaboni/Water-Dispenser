@@ -1,8 +1,10 @@
 "use server";
 
-import TestGpio from "@/components/client/test-gpio";
-import { Button, Stack } from "@mantine/core";
 import Link from "next/link";
+
+import { Button, Stack } from "@mantine/core";
+
+import DispenseActions from "@/components/client/DispenseActions";
 
 // https://github.com/pacocoursey/next-themes
 export default async function Home() {
@@ -16,10 +18,7 @@ export default async function Home() {
                 <Button fullWidth variant="gradient" component={Link} href="/stats">
                     Stats
                 </Button>
-                <Button fullWidth variant="outline" component={Link} href="/test">
-                    Test
-                </Button>
-                <TestGpio />
+                <DispenseActions />
             </Stack>
         </>
     );

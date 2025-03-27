@@ -1,5 +1,8 @@
+"use server";
+
 import { exec } from "child_process";
-import { GPIO_MODE, GPIO_STATE } from "@/service/globals";
+
+import { DispenseOperation, GPIO_MODE, GPIO_STATE } from "@/service/globals";
 
 const subporcess = async (command: string): Promise<string> =>
     new Promise((resolve, reject) =>
@@ -27,8 +30,15 @@ const gpio_wrap = async (fun: (command: string) => Promise<string>, command: str
 
 const gpio_mode = async (gpio: number, mode: GPIO_MODE) => gpio_wrap(subporcess, `gpio mode ${gpio} ${mode}`);
 
-// export const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `ls`);
-export const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `gpio read ${gpio}`);
+const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `gpio read ${gpio}`);
 
-export const gpio_write = async (gpio: number, state: GPIO_STATE) =>
+const gpio_write = async (gpio: number, state: GPIO_STATE) =>
     gpio_wrap(subporcess, `gpio write ${gpio} ${state}`);
+
+export async function turnON(target: DispenseOperation | number) {
+    return gpio_write(typeof target === "number" ? target : (target as DispenseOperation).relay, GPIO_STATE.LOW);
+}
+
+export async function turnOFF(target: DispenseOperation | number) {
+    return gpio_write(typeof target === "number" ? target : (target as DispenseOperation).relay, GPIO_STATE.HIGH);
+}
