@@ -9,6 +9,7 @@ services:
     privileged: true
     volumes:
       - /etc/armbian-release:/etc/armbian-release
+      - /home/manuel/water-dispenser/data/:/app/data
     ports:
       - "80:80"
     networks:
