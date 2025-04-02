@@ -5,8 +5,9 @@ import { Children, useState, useTransition } from "react";
 import { Button, Group } from "@mantine/core";
 
 import { insertDispense } from "@/service/db";
-import { DISPENSE_OPERATIONS, DispenseOperation } from "@/service/globals";
 import { turnOFF, turnON } from "@/service/gpio";
+import { DispenseOperation } from "@/service/types";
+import { DISPENSE_OPERATIONS } from "@/service/utils";
 
 
 export default function DispenseActions() {
@@ -47,7 +48,7 @@ export default function DispenseActions() {
             <Group>
                 {Children.toArray(
                     Object.values(DISPENSE_OPERATIONS).map(op =>
-                        <Button loading={isPending} onClick={() => handleOperation(op)}>
+                        <Button key={op.type} loading={isPending} onClick={() => handleOperation(op)}>
                             {op.name}
                         </Button>
                     )

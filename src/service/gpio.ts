@@ -2,7 +2,7 @@
 
 import { exec } from "child_process";
 
-import { DispenseOperation, GPIO_MODE, GPIO_STATE } from "@/service/globals";
+import { DispenseOperation, GPIO_MODE, GPIO_STATE } from "@/service/types";
 
 const subporcess = async (command: string): Promise<string> =>
     new Promise((resolve, reject) =>

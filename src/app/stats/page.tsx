@@ -13,7 +13,7 @@ export default async function Stats() {
 
     return (
         <>
-            <h1>Hello, Stats Page!</h1>
+            <h1>Stats Page!</h1>
             <Button component={Link} href="/">
                 Home
             </Button>

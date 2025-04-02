@@ -1,8 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
+
 import sqlite3 from "sqlite3";
 
-import { DispenseModel, DispenseOperation } from "./globals";
+import { DispenseModel, DispenseOperation } from "./types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
@@ -44,15 +46,18 @@ const db = new sqlite3.Database(
     }
 );
 
-export const getDispenses = (): Promise<DispenseModel[]> =>
+export const getDispenses = async (): Promise<DispenseModel[]> =>
     new Promise((resolve, reject) =>
-        db.all(`SELECT * FROM ${DISPENSES_TABLE}`, (err, rows) => {
-            if (err) reject(err);
-            resolve(rows as DispenseModel[]);
-        })
+        db.all(`SELECT * FROM ${DISPENSES_TABLE} 
+            WHERE strftime('%m-%Y', datetime(ts, 'unixepoch')) = strftime('%m-%Y', datetime())
+            ORDER BY id DESC;`,
+            (err, rows) => {
+                if (err) reject(err);
+                resolve(rows as DispenseModel[]);
+            })
     );
 
-export const insertDispense = (operation: DispenseOperation, duration: number, qty?: number): Promise<void> =>
+export const insertDispense = async (operation: DispenseOperation, duration: number, qty?: number): Promise<void> =>
     new Promise((resolve, reject) => {
 
         const insertSql = `INSERT INTO ${DISPENSES_TABLE}(operation_type, duration, qty) VALUES(?, ?, ?)`;
@@ -66,6 +71,7 @@ export const insertDispense = (operation: DispenseOperation, duration: number, q
                 reject(err);
             } else {
                 console.log("Inserted new dispense entry:\n", this.lastID);
+                revalidatePath("/stats");
                 resolve();
             }
         });

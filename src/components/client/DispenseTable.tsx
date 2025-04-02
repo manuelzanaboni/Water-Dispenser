@@ -2,16 +2,17 @@
 
 import { Table } from "@mantine/core";
 
-import { DispenseModel } from "@/service/globals";
+import { DispenseModel } from "@/service/types";
+import { findDispenseOperation } from "@/service/utils";
 
 export default function DispenseTable({ dispenses }: { dispenses: DispenseModel[] }) {
 
     const rows = dispenses.map(element => <Table.Tr key={element.id}>
         <Table.Td>{element.id}</Table.Td>
-        <Table.Td>{element.operation_type}</Table.Td>
+        <Table.Td>{findDispenseOperation(element.operation_type)?.name}</Table.Td>
         <Table.Td>{element.duration}</Table.Td>
         <Table.Td>{element.qty}</Table.Td>
-        <Table.Td>{element.ts}</Table.Td>
+        <Table.Td>{`${new Date(element.ts * 1000).toLocaleDateString()} ${new Date(element.ts * 1000).toLocaleTimeString()}`}</Table.Td>
     </Table.Tr>)
 
     return (
