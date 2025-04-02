@@ -14,7 +14,7 @@ const subporcess = async (command: string): Promise<string> =>
                 console.error(`stderr: ${stderr}`);
                 reject(stderr);
             } else {
-                console.log(`stdout:\n${stdout}`);
+                // console.log(`stdout:\n${stdout}`);
                 resolve(stdout);
             }
         })
@@ -30,15 +30,27 @@ const gpio_wrap = async (fun: (command: string) => Promise<string>, command: str
 
 const gpio_mode = async (gpio: number, mode: GPIO_MODE) => gpio_wrap(subporcess, `gpio mode ${gpio} ${mode}`);
 
-const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `gpio read ${gpio}`);
+// const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `gpio read ${gpio}`);
 
 const gpio_write = async (gpio: number, state: GPIO_STATE) =>
     gpio_wrap(subporcess, `gpio write ${gpio} ${state}`);
 
+const handle_gpio = async (gpio: number, mode: GPIO_MODE, state: GPIO_STATE) =>
+    gpio_mode(gpio, mode).then(() => gpio_write(gpio, state));
+
+
 export async function turnON(target: DispenseOperation | number) {
-    return gpio_write(typeof target === "number" ? target : (target as DispenseOperation).relay, GPIO_STATE.LOW);
+    return handle_gpio(
+        typeof target === "number" ? target : (target as DispenseOperation).relay,
+        GPIO_MODE.OUT,
+        GPIO_STATE.LOW
+    );
 }
 
 export async function turnOFF(target: DispenseOperation | number) {
-    return gpio_write(typeof target === "number" ? target : (target as DispenseOperation).relay, GPIO_STATE.HIGH);
+    return handle_gpio(
+        typeof target === "number" ? target : (target as DispenseOperation).relay,
+        GPIO_MODE.OUT,
+        GPIO_STATE.HIGH
+    );
 }
