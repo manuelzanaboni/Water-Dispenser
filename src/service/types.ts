@@ -22,7 +22,8 @@ export interface DispenseModel {
     ts: number;
 }
 
-export interface Settings {
-    id: number
-    config: object
+export interface FilterModel {
+    id?: number;
+    qty: number;
+    ts: number;
 }

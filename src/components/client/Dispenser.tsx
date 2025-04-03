@@ -29,7 +29,12 @@ const DEAFULT_STATE: DispenserState = {
 
 const MID_ROW_HEIGHT = "calc(100vh - 12rem)";
 
-export default function Dispenser() {
+
+type DispenserProps = {
+    filterCapacity: number;
+}
+
+export default function Dispenser({ filterCapacity }: DispenserProps) {
     const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
 
     const setSelectedOperation = (selectedOperation: DispenseOperation) =>
@@ -107,7 +112,11 @@ export default function Dispenser() {
             </Grid.Col>
 
             {/* Mid row */}
-            <Grid.Col span={3} ></Grid.Col>
+            <Grid.Col span={3}>
+                <Center h="100%">
+                    <Text size="lg">Filtro: {filterCapacity}</Text>
+                </Center>
+            </Grid.Col>
             <Grid.Col span={6} h={MID_ROW_HEIGHT}>
                 <Center h="100%">
                     {dispenserState.isPending ?
