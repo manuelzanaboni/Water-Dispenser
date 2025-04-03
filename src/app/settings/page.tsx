@@ -1,21 +1,20 @@
 "use server";
 
-import Link from "next/link";
+import { Stack } from "@mantine/core";
 
-import { Button } from "@mantine/core";
-
+import FullScreen from "@/components/client/FullScreen";
+import SidePageHeader from "@/components/client/SidePageHeader";
 import ToggleTheme from "@/components/client/ToggleTheme";
 
 export default async function Settings() {
     return (
         <>
-            <h1>Hello, Settings Page!</h1>
-            <Button component={Link} href="/">
-                Home
-            </Button>
-            <br />
-            <ToggleTheme />
-            <br />
+            <SidePageHeader title="Impostazioni" />
+
+            <Stack gap="md" align="flex-start">
+                <ToggleTheme />
+                <FullScreen />
+            </Stack>
         </>
     );
 }

@@ -8,8 +8,8 @@ export default function ToggleTheme() {
     return (
         <>
             <Group>
-                <Button onClick={() => setColorScheme("light")}>Light</Button>
-                <Button onClick={() => setColorScheme("dark")}>Dark</Button>
+                <Button onClick={() => setColorScheme("light")} size="xl">Light</Button>
+                <Button onClick={() => setColorScheme("dark")} size="xl">Dark</Button>
             </Group>
         </>
     );

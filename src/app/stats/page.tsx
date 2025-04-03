@@ -1,10 +1,7 @@
 "use server";
 
-import Link from "next/link";
-
-import { Button } from '@mantine/core';
-
 import DispenseTable from "@/components/client/DispenseTable";
+import SidePageHeader from "@/components/client/SidePageHeader";
 import { getDispenses } from "@/service/db";
 
 export default async function Stats() {
@@ -13,10 +10,7 @@ export default async function Stats() {
 
     return (
         <>
-            <h1>Stats Page!</h1>
-            <Button component={Link} href="/">
-                Home
-            </Button>
+            <SidePageHeader title="Statistiche" />
             <DispenseTable dispenses={dispenses} />
         </>
     );

@@ -21,8 +21,8 @@ export default function DispenseTable({ dispenses }: { dispenses: DispenseModel[
                 <Table.Tr>
                     <Table.Th>ID</Table.Th>
                     <Table.Th>Tipo</Table.Th>
-                    <Table.Th>Durata</Table.Th>
-                    <Table.Th>Quantità</Table.Th>
+                    <Table.Th>Durata [s]</Table.Th>
+                    <Table.Th>Quantità [L]</Table.Th>
                     <Table.Th>Timestamp</Table.Th>
                 </Table.Tr>
             </Table.Thead>
