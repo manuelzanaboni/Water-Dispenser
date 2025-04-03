@@ -6,11 +6,9 @@ export default function ToggleTheme() {
     const { colorScheme, setColorScheme } = useMantineColorScheme();
 
     return (
-        <>
-            <Group>
-                <Button onClick={() => setColorScheme("light")} size="xl">Light</Button>
-                <Button onClick={() => setColorScheme("dark")} size="xl">Dark</Button>
-            </Group>
-        </>
+        <Group>
+            <Button onClick={() => setColorScheme("light")} size="xl">Light</Button>
+            <Button onClick={() => setColorScheme("dark")} size="xl">Dark</Button>
+        </Group>
     );
 }

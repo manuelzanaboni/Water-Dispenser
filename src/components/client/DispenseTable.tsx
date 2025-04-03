@@ -5,6 +5,8 @@ import { Table } from "@mantine/core";
 import { DispenseModel } from "@/service/types";
 import { findDispenseOperation } from "@/service/utils";
 
+const buildTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleString("it-IT")}`;
+
 export default function DispenseTable({ dispenses }: { dispenses: DispenseModel[] }) {
 
     const rows = dispenses.map(element => <Table.Tr key={element.id}>
@@ -12,7 +14,7 @@ export default function DispenseTable({ dispenses }: { dispenses: DispenseModel[
         <Table.Td>{findDispenseOperation(element.operation_type)?.name}</Table.Td>
         <Table.Td>{element.duration}</Table.Td>
         <Table.Td>{element.qty}</Table.Td>
-        <Table.Td>{`${new Date(element.ts * 1000).toLocaleDateString()} ${new Date(element.ts * 1000).toLocaleTimeString()}`}</Table.Td>
+        <Table.Td>{buildTimestamp(element.ts)}</Table.Td>
     </Table.Tr>)
 
     return (
