@@ -1,10 +1,9 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "motion/react";
 
 export default function Template({ children }: { children: React.ReactNode }) {
     return (
-        // <AnimatePresence>
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -16,6 +15,5 @@ export default function Template({ children }: { children: React.ReactNode }) {
         >
             {children}
         </motion.div>
-        // </AnimatePresence>
     );
 }
