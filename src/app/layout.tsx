@@ -5,7 +5,7 @@ import "./globals.css";
 // All packages except `@mantine/hooks` require styles imports
 import "@mantine/core/styles.css";
 
-import { ColorSchemeScript, MantineProvider } from "@mantine/core";
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from "@mantine/core";
 
 export const metadata: Metadata = {
     title: "Water Dispenser",
@@ -18,9 +18,9 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="it">
+        <html lang="it" {...mantineHtmlProps}>
             <head>
-                <ColorSchemeScript defaultColorScheme="light" />
+                <ColorSchemeScript />
             </head>
             <body>
                 <MantineProvider>{children}</MantineProvider>

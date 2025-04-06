@@ -1,6 +1,5 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 
 import sqlite3 from "sqlite3";
 
@@ -88,7 +87,8 @@ export const insertDispense = async (operation: DispenseOperation, duration: num
                 reject(err);
             } else {
                 console.log("Inserted new dispense entry:\n", this.lastID);
-                revalidatePath("/stats");
+                // NextJS15 - https://nextjs.org/blog/next-15#caching-semantics
+                // revalidatePath("/stats");
                 resolve();
             }
         });
@@ -125,8 +125,9 @@ export const insertFilter = async (qty: number): Promise<void> =>
                 reject(err);
             } else {
                 console.log("Inserted new filter entry:\n", this.lastID);
-                revalidatePath("/");
-                revalidatePath("/stats");
+                // NextJS15 - https://nextjs.org/blog/next-15#caching-semantics
+                // revalidatePath("/");
+                // revalidatePath("/stats");
                 resolve();
             }
         });

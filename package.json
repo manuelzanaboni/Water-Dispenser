@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-        "dev": "next dev",
+        "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
         "lint": "next lint"
@@ -13,20 +13,24 @@
         "@mantine/hooks": "^7.17.3",
         "@tabler/icons-react": "^3.31.0",
         "motion": "^12.6.3",
-        "next": "14.2.3",
-        "react": "^18",
-        "react-dom": "^18",
+        "next": "15.2.4",
+        "react": "19.1.0",
+        "react-dom": "19.1.0",
         "sqlite3": "^5.1.7"
     },
     "devDependencies": {
         "@types/node": "^20",
-        "@types/react": "^18",
-        "@types/react-dom": "^18",
+        "@types/react": "19.1.0",
+        "@types/react-dom": "19.1.1",
         "eslint": "^8",
-        "eslint-config-next": "14.2.1",
+        "eslint-config-next": "15.2.4",
         "postcss": "^8.4.38",
         "postcss-preset-mantine": "^1.14.4",
         "postcss-simple-vars": "^7.0.1",
         "typescript": "^5"
+    },
+    "overrides": {
+        "@types/react": "19.1.0",
+        "@types/react-dom": "19.1.1"
     }
 }
