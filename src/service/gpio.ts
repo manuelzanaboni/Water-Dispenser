@@ -4,6 +4,8 @@ import { exec } from "child_process";
 
 import { DispenseOperation, GPIO_MODE, GPIO_STATE } from "@/service/types";
 
+const TEMPERATURE_FILE = process.env.TEMPERATURE_FILE ?? "dummy";
+
 const subporcess = async (command: string): Promise<string> =>
     new Promise((resolve, reject) =>
         exec(command, (error, stdout, stderr) => {
@@ -20,7 +22,7 @@ const subporcess = async (command: string): Promise<string> =>
         })
     );
 
-const gpio_wrap = async (fun: (command: string) => Promise<string>, command: string) => {
+const wrap = async (fun: (command: string) => Promise<string>, command: string) => {
     return fun(command).catch(() => {
         const msg = `Mocking GPIO subprocess: ${command}`;
         console.log(msg);
@@ -28,12 +30,12 @@ const gpio_wrap = async (fun: (command: string) => Promise<string>, command: str
     });
 };
 
-const gpio_mode = async (gpio: number, mode: GPIO_MODE) => gpio_wrap(subporcess, `gpio mode ${gpio} ${mode}`);
+const gpio_mode = async (gpio: number, mode: GPIO_MODE) => wrap(subporcess, `gpio mode ${gpio} ${mode}`);
 
-// const gpio_read = async (gpio: number) => gpio_wrap(subporcess, `gpio read ${gpio}`);
+// const gpio_read = async (gpio: number) => wrap(subporcess, `gpio read ${gpio}`);
 
 const gpio_write = async (gpio: number, state: GPIO_STATE) =>
-    gpio_wrap(subporcess, `gpio write ${gpio} ${state}`);
+    wrap(subporcess, `gpio write ${gpio} ${state}`);
 
 const handle_gpio = async (gpio: number, mode: GPIO_MODE, state: GPIO_STATE) =>
     gpio_mode(gpio, mode).then(() => gpio_write(gpio, state));
@@ -54,3 +56,5 @@ export async function turnOFF(target: DispenseOperation | number) {
         GPIO_STATE.HIGH
     );
 }
+
+export const readTemp = async () => wrap(subporcess, `cat ${TEMPERATURE_FILE}`);
