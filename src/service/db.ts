@@ -1,14 +1,14 @@
 "use server";
 
-
 import sqlite3 from "sqlite3";
 
-import { DispenseModel, DispenseOperation, FilterModel } from "./types";
+import { DispenseModel, DispenseOperation, FilterModel, TemperatureModel } from "./types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
 const FILTERS_TABLE = "filters";
 const SETTINGS_TABLE = "settings";
+const TEMPERATURES_TABLE = "temperatures";
 
 const db = new sqlite3.Database(
     DB,
@@ -54,6 +54,19 @@ const db = new sqlite3.Database(
                 }
             );
 
+            // types.ts - interface TemperatureModel
+            db.run(
+                `CREATE TABLE IF NOT EXISTS ${TEMPERATURES_TABLE} (
+                    ts INTEGER PRIMARY KEY DEFAULT (strftime('%s', 'now')),
+                    temperature REAL
+                ) WITHOUT ROWID`,
+                (err) => {
+                    if (err) {
+                        return console.error(err.message);
+                    }
+                }
+            );
+
             console.log("SQL ready");
 
         });
@@ -76,7 +89,7 @@ export const getDispenses = async (): Promise<DispenseModel[]> =>
 export const insertDispense = async (operation: DispenseOperation, duration: number, qty?: number): Promise<void> =>
     new Promise((resolve, reject) => {
 
-        const insertSql = `INSERT INTO ${DISPENSES_TABLE}(operation_type, duration, qty) VALUES(?, ?, ?)`;
+        const insertSql = `INSERT INTO ${DISPENSES_TABLE}(operation_type, duration, qty) VALUES(?, ?, ?);`;
         const values = [
             operation.type, duration, qty ?? null
         ];
@@ -102,15 +115,9 @@ export const getFilterCapacity = async (): Promise<number> =>
         db.get(`SELECT * FROM ${FILTERS_TABLE} 
             ORDER BY id DESC
             LIMIT 1;`,
-            (err, row) => {
-                if (err) reject(err);
-                else if (row === undefined) resolve(-1)
-                else {
-                    const filter = row as FilterModel;
-                    console.log(filter);
-                    resolve(filter.qty);
-                }
-            })
+            (err, row) =>
+                err ? reject(err) : row === undefined ? resolve(-1) : resolve((row as FilterModel).qty)
+        )
     });
 
 export const insertFilter = async (qty: number): Promise<void> =>
@@ -131,4 +138,30 @@ export const insertFilter = async (qty: number): Promise<void> =>
                 resolve();
             }
         });
+    });
+
+//////////////////////// TEMPERATURES ////////////////////////
+
+export const insertTemperature = async (temperature: number): Promise<void> =>
+    new Promise((resolve, reject) => {
+
+        const insertSql = `INSERT INTO ${TEMPERATURES_TABLE}(temperature) VALUES(?);`;
+        const values = [temperature];
+
+        db.run(insertSql, values, function (err) {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else
+                resolve();
+        });
+    });
+
+export const getTemperature = async (): Promise<TemperatureModel | undefined> =>
+    new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM ${TEMPERATURES_TABLE} 
+            ORDER BY ts DESC
+            LIMIT 1;`,
+            (err, row) => err ? reject(err) : resolve((row as TemperatureModel | undefined))
+        )
     });

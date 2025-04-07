@@ -27,3 +27,8 @@ export interface FilterModel {
     qty: number;
     ts: number;
 }
+
+export interface TemperatureModel {
+    ts: number;
+    temperature: number | null;
+}
