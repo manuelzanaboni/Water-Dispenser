@@ -1,11 +1,11 @@
-import { insertTemperature } from "@/service/db";
-import { readTemp } from "@/service/gpio";
-
 const READ_TEMP_ENABLED = process.env.READ_TEMP_ENABLED ?? false;
 const READ_TEMP_DELTA_SEC = Number(process.env.READ_TEMP_DELTA_SEC) ?? 300;
 
-export function register() {
+export async function register() {
     if (process.env.NEXT_RUNTIME === 'nodejs' && READ_TEMP_ENABLED === "true") {
+        let { readTemp } = await import("@/service/gpio");
+        let { insertTemperature } = await import("@/service/db");
+
         console.log("Starting temperature reader...");
 
         setInterval(async () => {
