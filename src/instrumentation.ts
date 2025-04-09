@@ -1,20 +1,21 @@
 const READ_TEMP_ENABLED = process.env.READ_TEMP_ENABLED ?? false;
-const READ_TEMP_DELTA_SEC = Number(process.env.READ_TEMP_DELTA_SEC) ?? 300;
+const READ_TEMP_DELTA_SEC = Number(process.env.READ_TEMP_DELTA_SEC) ?? 120;
 
 export async function register() {
     if (process.env.NEXT_RUNTIME === 'nodejs' && READ_TEMP_ENABLED === "true") {
-        let { readTemp } = await import("@/service/gpio");
+        let { readTemperature } = await import("@/service/gpio");
         let { insertTemperature } = await import("@/service/db");
 
         console.log("Starting temperature reader...");
 
         setInterval(async () => {
             try {
-                const temperatureString = await readTemp();
+                const temperatureString = await readTemperature();
                 if (temperatureString) {
-                    const temperature = (+temperatureString.trim()) / 1000;
+                    const temperature = (+temperatureString.trim()) / 1e3;
                     await insertTemperature(temperature);
-                }
+                } else
+                    console.error(`Error while detecting temperature. temperatureString: ${temperatureString}`);
             } catch (error) {
                 console.error(error);
             }

@@ -57,4 +57,4 @@ export async function turnOFF(target: DispenseOperation | number) {
     );
 }
 
-export const readTemp = async () => wrap(subporcess, `cat ${TEMPERATURE_FILE}`);
+export const readTemperature = async () => wrap(subporcess, `cat ${TEMPERATURE_FILE}`);
