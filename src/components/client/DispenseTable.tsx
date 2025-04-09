@@ -3,9 +3,7 @@
 import { Table } from "@mantine/core";
 
 import { DispenseModel } from "@/service/types";
-import { findDispenseOperation } from "@/service/utils";
-
-const buildTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleString("it-IT")}`;
+import { buildTimestamp, findDispenseOperation } from "@/service/utils";
 
 export default function DispenseTable({ dispenses }: { dispenses: DispenseModel[] }) {
 

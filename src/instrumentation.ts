@@ -4,7 +4,7 @@ const READ_TEMP_DELTA_SEC = Number(process.env.READ_TEMP_DELTA_SEC) ?? 120;
 export async function register() {
     if (process.env.NEXT_RUNTIME === 'nodejs' && READ_TEMP_ENABLED === "true") {
         let { readTemperature } = await import("@/service/gpio");
-        let { insertTemperature } = await import("@/service/db");
+        let { insertRefrigerator } = await import("@/service/db");
 
         console.log("Starting temperature reader...");
 
@@ -13,7 +13,10 @@ export async function register() {
                 const temperatureString = await readTemperature();
                 if (temperatureString) {
                     const temperature = (+temperatureString.trim()) / 1e3;
-                    await insertTemperature(temperature);
+
+                    // ToDo check with setpoint
+                    const refrigeratorState = 1;
+                    await insertRefrigerator(temperature, refrigeratorState);
                 } else
                     console.error(`Error while detecting temperature. temperatureString: ${temperatureString}`);
             } catch (error) {

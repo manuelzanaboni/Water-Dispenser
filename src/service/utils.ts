@@ -29,3 +29,5 @@ export const DISPENSE_OPERATIONS: DispenseOperation[] = [
 ];
 
 export const findDispenseOperation = (type: number) => DISPENSE_OPERATIONS.find(d => d.type === type);
+
+export const buildTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleString("it-IT")}`;

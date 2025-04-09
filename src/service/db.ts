@@ -2,13 +2,13 @@
 
 import sqlite3 from "sqlite3";
 
-import { DispenseModel, DispenseOperation, FilterModel, TemperatureModel } from "./types";
+import { DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel } from "@/service/types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
 const FILTERS_TABLE = "filters";
 const SETTINGS_TABLE = "settings";
-const TEMPERATURES_TABLE = "temperatures";
+const REFRIGERATOR_TABLE = "refrigerator";
 
 const db = new sqlite3.Database(
     DB,
@@ -54,11 +54,12 @@ const db = new sqlite3.Database(
                 }
             );
 
-            // types.ts - interface TemperatureModel
+            // types.ts - interface RefrigeratorModel
             db.run(
-                `CREATE TABLE IF NOT EXISTS ${TEMPERATURES_TABLE} (
+                `CREATE TABLE IF NOT EXISTS ${REFRIGERATOR_TABLE} (
                     ts INTEGER PRIMARY KEY DEFAULT (strftime('%s', 'now')),
-                    temperature REAL
+                    temperature REAL,
+                    state INTEGER
                 ) WITHOUT ROWID`,
                 (err) => {
                     if (err) {
@@ -140,13 +141,13 @@ export const insertFilter = async (qty: number): Promise<void> =>
         });
     });
 
-//////////////////////// TEMPERATURES ////////////////////////
+//////////////////////// REFRIGERATOR ////////////////////////
 
-export const insertTemperature = async (temperature: number): Promise<void> =>
+export const insertRefrigerator = async (temperature: number, state: number): Promise<void> =>
     new Promise((resolve, reject) => {
 
-        const insertSql = `INSERT INTO ${TEMPERATURES_TABLE}(temperature) VALUES(?);`;
-        const values = [temperature];
+        const insertSql = `INSERT INTO ${REFRIGERATOR_TABLE}(temperature, state) VALUES(?, ?);`;
+        const values = [temperature, state];
 
         db.run(insertSql, values, function (err) {
             if (err) {
@@ -157,11 +158,11 @@ export const insertTemperature = async (temperature: number): Promise<void> =>
         });
     });
 
-export const getTemperature = async (): Promise<TemperatureModel | undefined> =>
+export const getRefrigerator = async (): Promise<RefrigeratorModel | undefined> =>
     new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM ${TEMPERATURES_TABLE} 
+        db.get(`SELECT * FROM ${REFRIGERATOR_TABLE} 
             ORDER BY ts DESC
             LIMIT 1;`,
-            (err, row) => err ? reject(err) : resolve((row as TemperatureModel | undefined))
+            (err, row) => err ? reject(err) : resolve((row as RefrigeratorModel | undefined))
         )
     });

@@ -28,7 +28,8 @@ export interface FilterModel {
     ts: number;
 }
 
-export interface TemperatureModel {
+export interface RefrigeratorModel {
     ts: number;
     temperature: number | null;
+    state: number;
 }
