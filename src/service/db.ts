@@ -110,7 +110,7 @@ export const insertDispense = async (operation: DispenseOperation, duration: num
 
 //////////////////////// FILTERS ////////////////////////
 
-export const getFilterCapacity = async (): Promise<number> =>
+export const getLastFilterCapacity = async (): Promise<number> =>
     new Promise((resolve, reject) => {
 
         db.get(`SELECT * FROM ${FILTERS_TABLE} 
@@ -143,6 +143,26 @@ export const insertFilter = async (qty: number): Promise<void> =>
 
 //////////////////////// REFRIGERATOR ////////////////////////
 
+export const getRefrigeratorHistory = async (): Promise<RefrigeratorModel[]> =>
+    new Promise((resolve, reject) =>
+        db.all(`SELECT * FROM ${REFRIGERATOR_TABLE}
+            ORDER BY ts DESC
+            LIMIT 50;`,
+            (err, rows) => {
+                if (err) reject(err);
+                else resolve(rows as RefrigeratorModel[]);
+            })
+    );
+
+export const getLastRefrigerator = async (): Promise<RefrigeratorModel | undefined> =>
+    new Promise((resolve, reject) => {
+        db.get(`SELECT * FROM ${REFRIGERATOR_TABLE} 
+            ORDER BY ts DESC
+            LIMIT 1;`,
+            (err, row) => err ? reject(err) : resolve((row as RefrigeratorModel | undefined))
+        )
+    });
+
 export const insertRefrigerator = async (temperature: number, state: number): Promise<void> =>
     new Promise((resolve, reject) => {
 
@@ -156,13 +176,4 @@ export const insertRefrigerator = async (temperature: number, state: number): Pr
             } else
                 resolve();
         });
-    });
-
-export const getRefrigerator = async (): Promise<RefrigeratorModel | undefined> =>
-    new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM ${REFRIGERATOR_TABLE} 
-            ORDER BY ts DESC
-            LIMIT 1;`,
-            (err, row) => err ? reject(err) : resolve((row as RefrigeratorModel | undefined))
-        )
     });

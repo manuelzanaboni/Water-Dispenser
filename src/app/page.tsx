@@ -1,12 +1,12 @@
 "use server";
 
 import Dispenser from "@/components/client/Dispenser";
-import { getFilterCapacity } from "@/service/db";
+import { getLastFilterCapacity } from "@/service/db";
 
 // https://github.com/pacocoursey/next-themes
 export default async function Home() {
     // server side data retrieval from DB
-    const filterCapacity: number = await getFilterCapacity();
+    const filterCapacity: number = await getLastFilterCapacity();
 
     return (
         <Dispenser filterCapacity={filterCapacity} />
