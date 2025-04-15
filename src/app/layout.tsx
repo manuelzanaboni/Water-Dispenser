@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
-import "./globals.css";
+
+import "@mantine/charts/styles.css";
+
+import "@/app/globals.css";
 
 // Import styles of packages that you've installed.
 // All packages except `@mantine/hooks` require styles imports

@@ -78,9 +78,11 @@ const db = new sqlite3.Database(
 
 export const getDispenses = async (): Promise<DispenseModel[]> =>
     new Promise((resolve, reject) =>
-        db.all(`SELECT * FROM ${DISPENSES_TABLE} 
-            WHERE strftime('%m-%Y', datetime(ts, 'unixepoch')) = strftime('%m-%Y', datetime())
-            ORDER BY id DESC;`,
+        db.all(`SELECT * FROM (
+                    SELECT * FROM ${DISPENSES_TABLE} 
+                    WHERE strftime('%m-%Y', datetime(ts, 'unixepoch')) = strftime('%m-%Y', datetime())
+                    ORDER BY id DESC) sub
+                ORDER BY sub.id ASC;`,
             (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows as DispenseModel[]);
@@ -145,9 +147,11 @@ export const insertFilter = async (qty: number): Promise<void> =>
 
 export const getRefrigeratorHistory = async (): Promise<RefrigeratorModel[]> =>
     new Promise((resolve, reject) =>
-        db.all(`SELECT * FROM ${REFRIGERATOR_TABLE}
-            ORDER BY ts DESC
-            LIMIT 50;`,
+        db.all(`SELECT * FROM (
+                    SELECT * FROM ${REFRIGERATOR_TABLE}
+                    ORDER BY ts DESC
+                    LIMIT 50) sub
+                ORDER BY sub.ts ASC;`,
             (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows as RefrigeratorModel[]);

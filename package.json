@@ -9,6 +9,7 @@
         "lint": "next lint"
     },
     "dependencies": {
+        "@mantine/charts": "^7.17.4",
         "@mantine/core": "^7.17.3",
         "@mantine/hooks": "^7.17.3",
         "@tabler/icons-react": "^3.31.0",
@@ -16,6 +17,7 @@
         "next": "15.2.4",
         "react": "19.1.0",
         "react-dom": "19.1.0",
+        "recharts": "^2.15.2",
         "sqlite3": "^5.1.7"
     },
     "devDependencies": {
