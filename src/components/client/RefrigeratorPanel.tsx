@@ -25,7 +25,7 @@ const RefrigeratorPanel = ({ filterCapacity }: RefrigeratorPanelProps) => {
         fetchState();
         const id = setInterval(fetchState, FETCH_INTERVAL * 1000);
         return () => clearInterval(id);
-    }, [fetchState])
+    }, [fetchState]);
 
     return (
         <Center h="100%">

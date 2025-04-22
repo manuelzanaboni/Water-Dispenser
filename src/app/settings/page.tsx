@@ -11,7 +11,7 @@ export default async function Settings() {
         <>
             <SidePageHeader title="Impostazioni" />
 
-            <Stack gap="md" align="flex-start">
+            <Stack gap="md" align="stretch">
                 <ToggleTheme />
                 <FullScreen />
             </Stack>
