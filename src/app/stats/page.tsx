@@ -2,8 +2,9 @@
 
 import { connection } from "next/server";
 
+import { Stack } from "@mantine/core";
+
 import DispenseChart from "@/components/client/DispenseChart";
-import DispenseTable from "@/components/client/DispenseTable";
 import RefrigeratorChart from "@/components/client/RefrigeratorChart";
 import SidePageHeader from "@/components/client/SidePageHeader";
 import { getDispenses } from "@/service/db";
@@ -17,9 +18,10 @@ export default async function Stats() {
     return (
         <>
             <SidePageHeader title="Statistiche" />
-            <DispenseChart dispenses={dispenses} />
-            <DispenseTable dispenses={dispenses} />
-            <RefrigeratorChart />
+            <Stack gap="md">
+                <DispenseChart dispenses={dispenses} />
+                <RefrigeratorChart />
+            </Stack>
         </>
     );
 }

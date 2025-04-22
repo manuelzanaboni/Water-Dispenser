@@ -2,12 +2,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { LineChart } from "@mantine/charts";
+import { SegmentedControl, Stack } from "@mantine/core";
 
 import TitledCard from "@/components/client/TitledCard";
-
 import { RefrigeratorModel } from "@/service/types";
 import { buildTimestamp } from "@/service/utils";
-import { SegmentedControl, Stack } from "@mantine/core";
 
 export default function RefrigeratorChart() {
     const [refrigerators, setRefrigerators] = useState<RefrigeratorModel[]>([])
@@ -65,7 +64,6 @@ export default function RefrigeratorChart() {
                     size="md"
                     color="blue"
                 />
-
             </Stack>
         </TitledCard >
     );
