@@ -48,7 +48,7 @@ export default function RefrigeratorChart() {
                     unit="°C"
                     connectNulls={false}
                     tooltipAnimationDuration={250}
-                    dotProps={{ r: 6, strokeWidth: 2, stroke: '#fff' }}
+                    // dotProps={{ r: 6, strokeWidth: 2, stroke: '#fff' }}
                     activeDotProps={{ r: 9, strokeWidth: 3, stroke: '#fff' }}
                 />
 
