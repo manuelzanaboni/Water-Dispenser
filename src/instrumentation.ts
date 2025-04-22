@@ -13,6 +13,7 @@ export async function register() {
                 const temperatureString = await readTemperature();
                 if (temperatureString) {
                     const temperature = (+temperatureString.trim()) / 1e3;
+                    console.log(`Temp = ${temperature} °C`);
 
                     // ToDo check with setpoint
                     const refrigeratorState = 1;
