@@ -105,7 +105,6 @@ export const insertDispense = async (operation: DispenseOperation, duration: num
                 reject(err);
             } else {
                 console.log("Inserted new dispense entry:\n", this.lastID);
-                revalidatePath("/stats");
                 resolve();
             }
         });
@@ -144,27 +143,16 @@ export const insertFilter = async (qty: number): Promise<void> =>
 
 //////////////////////// REFRIGERATOR ////////////////////////
 
-export const getRefrigeratorHistory = async (): Promise<RefrigeratorModel[]> =>
+export const getRefrigerators = async (limit?: number): Promise<RefrigeratorModel[]> =>
     new Promise((resolve, reject) =>
-        db.all(`SELECT * FROM (
-                    SELECT * FROM ${REFRIGERATOR_TABLE}
-                    ORDER BY ts DESC
-                    LIMIT 50) sub
-                ORDER BY sub.ts ASC;`,
+        db.all(`SELECT * FROM ${REFRIGERATOR_TABLE} 
+            ORDER BY ts DESC
+            LIMIT ${limit && limit > 0 ? limit : 1};`,
             (err, rows) => {
                 if (err) reject(err);
                 else resolve(rows as RefrigeratorModel[]);
             })
     );
-
-export const getLastRefrigerator = async (): Promise<RefrigeratorModel | undefined> =>
-    new Promise((resolve, reject) => {
-        db.get(`SELECT * FROM ${REFRIGERATOR_TABLE} 
-            ORDER BY ts DESC
-            LIMIT 1;`,
-            (err, row) => err ? reject(err) : resolve((row as RefrigeratorModel | undefined))
-        )
-    });
 
 export const insertRefrigerator = async (temperature: number, state: number): Promise<void> =>
     new Promise((resolve, reject) => {

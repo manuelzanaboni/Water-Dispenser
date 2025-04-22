@@ -17,8 +17,8 @@ const RefrigeratorPanel = ({ filterCapacity }: RefrigeratorPanelProps) => {
     const [refrigeratorState, setRefrigeratorState] = useState<RefrigeratorModel | null>(null);
 
     const fetchState = useCallback(async () => {
-        const state = await (await fetch("/api/refrigerator")).json() as RefrigeratorModel | null;
-        setRefrigeratorState(state);
+        const state = await (await fetch("/api/refrigerators")).json() as RefrigeratorModel[];
+        setRefrigeratorState(state[0] ?? null);
     }, [setRefrigeratorState]);
 
     useEffect(() => {

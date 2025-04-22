@@ -1,13 +1,15 @@
 "use client";
 
-import { Button, Card } from "@mantine/core";
+import { Button } from "@mantine/core";
 import { useFullscreen } from "@mantine/hooks";
+
+import TitledCard from "@/components/client/TitledCard";
 
 const FullScreen = () => {
     const { toggle, fullscreen } = useFullscreen();
 
     return (
-        <Card shadow="lg" padding="lg" radius="md" withBorder>
+        <TitledCard title="">
             <Button
                 onClick={toggle}
                 color={fullscreen ? 'red' : 'blue'}
@@ -15,9 +17,7 @@ const FullScreen = () => {
             >
                 Schermo intero
             </Button>
-        </Card>
-
-
+        </TitledCard>
     );
 }
 

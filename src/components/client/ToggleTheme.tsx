@@ -1,14 +1,14 @@
 "use client";
 
-import { Button, Card, Group, Text, useMantineColorScheme } from "@mantine/core";
+import { Button, Group, useMantineColorScheme } from "@mantine/core";
+
+import TitledCard from "@/components/client/TitledCard";
 
 export default function ToggleTheme() {
     const { colorScheme, setColorScheme } = useMantineColorScheme();
 
     return (
-        <Card shadow="lg" padding="lg" radius="md" withBorder>
-            <Text size="lg" fw={700}>Tema</Text>
-
+        <TitledCard title="Tema">
             <Group mt="md" grow>
                 <Button
                     onClick={() => setColorScheme("light")}
@@ -27,6 +27,6 @@ export default function ToggleTheme() {
                     Scuro
                 </Button>
             </Group>
-        </Card>
+        </TitledCard >
     );
 }
