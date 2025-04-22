@@ -2,6 +2,8 @@
 
 import sqlite3 from "sqlite3";
 
+import { revalidatePath } from "next/cache";
+
 import { DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel } from "@/service/types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
@@ -103,8 +105,7 @@ export const insertDispense = async (operation: DispenseOperation, duration: num
                 reject(err);
             } else {
                 console.log("Inserted new dispense entry:\n", this.lastID);
-                // NextJS15 - https://nextjs.org/blog/next-15#caching-semantics
-                // revalidatePath("/stats");
+                revalidatePath("/stats");
                 resolve();
             }
         });
@@ -135,9 +136,7 @@ export const insertFilter = async (qty: number): Promise<void> =>
                 reject(err);
             } else {
                 console.log("Inserted new filter entry:\n", this.lastID);
-                // NextJS15 - https://nextjs.org/blog/next-15#caching-semantics
-                // revalidatePath("/");
-                // revalidatePath("/stats");
+                revalidatePath("/");
                 resolve();
             }
         });
