@@ -91,10 +91,11 @@ export const getDispenses = async (): Promise<DispenseModel[]> =>
             })
     );
 
-export const insertDispense = async (operation: DispenseOperation, duration: number, qty?: number): Promise<void> =>
+export const insertDispense = async (operation: DispenseOperation, duration: number): Promise<void> =>
     new Promise((resolve, reject) => {
 
         const insertSql = `INSERT INTO ${DISPENSES_TABLE}(operation_type, duration, qty) VALUES(?, ?, ?);`;
+        const qty = duration * operation.factor;
         const values = [
             operation.type, duration, qty ?? null
         ];

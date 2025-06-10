@@ -12,6 +12,7 @@ export interface DispenseOperation {
     relay: number;
     name: string;
     type: number;
+    factor: number; // ml/sec
 }
 
 export interface DispenseModel {

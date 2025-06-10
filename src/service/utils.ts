@@ -16,15 +16,18 @@ export const DISPENSE_OPERATIONS: DispenseOperation[] = [
     {
         relay: STILL,
         name: "Naturale Ambiente",
-        type: 1
+        type: 1,
+        factor: 32 // ml/sec
     }, {
         relay: COLD,
         name: "Naturale Fredda",
-        type: 2
+        type: 2,
+        factor: 32 // ml/sec
     }, {
         relay: SPARKLING,
         name: "Frizzante Fredda",
-        type: 3
+        type: 3,
+        factor: 37 // ml/sec
     }
 ];
 
