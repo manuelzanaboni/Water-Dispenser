@@ -18,6 +18,7 @@ type DispenserState = {
     selectedOperation: DispenseOperation;
     selectedPreset: null;
     isPending: boolean;
+    startStopDisabled: boolean;
     timestampTracker: number;
 }
 
@@ -25,6 +26,7 @@ const DEAFULT_STATE: DispenserState = {
     selectedOperation: DISPENSE_OPERATIONS[0],
     selectedPreset: null,
     isPending: false,
+    startStopDisabled: false,
     timestampTracker: -1
 }
 
@@ -63,13 +65,25 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
     // }
 
     const handleStart = async () => {
-        setDispenserState(prev => ({ ...prev, isPending: true, timestampTracker: new Date().getTime() }));
+        setDispenserState(prev => ({
+            ...prev,
+            isPending: true,
+            startStopDisabled: true,
+            timestampTracker: new Date().getTime()
+        }));
+        setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
         await turnON(dispenserState.selectedOperation);
     }
 
     const handleStop = async () => {
         const { selectedOperation, timestampTracker } = dispenserState;
-        setDispenserState(prev => ({ ...prev, isPending: false, timestampTracker: -1 }));
+        setDispenserState(prev => ({
+            ...prev,
+            isPending: false,
+            startStopDisabled: true,
+            timestampTracker: -1
+        }));
+        setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
         await turnOFF(selectedOperation);
         await insertDispense(selectedOperation, Math.round((new Date().getTime() - timestampTracker) / 1000));
     }
@@ -132,6 +146,7 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
                             variant="filled"
                             color="green"
                             onClick={handleStart}
+                            disabled={dispenserState.startStopDisabled}
                         >
                             Avvio
                         </Button>
@@ -142,6 +157,7 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
                             variant="filled"
                             color="red"
                             onClick={handleStop}
+                            disabled={dispenserState.startStopDisabled}
                         >
                             Stop
                         </Button>
