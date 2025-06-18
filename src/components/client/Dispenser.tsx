@@ -71,7 +71,9 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
             startStopDisabled: true,
             timestampTracker: new Date().getTime()
         }));
+
         setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
+
         await turnON(dispenserState.selectedOperation);
     }
 
@@ -83,9 +85,13 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
             startStopDisabled: true,
             timestampTracker: -1
         }));
+
         setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
-        await turnOFF(selectedOperation);
-        await insertDispense(selectedOperation, Math.round((new Date().getTime() - timestampTracker) / 1000));
+
+        await Promise.all([
+            turnOFF(selectedOperation),
+            insertDispense(selectedOperation, Math.round((new Date().getTime() - timestampTracker) / 1000))
+        ]);
     }
 
     return (
