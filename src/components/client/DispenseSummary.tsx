@@ -12,11 +12,15 @@ export default function DispenseSummary({ dispenses }: { dispenses: DispenseMode
 
     const data = useMemo(() => {
         const summary = [0, 0, 0];
+
         dispenses.forEach(d => {
             const qty = d.qty ?? d.duration * (findDispenseOperation(d.operation_type) as DispenseOperation).factor;
             summary[d.operation_type - 1] += qty;
-        })
-        return summary.map(v => v / 1000).map(v => (Math.round(v * 10) / 10))
+        });
+
+        return summary
+            .map(v => v / 1000)
+            .map(v => (Math.round(v * 10) / 10));
     }, [dispenses]);
 
     return (
