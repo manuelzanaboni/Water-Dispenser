@@ -4,20 +4,12 @@ import { Accordion, Center } from "@mantine/core";
 
 import KeyPad from "@/components/client/KeyPad";
 import TitledCard from "@/components/client/TitledCard";
+import { insertFilter } from "@/service/db";
 import { IconFilterPlus } from "@tabler/icons-react";
 
 const FilterManagement = () => {
 
-    const handleNewFilter = (capacity: number) => {
-        // ToDo
-        const promise = new Promise<number>((resolve, reject) => {
-            setTimeout(() => {
-                console.log(capacity)
-                resolve(capacity);
-            }, 300);
-        });
-        return promise;
-    }
+    const handleNewFilter = (qty: number) => insertFilter(qty);
 
     return (
         <TitledCard title="Filtraggio" >

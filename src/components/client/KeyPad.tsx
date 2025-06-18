@@ -11,7 +11,7 @@ const NUMBERS = new Array<string>(9)
 
 
 type KeyPadProps = {
-    onSubmit: (value: number) => Promise<number>;
+    onSubmit: (value: number) => Promise<void>;
 }
 
 export default function KeyPad({ onSubmit }: KeyPadProps) {
