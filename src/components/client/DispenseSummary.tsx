@@ -1,14 +1,16 @@
 "use client";
 
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Badge, Card, Grid, Group, Text } from '@mantine/core';
 
 import TitledCard from "@/components/client/TitledCard";
+import { getDispenses } from "@/service/db";
 import { DispenseModel, DispenseOperation } from "@/service/types";
 import { findDispenseOperation } from "@/service/utils";
 
-export default function DispenseSummary({ dispenses }: { dispenses: DispenseModel[] }) {
+export default function DispenseSummary() {
+    const [dispenses, setDispenses] = useState<DispenseModel[]>([]);
 
     const data = useMemo(() => {
         const summary = [0, 0, 0];
@@ -22,6 +24,14 @@ export default function DispenseSummary({ dispenses }: { dispenses: DispenseMode
             .map(v => v / 1000)
             .map(v => (Math.round(v * 10) / 10));
     }, [dispenses]);
+
+    const fetchData = useCallback(async () => {
+        setDispenses(await getDispenses());
+    }, [setDispenses]);
+
+    useEffect(() => {
+        fetchData();
+    }, [fetchData]);
 
     return (
         <TitledCard title="Erogazioni questo mese">
