@@ -4,11 +4,13 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import { ActionIcon, Button, Center, Grid, Loader, Text } from "@mantine/core";
+import { ActionIcon, Button, Center, Grid, Loader, Stack, Text } from "@mantine/core";
 import { IconDeviceAnalytics, IconPlayerPlayFilled, IconPlayerStopFilled, IconSettings } from "@tabler/icons-react";
 
+import FilterPanel from "@/components/client/FilterPanel";
 import OperationSelector from "@/components/client/OperationSelector";
 import RefrigeratorPanel from "@/components/client/RefrigeratorPanel";
+
 import { insertDispense } from "@/service/db";
 import { turnOFF, turnON } from "@/service/gpio";
 import { DispenseOperation } from "@/service/types";
@@ -32,11 +34,7 @@ const DEAFULT_STATE: DispenserState = {
 
 const MID_ROW_HEIGHT = "calc(100vh - 12rem)";
 
-type DispenserProps = {
-    filterCapacity: number;
-}
-
-export default function Dispenser({ filterCapacity }: DispenserProps) {
+export default function Dispenser() {
     const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
 
     const setSelectedOperation = (selectedOperation: DispenseOperation) =>
@@ -133,7 +131,12 @@ export default function Dispenser({ filterCapacity }: DispenserProps) {
 
             {/* Mid row */}
             <Grid.Col span={3}>
-                <RefrigeratorPanel filterCapacity={filterCapacity} />
+                <Center h="100%">
+                    <Stack>
+                        <FilterPanel />
+                        <RefrigeratorPanel />
+                    </Stack>
+                </Center>
             </Grid.Col>
             <Grid.Col span={6} h={MID_ROW_HEIGHT}>
                 <Center h="100%">

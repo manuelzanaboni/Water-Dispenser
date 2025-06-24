@@ -2,18 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Center, Stack } from "@mantine/core";
+import { Stack } from "@mantine/core";
 
 import { RefrigeratorModel } from "@/service/types";
 import { buildTimestamp } from "@/service/utils";
 
-type RefrigeratorPanelProps = {
-    filterCapacity: number;
-}
-
 const FETCH_INTERVAL = 30;
 
-const RefrigeratorPanel = ({ filterCapacity }: RefrigeratorPanelProps) => {
+const RefrigeratorPanel = () => {
     const [refrigeratorState, setRefrigeratorState] = useState<RefrigeratorModel | null>(null);
 
     const fetchState = useCallback(async () => {
@@ -28,14 +24,11 @@ const RefrigeratorPanel = ({ filterCapacity }: RefrigeratorPanelProps) => {
     }, [fetchState]);
 
     return (
-        <Center h="100%">
-            <Stack>
-                <div>Filtro: {filterCapacity}</div>
-                <div>Temperatura: {refrigeratorState?.temperature}</div>
-                <div>Compressore: {refrigeratorState?.state}</div>
-                <div>Ultima lettura: {refrigeratorState ? buildTimestamp(refrigeratorState.ts) : ""}</div>
-            </Stack>
-        </Center>
+        <Stack>
+            <div>Temperatura: {refrigeratorState?.temperature}</div>
+            <div>Compressore: {refrigeratorState?.state}</div>
+            <div>Ultima lettura: {refrigeratorState ? buildTimestamp(refrigeratorState.ts) : ""}</div>
+        </Stack>
     );
 }
 

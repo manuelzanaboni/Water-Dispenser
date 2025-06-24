@@ -71,7 +71,6 @@ const db = new sqlite3.Database(
             );
 
             console.log("SQL ready");
-
         });
     }
 );
@@ -85,10 +84,8 @@ export const getDispenses = async (): Promise<DispenseModel[]> =>
                     WHERE strftime('%m-%Y', datetime(ts, 'unixepoch')) = strftime('%m-%Y', datetime())
                     ORDER BY id DESC) sub
                 ORDER BY sub.id ASC;`,
-            (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows as DispenseModel[]);
-            })
+            (err, rows) => err ? reject(err) : resolve(rows as DispenseModel[])
+        )
     );
 
 export const insertDispense = async (operation: DispenseOperation, duration: number): Promise<void> =>
@@ -113,16 +110,14 @@ export const insertDispense = async (operation: DispenseOperation, duration: num
 
 //////////////////////// FILTERS ////////////////////////
 
-export const getLastFilterCapacity = async (): Promise<number> =>
-    new Promise((resolve, reject) => {
-
+export const getCurrentFilter = async (): Promise<FilterModel> =>
+    new Promise((resolve, reject) =>
         db.get(`SELECT * FROM ${FILTERS_TABLE} 
             ORDER BY id DESC
             LIMIT 1;`,
-            (err, row) =>
-                err ? reject(err) : row === undefined ? resolve(-1) : resolve((row as FilterModel).qty)
+            (err, row) => err ? reject(err) : resolve(row as FilterModel)
         )
-    });
+    );
 
 export const insertFilter = async (qty: number): Promise<void> =>
     new Promise((resolve, reject) => {
@@ -149,10 +144,8 @@ export const getRefrigerators = async (limit?: number): Promise<RefrigeratorMode
         db.all(`SELECT * FROM ${REFRIGERATOR_TABLE} 
             ORDER BY ts DESC
             LIMIT ${limit && limit > 0 ? limit : 1};`,
-            (err, rows) => {
-                if (err) reject(err);
-                else resolve(rows as RefrigeratorModel[]);
-            })
+            (err, rows) => err ? reject(err) : resolve(rows as RefrigeratorModel[])
+        )
     );
 
 export const insertRefrigerator = async (temperature: number, state: number): Promise<void> =>
