@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Badge, Center, Stack, Text } from "@mantine/core";
+import { Badge, Stack, Text } from "@mantine/core";
 
 import { getAggregateDispenses, getCurrentFilter } from "@/service/db";
 import { AggregateDispenseModel, DispenseOperation, FilterModel } from "@/service/types";
@@ -35,18 +35,16 @@ const FilterPanel = () => {
     }, [fetchData]);
 
     return (
-        <Stack gap="xs">
+        <Stack gap="xs" align="center">
             <Text size="xl">
                 Capacità filtrante residua
             </Text>
-            <Center>
-                <Badge
-                    size="xl"
-                    variant="gradient"
-                    gradient={{ from: 'blue', to: 'teal', deg: 165 }}>
-                    {capacity} litri
-                </Badge>
-            </Center>
+            <Badge
+                size="xl"
+                variant="gradient"
+                gradient={{ from: 'blue', to: 'teal', deg: 165 }}>
+                {capacity} litri
+            </Badge>
         </Stack>
     );
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 
-import { Badge, Center, Stack, Text } from "@mantine/core";
+import { Badge, Stack, Text } from "@mantine/core";
 
 import { RefrigeratorModel } from "@/service/types";
 import { buildTimestamp } from "@/service/utils";
@@ -24,20 +24,18 @@ const RefrigeratorPanel = () => {
     }, [fetchState]);
 
     return (
-        <Stack gap="xs">
+        <Stack gap="xs" align="center">
             <Text size="xl">
                 Temperatura
             </Text>
-            <Center>
-                <Badge
-                    size="xl"
-                    variant="gradient"
-                    gradient={{ from: 'yellow', to: 'teal', deg: 165 }}>
-                    {refrigeratorState?.temperature ?
-                        Math.round(refrigeratorState?.temperature * 10) / 10
-                        : ""} °C
-                </Badge>
-            </Center>
+            <Badge
+                size="xl"
+                variant="gradient"
+                gradient={{ from: 'yellow', to: 'teal', deg: 165 }}>
+                {refrigeratorState?.temperature ?
+                    Math.round(refrigeratorState?.temperature * 10) / 10
+                    : ""} °C
+            </Badge>
             <Text size="sm">
                 Ultima lettura: {refrigeratorState ? buildTimestamp(refrigeratorState.ts) : ""}
             </Text>
