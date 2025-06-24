@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
+import { motion } from "motion/react";
 import Link from "next/link";
+import { useState } from "react";
 
 import { ActionIcon, Button, Center, Grid, Loader, Paper, Stack, Text } from "@mantine/core";
 import { IconDeviceAnalytics, IconPlayerPlayFilled, IconPlayerStopFilled, IconSettings } from "@tabler/icons-react";
@@ -150,29 +150,31 @@ export default function Dispenser() {
             </Grid.Col>
             <Grid.Col span={4} h={MID_ROW_HEIGHT}>
                 <Center h="100%">
-                    {!dispenserState.isPending ?
-                        <Button
-                            size="xl"
-                            leftSection={<IconPlayerPlayFilled size={45} />}
-                            variant="filled"
-                            color="green"
-                            onClick={handleStart}
-                            disabled={dispenserState.startStopDisabled}
-                        >
-                            Avvio
-                        </Button>
-                        :
-                        <Button
-                            size="xl"
-                            leftSection={<IconPlayerStopFilled size={45} />}
-                            variant="filled"
-                            color="red"
-                            onClick={handleStop}
-                            disabled={dispenserState.startStopDisabled}
-                        >
-                            Stop
-                        </Button>
-                    }
+                    <motion.div whileTap={{ scale: dispenserState.startStopDisabled ? 1 : 1.3 }}>
+                        {!dispenserState.isPending ?
+                            <Button
+                                size="xl"
+                                leftSection={<IconPlayerPlayFilled size={45} />}
+                                variant="filled"
+                                color="green"
+                                onClick={handleStart}
+                                disabled={dispenserState.startStopDisabled}
+                            >
+                                Avvio
+                            </Button>
+                            :
+                            <Button
+                                size="xl"
+                                leftSection={<IconPlayerStopFilled size={45} />}
+                                variant="filled"
+                                color="red"
+                                onClick={handleStop}
+                                disabled={dispenserState.startStopDisabled}
+                            >
+                                Stop
+                            </Button>
+                        }
+                    </motion.div>
                 </Center>
             </Grid.Col>
 
