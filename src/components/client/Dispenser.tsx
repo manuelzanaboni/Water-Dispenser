@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import Link from "next/link";
 
-import { ActionIcon, Button, Center, Grid, Loader, Stack, Text } from "@mantine/core";
+import { ActionIcon, Button, Center, Grid, Loader, Paper, Stack, Text } from "@mantine/core";
 import { IconDeviceAnalytics, IconPlayerPlayFilled, IconPlayerStopFilled, IconSettings } from "@tabler/icons-react";
 
 import FilterPanel from "@/components/client/FilterPanel";
@@ -130,15 +130,17 @@ export default function Dispenser() {
             </Grid.Col>
 
             {/* Mid row */}
-            <Grid.Col span={3}>
+            <Grid.Col span={4}>
                 <Center h="100%">
-                    <Stack gap="xl">
-                        <FilterPanel />
-                        <RefrigeratorPanel />
-                    </Stack>
+                    <Paper shadow="md" radius="md" withBorder p="xl">
+                        <Stack gap="xl">
+                            <FilterPanel />
+                            <RefrigeratorPanel />
+                        </Stack>
+                    </Paper>
                 </Center>
             </Grid.Col>
-            <Grid.Col span={6} h={MID_ROW_HEIGHT}>
+            <Grid.Col span={4} h={MID_ROW_HEIGHT}>
                 <Center h="100%">
                     {dispenserState.isPending ?
                         <Loader size={50} /> :
@@ -146,7 +148,7 @@ export default function Dispenser() {
                     }
                 </Center>
             </Grid.Col>
-            <Grid.Col span={3} h={MID_ROW_HEIGHT}>
+            <Grid.Col span={4} h={MID_ROW_HEIGHT}>
                 <Center h="100%">
                     {!dispenserState.isPending ?
                         <Button
