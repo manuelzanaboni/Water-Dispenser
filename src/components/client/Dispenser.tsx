@@ -132,7 +132,7 @@ export default function Dispenser() {
             {/* Mid row */}
             <Grid.Col span={3}>
                 <Center h="100%">
-                    <Stack>
+                    <Stack gap="xl">
                         <FilterPanel />
                         <RefrigeratorPanel />
                     </Stack>
