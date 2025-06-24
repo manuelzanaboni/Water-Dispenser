@@ -4,10 +4,11 @@ import sqlite3 from "sqlite3";
 
 import { revalidatePath } from "next/cache";
 
-import { DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel } from "@/service/types";
+import { AggregateDispenseModel, DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel } from "@/service/types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
+const AGGREGATE_DISPENSES_VIEW = "aggregate_dispenses";
 const FILTERS_TABLE = "filters";
 const SETTINGS_TABLE = "settings";
 const REFRIGERATOR_TABLE = "refrigerator";
@@ -70,6 +71,30 @@ const db = new sqlite3.Database(
                 }
             );
 
+            db.run(
+                `CREATE VIEW IF NOT EXISTS ${AGGREGATE_DISPENSES_VIEW}(operation_type, duration) AS 
+                    SELECT operation_type, SUM(duration)
+                    FROM ${DISPENSES_TABLE}
+                    WHERE ts > (
+                        SELECT coalesce(
+                            (
+                                SELECT ts
+                                FROM ${FILTERS_TABLE}
+                                ORDER BY id DESC
+                                LIMIT 1
+                            ),
+                            0
+                        )
+                    )
+                    GROUP BY operation_type
+                `,
+                (err) => {
+                    if (err) {
+                        return console.error(err.message);
+                    }
+                }
+            );
+
             console.log("SQL ready");
         });
     }
@@ -85,6 +110,13 @@ export const getDispenses = async (): Promise<DispenseModel[]> =>
                     ORDER BY id DESC) sub
                 ORDER BY sub.id ASC;`,
             (err, rows) => err ? reject(err) : resolve(rows as DispenseModel[])
+        )
+    );
+
+export const getAggregateDispenses = async (): Promise<AggregateDispenseModel[]> =>
+    new Promise((resolve, reject) =>
+        db.all(`SELECT * FROM ${AGGREGATE_DISPENSES_VIEW}`,
+            (err, rows) => err ? reject(err) : resolve(rows as AggregateDispenseModel[])
         )
     );
 

@@ -23,6 +23,11 @@ export interface DispenseModel {
     ts: number;
 }
 
+export interface AggregateDispenseModel {
+    operation_type: number;
+    duration: number;
+}
+
 export interface FilterModel {
     id?: number;
     qty: number;
