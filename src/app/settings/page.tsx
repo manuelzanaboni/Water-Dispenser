@@ -1,11 +1,13 @@
 "use server";
 
-import { Stack } from "@mantine/core";
+import { Group, Stack, Text } from "@mantine/core";
 
 import FilterManagement from "@/components/client/FilterManagement";
 import FullScreen from "@/components/client/FullScreen";
 import SidePageHeader from "@/components/client/SidePageHeader";
 import ToggleTheme from "@/components/client/ToggleTheme";
+
+import nextConfig from "../../../next.config";
 
 export default async function Settings() {
     return (
@@ -16,6 +18,11 @@ export default async function Settings() {
                 <ToggleTheme />
                 <FullScreen />
                 <FilterManagement />
+                {/* Version */}
+                <Group gap="xs">
+                    <Text>Version:</Text>
+                    <Text fw={700}>{nextConfig?.publicRuntimeConfig?.version}</Text>
+                </Group>
             </Stack>
         </>
     );
