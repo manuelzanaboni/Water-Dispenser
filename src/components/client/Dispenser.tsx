@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { ActionIcon, Button, Center, Grid, Loader, Paper, Stack, Text } from "@mantine/core";
+import { ActionIcon, Button, Center, Grid, Loader, Paper, Stack, Text, useMantineTheme } from "@mantine/core";
 import { IconDeviceAnalytics, IconPlayerPlayFilled, IconPlayerStopFilled, IconSettings } from "@tabler/icons-react";
 
 import FilterPanel from "@/components/client/FilterPanel";
@@ -35,6 +35,8 @@ const DEAFULT_STATE: DispenserState = {
 const MID_ROW_HEIGHT = "calc(100vh - 12rem)";
 
 export default function Dispenser() {
+    const theme = useMantineTheme();
+
     const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
 
     const setSelectedOperation = (selectedOperation: DispenseOperation) =>
@@ -110,9 +112,9 @@ export default function Dispenser() {
                 </Center>
             </Grid.Col>
             <Grid.Col span={10}>
-                <Center>
+                {/* <Center>
                     <Text size="xl">... presets ...</Text>
-                </Center>
+                </Center> */}
             </Grid.Col>
             <Grid.Col span="content">
                 <Center>
@@ -150,26 +152,44 @@ export default function Dispenser() {
             </Grid.Col>
             <Grid.Col span={4} h={MID_ROW_HEIGHT}>
                 <Center h="100%">
-                    <motion.div whileTap={{ scale: dispenserState.startStopDisabled ? 1 : 1.3 }}>
+                    <motion.div whileTap={{ scale: dispenserState.startStopDisabled ? 1 : 1.2 }}>
                         {!dispenserState.isPending ?
                             <Button
-                                size="xl"
-                                leftSection={<IconPlayerPlayFilled size={45} />}
+                                leftSection={<IconPlayerPlayFilled size={75} />}
                                 variant="filled"
-                                color="green"
                                 onClick={handleStart}
                                 disabled={dispenserState.startStopDisabled}
+                                styles={{
+                                    root: {
+                                        backgroundColor: dispenserState.startStopDisabled ?
+                                            theme.colors.gray[0] :
+                                            theme.colors.lime[6],
+                                        height: "20rem",
+                                        width: "17rem",
+                                        borderRadius: "var(--mantine-radius-md)"
+                                    },
+                                    inner: { fontSize: 36 },
+                                }}
                             >
                                 Avvio
                             </Button>
                             :
                             <Button
-                                size="xl"
-                                leftSection={<IconPlayerStopFilled size={45} />}
+                                leftSection={<IconPlayerStopFilled size={75} />}
                                 variant="filled"
-                                color="red"
                                 onClick={handleStop}
                                 disabled={dispenserState.startStopDisabled}
+                                styles={{
+                                    root: {
+                                        backgroundColor: dispenserState.startStopDisabled ?
+                                            theme.colors.gray[0] :
+                                            theme.colors.red[7],
+                                        height: "20rem",
+                                        width: "17rem",
+                                        borderRadius: "var(--mantine-radius-md)"
+                                    },
+                                    inner: { fontSize: 36 },
+                                }}
                             >
                                 Stop
                             </Button>

@@ -37,7 +37,7 @@ const FilterPanel = () => {
     return (
         <Stack gap="xs" align="center">
             <Text size="xl">
-                Capacità filtrante residua
+                Filtraggio residuo
             </Text>
             <Badge
                 size="xl"

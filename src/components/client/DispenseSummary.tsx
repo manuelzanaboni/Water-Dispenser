@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Badge, Card, Grid, Group, Text } from '@mantine/core';
+import { Badge, Card, Grid, Stack, Text } from '@mantine/core';
 
 import TitledCard from "@/components/client/TitledCard";
 import { getDispenses } from "@/service/db";
@@ -39,7 +39,7 @@ export default function DispenseSummary() {
                 {data.map((value, index) =>
                     <Grid.Col key={index} span={4}>
                         <Card shadow="md" padding="lg" radius="md">
-                            <Group justify="space-between" mt="md" mb="xs">
+                            <Stack gap="xs" mt="md" mb="xs">
                                 <Text fw={500}>
                                     {findDispenseOperation(index + 1)?.name}
                                 </Text>
@@ -49,7 +49,7 @@ export default function DispenseSummary() {
                                     gradient={{ from: 'blue', to: 'teal', deg: 165 }}>
                                     {value} litri
                                 </Badge>
-                            </Group>
+                            </Stack>
                         </Card>
                     </Grid.Col>)}
             </Grid>
