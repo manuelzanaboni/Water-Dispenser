@@ -9,30 +9,30 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@mantine/charts": "^7.17.4",
-        "@mantine/core": "^7.17.3",
-        "@mantine/hooks": "^7.17.3",
-        "@tabler/icons-react": "^3.31.0",
-        "motion": "^12.6.3",
-        "next": "15.2.4",
-        "react": "19.1.0",
-        "react-dom": "19.1.0",
-        "recharts": "^2.15.2",
+        "@mantine/charts": "^8.2.2",
+        "@mantine/core": "^8.2.2",
+        "@mantine/hooks": "^8.2.2",
+        "@tabler/icons-react": "^3.34.1",
+        "motion": "^12.23.12",
+        "next": "15.4.5",
+        "react": "19.1.1",
+        "react-dom": "19.1.1",
+        "recharts": "^3.1.0",
         "sqlite3": "^5.1.7"
     },
     "devDependencies": {
-        "@types/node": "^20",
-        "@types/react": "19.1.0",
-        "@types/react-dom": "19.1.1",
-        "eslint": "^8",
-        "eslint-config-next": "15.2.4",
-        "postcss": "^8.4.38",
-        "postcss-preset-mantine": "^1.14.4",
+        "@types/node": "^24",
+        "@types/react": "19.1.9",
+        "@types/react-dom": "19.1.7",
+        "eslint": "^9",
+        "eslint-config-next": "15.4.5",
+        "postcss": "^8.5.6",
+        "postcss-preset-mantine": "^1.18.0",
         "postcss-simple-vars": "^7.0.1",
         "typescript": "^5"
     },
     "overrides": {
-        "@types/react": "19.1.0",
-        "@types/react-dom": "19.1.1"
+        "@types/react": "19.1.9",
+        "@types/react-dom": "19.1.7"
     }
 }
