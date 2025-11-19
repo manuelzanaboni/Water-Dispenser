@@ -28,11 +28,15 @@ export interface AggregateDispenseModel {
     duration: number;
 }
 
-export interface FilterModel {
+interface PointInTimeWithQuantity {
     id?: number;
     qty: number;
     ts: number;
 }
+
+export interface FilterModel extends PointInTimeWithQuantity { }
+
+export interface TankModel extends PointInTimeWithQuantity { }
 
 export interface RefrigeratorModel {
     ts: number;

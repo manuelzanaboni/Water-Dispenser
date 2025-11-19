@@ -10,6 +10,7 @@ const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
 const AGGREGATE_DISPENSES_VIEW = "aggregate_dispenses";
 const FILTERS_TABLE = "filters";
+const TANKS_TABLE = "tanks";
 const SETTINGS_TABLE = "settings";
 const REFRIGERATOR_TABLE = "refrigerator";
 
@@ -46,6 +47,20 @@ const db = new sqlite3.Database(
             // types.ts - interface FilterModel
             db.run(
                 `CREATE TABLE IF NOT EXISTS ${FILTERS_TABLE} (
+                    id INTEGER PRIMARY KEY,
+                    qty INTEGER NOT NULL,
+                    ts INTEGER DEFAULT (strftime('%s', 'now'))
+                )`,
+                (err) => {
+                    if (err) {
+                        return console.error(err.message);
+                    }
+                }
+            );
+
+            // types.ts - interface TankModel
+            db.run(
+                `CREATE TABLE IF NOT EXISTS ${TANKS_TABLE} (
                     id INTEGER PRIMARY KEY,
                     qty INTEGER NOT NULL,
                     ts INTEGER DEFAULT (strftime('%s', 'now'))
@@ -163,6 +178,26 @@ export const insertFilter = async (qty: number): Promise<void> =>
                 reject(err);
             } else {
                 console.log("Inserted new filter entry:\n", this.lastID);
+                revalidatePath("/");
+                resolve();
+            }
+        });
+    });
+
+//////////////////////// TANKS ////////////////////////
+
+export const insertTank = async (qty: number): Promise<void> =>
+    new Promise((resolve, reject) => {
+
+        const insertSql = `INSERT INTO ${TANKS_TABLE}(qty) VALUES(?)`;
+        const values = [qty];
+
+        db.run(insertSql, values, function (err) {
+            if (err) {
+                console.error(err.message);
+                reject(err);
+            } else {
+                console.log("Inserted new tank entry:\n", this.lastID);
                 revalidatePath("/");
                 resolve();
             }

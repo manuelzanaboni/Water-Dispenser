@@ -4,23 +4,23 @@ import { Accordion, Center } from "@mantine/core";
 
 import KeyPad from "@/components/client/KeyPad";
 import TitledCard from "@/components/client/TitledCard";
-import { insertFilter } from "@/service/db";
+import { insertTank } from "@/service/db";
 import { IconFilterPlus } from "@tabler/icons-react";
 
-const FilterManagement = () => {
+const TankManagement = () => {
 
-    const handleNewFilter = (qty: number) => insertFilter(qty);
+    const handleNewTank = (qty: number) => insertTank(qty);
 
     return (
-        <TitledCard title="Filtraggio" >
+        <TitledCard title="CO&#8322;" >
             <Accordion>
                 <Accordion.Item value="add">
                     <Accordion.Control icon={<IconFilterPlus />}>
-                        Sostituzione filtro
+                        Sostituzione bombola
                     </Accordion.Control>
                     <Accordion.Panel>
                         <Center>
-                            <KeyPad uom="litri" submitLabel="Aggiungi filtro" onSubmit={handleNewFilter} />
+                            <KeyPad uom="g" submitLabel="Aggiungi bombola" onSubmit={handleNewTank} />
                         </Center>
                     </Accordion.Panel>
                 </Accordion.Item>
@@ -29,4 +29,4 @@ const FilterManagement = () => {
     );
 }
 
-export default FilterManagement;
+export default TankManagement;

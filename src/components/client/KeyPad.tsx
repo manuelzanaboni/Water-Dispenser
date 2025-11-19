@@ -11,10 +11,12 @@ const NUMBERS = new Array<string>(9)
 
 
 type KeyPadProps = {
+    uom: string,
+    submitLabel: string,
     onSubmit: (value: number) => Promise<void>;
 }
 
-export default function KeyPad({ onSubmit }: KeyPadProps) {
+export default function KeyPad({ uom, submitLabel, onSubmit }: KeyPadProps) {
 
     const [value, setValue] = useState<string>("0");
 
@@ -55,7 +57,7 @@ export default function KeyPad({ onSubmit }: KeyPadProps) {
                 <Center>
                     <Group gap="xs">
                         <Text size="xl" fw={700}>{value}</Text>
-                        <Text size="xl">litri</Text>
+                        <Text size="xl">{uom}</Text>
                     </Group>
                 </Center>
 
@@ -75,7 +77,7 @@ export default function KeyPad({ onSubmit }: KeyPadProps) {
                     color="green"
                     onClick={handleSubmit}
                 >
-                    Aggiungi filtro
+                    {submitLabel}
                 </Button>
             </Stack>
         </Paper>
