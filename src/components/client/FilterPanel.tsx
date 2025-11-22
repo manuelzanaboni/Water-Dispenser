@@ -4,30 +4,30 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { Badge, Stack, Text } from "@mantine/core";
 
-import { getAggregateDispenses, getCurrentFilter } from "@/service/db";
-import { AggregateDispenseModel, DispenseOperation, FilterModel } from "@/service/types";
-import { findDispenseOperation } from "@/service/utils";
+import { getAggregateDispensesForFilter, getCurrentFilter } from "@/service/db";
+import { AggregateDispenseFilterModel, DispenseOperation, FilterModel } from "@/service/types";
+import { findDispenseOperation, toThousandsRounded } from "@/service/utils";
 
 const FilterPanel = () => {
     const [currentFilter, setCurrentFilter] = useState<FilterModel | null>(null);
-    const [aggregateDispenses, setAggregateDispenses] = useState<AggregateDispenseModel[]>([]);
+    const [aggregateDispenses, setAggregateDispenses] = useState<AggregateDispenseFilterModel[]>([]);
 
     const capacity = useMemo(() => {
         if (!currentFilter) return -1;
 
-        const used = aggregateDispenses.reduce((acc: number, d: AggregateDispenseModel) =>
+        const used = aggregateDispenses.reduce((acc: number, d: AggregateDispenseFilterModel) =>
             acc + d.duration * (findDispenseOperation(d.operation_type) as DispenseOperation).factor,
             0
         );
 
-        return currentFilter.qty - (Math.round(used / 1000 * 10) / 10);
+        return currentFilter.qty - toThousandsRounded(used);
     }, [currentFilter, aggregateDispenses]);
 
     const fetchData = useCallback(async () => {
         // const data = await (await fetch("/api/filters")).json();
         // setCurrentFilter(data ?? null);
         setCurrentFilter(await getCurrentFilter() ?? null);
-        setAggregateDispenses(await getAggregateDispenses() ?? [])
+        setAggregateDispenses(await getAggregateDispensesForFilter() ?? [])
     }, [setCurrentFilter]);
 
     useEffect(() => {

@@ -24,8 +24,15 @@ export interface DispenseModel {
 }
 
 export interface AggregateDispenseModel {
-    operation_type: number;
     duration: number;
+}
+
+export interface AggregateDispenseFilterModel extends AggregateDispenseModel {
+    operation_type: number;
+}
+
+export interface AggregateDispenseTankModel extends AggregateDispenseModel {
+    day: string;
 }
 
 interface PointInTimeWithQuantity {

@@ -7,9 +7,9 @@ import { Badge, Card, Grid, Stack, Text } from '@mantine/core';
 import TitledCard from "@/components/client/TitledCard";
 import { getDispenses } from "@/service/db";
 import { DispenseModel, DispenseOperation } from "@/service/types";
-import { findDispenseOperation } from "@/service/utils";
+import { findDispenseOperation, toThousandsRounded } from "@/service/utils";
 
-export default function DispenseSummary() {
+export default function MonthlyDispenseSummary() {
     const [dispenses, setDispenses] = useState<DispenseModel[]>([]);
 
     const data = useMemo(() => {
@@ -20,9 +20,7 @@ export default function DispenseSummary() {
             summary[d.operation_type - 1] += qty;
         });
 
-        return summary
-            .map(v => v / 1000)
-            .map(v => (Math.round(v * 10) / 10));
+        return summary.map(toThousandsRounded)
     }, [dispenses]);
 
     const fetchData = useCallback(async () => {

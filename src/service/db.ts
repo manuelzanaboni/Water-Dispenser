@@ -4,11 +4,12 @@ import sqlite3 from "sqlite3";
 
 import { revalidatePath } from "next/cache";
 
-import { AggregateDispenseModel, DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel } from "@/service/types";
+import { AggregateDispenseFilterModel, AggregateDispenseTankModel, DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel, TankModel } from "@/service/types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
 const DISPENSES_TABLE = "dispenses";
-const AGGREGATE_DISPENSES_VIEW = "aggregate_dispenses";
+const AGGREGATE_DISPENSES_FILTERS_VIEW = "aggregate_dispenses_filters";
+const AGGREGATE_DISPENSES_TANKS_VIEW = "aggregate_dispenses_tanks";
 const FILTERS_TABLE = "filters";
 const TANKS_TABLE = "tanks";
 const SETTINGS_TABLE = "settings";
@@ -87,7 +88,7 @@ const db = new sqlite3.Database(
             );
 
             db.run(
-                `CREATE VIEW IF NOT EXISTS ${AGGREGATE_DISPENSES_VIEW}(operation_type, duration) AS 
+                `CREATE VIEW IF NOT EXISTS ${AGGREGATE_DISPENSES_FILTERS_VIEW}(operation_type, duration) AS 
                     SELECT operation_type, SUM(duration)
                     FROM ${DISPENSES_TABLE}
                     WHERE ts > (
@@ -110,6 +111,21 @@ const db = new sqlite3.Database(
                 }
             );
 
+
+            db.run(
+                `CREATE VIEW IF NOT EXISTS ${AGGREGATE_DISPENSES_TANKS_VIEW}(day, duration) AS 
+                    SELECT strftime('%Y-%m-%d', datetime(ts, 'unixepoch')) AS day, SUM(duration)
+                    FROM ${DISPENSES_TABLE}
+                    WHERE operation_type = 3
+                    GROUP BY day
+                `,
+                (err) => {
+                    if (err) {
+                        return console.error(err.message);
+                    }
+                }
+            );
+
             console.log("SQL ready");
         });
     }
@@ -120,7 +136,7 @@ const db = new sqlite3.Database(
 export const getDispenses = async (): Promise<DispenseModel[]> =>
     new Promise((resolve, reject) =>
         db.all(`SELECT * FROM (
-                    SELECT * FROM ${DISPENSES_TABLE} 
+                    SELECT * FROM ${DISPENSES_TABLE}
                     WHERE strftime('%m-%Y', datetime(ts, 'unixepoch')) = strftime('%m-%Y', datetime())
                     ORDER BY id DESC) sub
                 ORDER BY sub.id ASC;`,
@@ -128,10 +144,18 @@ export const getDispenses = async (): Promise<DispenseModel[]> =>
         )
     );
 
-export const getAggregateDispenses = async (): Promise<AggregateDispenseModel[]> =>
+export const getAggregateDispensesForFilter = async (): Promise<AggregateDispenseFilterModel[]> =>
     new Promise((resolve, reject) =>
-        db.all(`SELECT * FROM ${AGGREGATE_DISPENSES_VIEW}`,
-            (err, rows) => err ? reject(err) : resolve(rows as AggregateDispenseModel[])
+        db.all(`SELECT * FROM ${AGGREGATE_DISPENSES_FILTERS_VIEW}`,
+            (err, rows) => err ? reject(err) : resolve(rows as AggregateDispenseFilterModel[])
+        )
+    );
+
+export const getAggregateDispensesForTank = async (tsFrom: number, tsTo: number): Promise<AggregateDispenseTankModel[]> =>
+    new Promise((resolve, reject) =>
+        db.all(`SELECT * FROM ${AGGREGATE_DISPENSES_TANKS_VIEW} WHERE day BETWEEN strftime('%Y-%m-%d', datetime(?, 'unixepoch')) AND strftime('%Y-%m-%d', datetime(?, 'unixepoch'))`,
+            [tsFrom, tsTo],
+            (err, rows) => err ? reject(err) : resolve(rows as AggregateDispenseTankModel[])
         )
     );
 
@@ -185,6 +209,13 @@ export const insertFilter = async (qty: number): Promise<void> =>
     });
 
 //////////////////////// TANKS ////////////////////////
+
+export const getTanks = async (): Promise<TankModel[]> =>
+    new Promise((resolve, reject) =>
+        db.all(`SELECT * FROM ${TANKS_TABLE}`,
+            (err, rows) => err ? reject(err) : resolve(rows as TankModel[])
+        )
+    );
 
 export const insertTank = async (qty: number): Promise<void> =>
     new Promise((resolve, reject) => {
