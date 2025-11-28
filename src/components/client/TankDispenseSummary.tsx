@@ -2,7 +2,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { BarChart } from '@mantine/charts';
-import { SegmentedControl, Stack } from "@mantine/core";
+import { Blockquote, SegmentedControl, Stack, Text } from "@mantine/core";
+import { IconInfoCircle } from '@tabler/icons-react';
 
 import TitledCard from "@/components/client/TitledCard";
 import { getAggregateDispensesForTank, getTanks } from "@/service/db";
@@ -48,7 +49,15 @@ export default function RefrigeratorChart() {
         const { ts, qty } = JSON.parse(selectedTank);
         const total = aggregateDispenses.reduce((acc, d) => acc + d.duration * SPARKLING_OPERATION.factor, 0);
 
-        return `Sotituita il ${buildDateTimestamp(ts)} - ${qty} Kg - Erogati: ${toThousandsRounded(total)} l`;
+        return <Blockquote
+            color="blue"
+            cite={`Sostituita il ${buildDateTimestamp(ts)} - ${toThousandsRounded(qty)} Kg`}
+            icon={<IconInfoCircle />}
+            mt="xl"
+        >
+            Erogazione totale acqua frizzante per questa bombola:
+            <Text size="lg" fw={700}>{toThousandsRounded(total)} litri</Text>
+        </Blockquote>
     }, [selectedTank, aggregateDispenses]);
 
     const data = useMemo(() => aggregateDispenses.map(d => ({
