@@ -13,6 +13,7 @@ export interface DispenseOperation {
     name: string;
     type: number;
     factor: number; // ml/sec
+    color: string; // hex
 }
 
 export interface DispenseModel {

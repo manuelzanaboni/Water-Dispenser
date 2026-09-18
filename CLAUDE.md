@@ -44,7 +44,7 @@ All hardware access shells out to the `gpio` CLI (`exec`) and to `cat` on the te
 
 ### Domain model (`src/service/types.ts`, `src/service/utils.ts`)
 
-`DISPENSE_OPERATIONS` in `utils.ts` is the single source of truth for the three water types the machine can dispense (still/room-temp, still/cold, sparkling/cold), each mapping a relay pin (`RELAYS`) to an `operation_type` id and a `factor` (ml/sec flow rate). Dispensed quantity is always derived as `duration * factor`, computed at insert time in `db.ts` — there's no direct flow-meter reading.
+`DISPENSE_OPERATIONS` in `utils.ts` is the single source of truth for the three water types the machine can dispense (still/room-temp, still/cold, sparkling/cold), each mapping a relay pin (`RELAYS`) to an `operation_type` id, a `factor` (ml/sec flow rate) and a `color` (Mantine palette name — orange / blue / teal — used consistently wherever a water type is shown). Dispensed quantity is always derived as `duration * factor`, computed at insert time in `db.ts` — there's no direct flow-meter reading.
 
 ### Persistence (`src/service/db.ts`)
 
@@ -61,7 +61,7 @@ Uses the Next.js `register()` instrumentation hook: on Node runtime startup, if 
 
 ### Pages (`src/app/`)
 
-- `/` (`page.tsx`) — the main kiosk screen (`Dispenser` component): pick a water type (`OperationSelector`), press Avvio/Stop to open/close the valve. On Stop it calls `turnOFF` + `insertDispense` together, using a client-tracked start timestamp to compute duration.
+- `/` (`page.tsx`) — the main kiosk screen (`Dispenser` component): pick a water type (`OperationSelector`), then tap the central animated glass (`DispenseControl` + `WaterAnimation`) to open/close the valve. On stop it calls `turnOFF` + `insertDispense` together, using a client-tracked start timestamp to compute duration. `FilterPanel` and `RefrigeratorPanel` still exist but are deliberately not mounted anywhere since the home redesign — they are waiting to be placed on another screen.
 - `/stats` — monthly dispense summary, tank (sparkling) usage chart, refrigerator temperature chart (Mantine charts / Recharts).
 - `/settings` — filter replacement logging, tank refill logging, theme toggle, fullscreen toggle, and the app version (read from `next.config.ts`'s `publicRuntimeConfig`, sourced from `package.json`).
 

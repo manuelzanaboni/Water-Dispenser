@@ -1,3 +1,5 @@
+import { IconChartBubble, IconDroplet, IconSnowflake } from "@tabler/icons-react";
+
 import { DispenseOperation } from "@/service/types";
 
 export const RELAYS = {
@@ -16,7 +18,8 @@ export const SPARKLING_OPERATION: DispenseOperation = {
     relay: SPARKLING,
     name: "Frizzante Fredda",
     type: 3,
-    factor: 37 // ml/sec
+    factor: 37, // ml/sec
+    color: "#228be6" // blue 6
 };
 
 export const DISPENSE_OPERATIONS: DispenseOperation[] = [
@@ -24,15 +27,24 @@ export const DISPENSE_OPERATIONS: DispenseOperation[] = [
         relay: STILL,
         name: "Naturale Ambiente",
         type: 1,
-        factor: 32 // ml/sec
+        factor: 32, // ml/sec
+        color: "#63e6be" // teal 3
     }, {
         relay: COLD,
         name: "Naturale Fredda",
         type: 2,
-        factor: 32 // ml/sec
+        factor: 32, // ml/sec
+        color: "#74c0fc" // blue 3
     },
     SPARKLING_OPERATION
 ];
+
+/* kept out of DispenseOperation: those objects cross the server action boundary and must stay serializable */
+export const OPERATION_ICONS: Record<number, typeof IconDroplet> = {
+    1: IconDroplet,
+    2: IconSnowflake,
+    3: IconChartBubble
+};
 
 export const findDispenseOperation = (type: number) => DISPENSE_OPERATIONS.find(d => d.type === type);
 

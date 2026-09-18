@@ -16,6 +16,8 @@ export const metadata: Metadata = {
 };
 
 const theme = createTheme({
+    // the water type colors are light shades: keep labels readable on filled surfaces
+    autoContrast: true,
     fontSizes: {
         // "xs": "10px",
         // "sm": "11px",

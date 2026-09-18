@@ -1,15 +1,14 @@
 "use client";
 
-import { motion } from "motion/react";
 import Link from "next/link";
 import { useState } from "react";
 
-import { ActionIcon, Button, Center, Grid, Loader, Paper, Stack, Text, useMantineTheme } from "@mantine/core";
-import { IconDeviceAnalytics, IconPlayerPlayFilled, IconPlayerStopFilled, IconSettings } from "@tabler/icons-react";
+import { ActionIcon, Center, Group, Stack } from "@mantine/core";
+import { IconDeviceAnalytics, IconSettings } from "@tabler/icons-react";
 
-import FilterPanel from "@/components/client/FilterPanel";
+import DispenseBackground from "@/components/client/DispenseBackground";
+import DispenseControl from "@/components/client/DispenseControl";
 import OperationSelector from "@/components/client/OperationSelector";
-import RefrigeratorPanel from "@/components/client/RefrigeratorPanel";
 
 import { insertDispense } from "@/service/db";
 import { turnOFF, turnON } from "@/service/gpio";
@@ -32,37 +31,14 @@ const DEAFULT_STATE: DispenserState = {
     timestampTracker: -1
 }
 
-const MID_ROW_HEIGHT = "calc(100vh - 12rem)";
+const SCREEN_HEIGHT = "calc(100dvh - 2rem)";
 
 export default function Dispenser() {
-    const theme = useMantineTheme();
 
     const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
 
     const setSelectedOperation = (selectedOperation: DispenseOperation) =>
         setDispenserState(prev => ({ ...prev, selectedOperation }));
-
-    // const [isPending, startTransition] = useTransition();
-
-    // const handleOperation = (op: DispenseOperation) => {
-    //     startTransition(async () => {
-    //         let data = await turnON(op);
-
-    //         data = await new Promise((resolve, reject) =>
-    //             // setTimeout(resolve,
-    //             //     3000,
-    //             //     turnOFF(op)
-    //             // )
-
-    //             setTimeout(() =>
-    //                 Promise.all([turnOFF(op), insertDispense(op, 42)])
-    //                     .then(([relayOp, _dbOP]) => resolve(relayOp))
-    //                     .catch(reject),
-    //                 3000
-    //             )
-    //         );
-    //     });
-    // }
 
     const handleStart = async () => {
         setDispenserState(prev => ({
@@ -95,119 +71,55 @@ export default function Dispenser() {
     }
 
     return (
-        <Grid p="md" justify="space-between">
+        <Stack h={SCREEN_HEIGHT} gap="md" justify="space-between">
+            <DispenseBackground
+                color={dispenserState.selectedOperation.color}
+                active={dispenserState.isPending}
+            />
+
             {/* Top row */}
-            <Grid.Col span="content">
-                <Center>
-                    <ActionIcon
-                        variant="light"
-                        size={60}
-                        component={Link}
-                        href="/stats"
-                        disabled={dispenserState.isPending}
-                        onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
-                    >
-                        <IconDeviceAnalytics size={40} />
-                    </ActionIcon>
-                </Center>
-            </Grid.Col>
-            <Grid.Col span={10}>
-                {/* <Center>
-                    <Text size="xl">... presets ...</Text>
-                </Center> */}
-            </Grid.Col>
-            <Grid.Col span="content">
-                <Center>
-                    <ActionIcon
-                        variant="light"
-                        size={60}
-                        component={Link}
-                        href="/settings"
-                        disabled={dispenserState.isPending}
-                        onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
-                    >
-                        <IconSettings size={40} />
-                    </ActionIcon>
-                </Center>
-            </Grid.Col>
+            <Group justify="space-between">
+                <ActionIcon
+                    variant="light"
+                    size={60}
+                    component={Link}
+                    href="/stats"
+                    disabled={dispenserState.isPending}
+                    onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
+                >
+                    <IconDeviceAnalytics size={40} />
+                </ActionIcon>
+                <ActionIcon
+                    variant="light"
+                    size={60}
+                    component={Link}
+                    href="/settings"
+                    disabled={dispenserState.isPending}
+                    onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
+                >
+                    <IconSettings size={40} />
+                </ActionIcon>
+            </Group>
 
             {/* Mid row */}
-            <Grid.Col span={4}>
-                <Center h="100%">
-                    <Paper shadow="md" radius="md" withBorder p="xl">
-                        <Stack gap="xl">
-                            <FilterPanel />
-                            <RefrigeratorPanel />
-                        </Stack>
-                    </Paper>
-                </Center>
-            </Grid.Col>
-            <Grid.Col span={4} h={MID_ROW_HEIGHT}>
-                <Center h="100%">
-                    {dispenserState.isPending ?
-                        <Loader size={50} /> :
-                        <Text size="xl">{dispenserState.selectedOperation.name}</Text>
-                    }
-                </Center>
-            </Grid.Col>
-            <Grid.Col span={4} h={MID_ROW_HEIGHT}>
-                <Center h="100%">
-                    <motion.div whileTap={{ scale: dispenserState.startStopDisabled ? 1 : 1.2 }}>
-                        {!dispenserState.isPending ?
-                            <Button
-                                leftSection={<IconPlayerPlayFilled size={75} />}
-                                variant="filled"
-                                onClick={handleStart}
-                                disabled={dispenserState.startStopDisabled}
-                                styles={{
-                                    root: {
-                                        backgroundColor: dispenserState.startStopDisabled ?
-                                            theme.colors.gray[0] :
-                                            theme.colors.lime[6],
-                                        height: "20rem",
-                                        width: "17rem",
-                                        borderRadius: "var(--mantine-radius-md)"
-                                    },
-                                    inner: { fontSize: 36 },
-                                }}
-                            >
-                                Avvio
-                            </Button>
-                            :
-                            <Button
-                                leftSection={<IconPlayerStopFilled size={75} />}
-                                variant="filled"
-                                onClick={handleStop}
-                                disabled={dispenserState.startStopDisabled}
-                                styles={{
-                                    root: {
-                                        backgroundColor: dispenserState.startStopDisabled ?
-                                            theme.colors.gray[0] :
-                                            theme.colors.red[7],
-                                        height: "20rem",
-                                        width: "17rem",
-                                        borderRadius: "var(--mantine-radius-md)"
-                                    },
-                                    inner: { fontSize: 36 },
-                                }}
-                            >
-                                Stop
-                            </Button>
-                        }
-                    </motion.div>
-                </Center>
-            </Grid.Col>
+            <Center style={{ flex: 1, minHeight: 0 }}>
+                <DispenseControl
+                    operation={dispenserState.selectedOperation}
+                    active={dispenserState.isPending}
+                    disabled={dispenserState.startStopDisabled}
+                    onStart={handleStart}
+                    onStop={handleStop}
+                />
+            </Center>
 
             {/* Bottom row */}
-            <Grid.Col span={12}>
-                <Center>
-                    <OperationSelector
-                        selectedOperation={dispenserState.selectedOperation}
-                        setSelectedOperation={setSelectedOperation}
-                        isPending={dispenserState.isPending}
-                    />
-                </Center>
-            </Grid.Col>
-        </Grid>
+            <Center>
+                <OperationSelector
+                    selectedOperation={dispenserState.selectedOperation}
+                    setSelectedOperation={setSelectedOperation}
+                    isPending={dispenserState.isPending}
+                />
+            </Center>
+        </Stack>
     );
 }

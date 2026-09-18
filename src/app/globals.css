@@ -2,7 +2,16 @@ html, body {
     height: 100%;
 }
 
+/* the glass is see through: on dark it needs a light outline and a fainter tint.
+   The light scheme values live on the SVG itself, these only override them. */
+[data-mantine-color-scheme="dark"] .glass-outline {
+    stroke: #ced4da;
+}
+
+[data-mantine-color-scheme="dark"] .glass-tint {
+    fill: rgba(255, 255, 255, 0.07);
+}
+
 body {
     padding: 1rem;
-    background-image: url("/crissxcross.png");
 }
