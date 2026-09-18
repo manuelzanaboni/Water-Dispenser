@@ -2,6 +2,16 @@ html, body {
     height: 100%;
 }
 
+.dispense-background {
+    background-image: url("/bg-light.webp");
+    background-size: cover;
+    background-position: center;
+}
+
+[data-mantine-color-scheme="dark"] .dispense-background {
+    background-image: url("/bg-dark.webp");
+}
+
 /* the glass is see through: on dark it needs a light outline and a fainter tint.
    The light scheme values live on the SVG itself, these only override them. */
 [data-mantine-color-scheme="dark"] .glass-outline {
