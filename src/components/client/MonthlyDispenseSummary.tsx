@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Badge, Card, Grid, Stack, Text } from '@mantine/core';
+import { Card, Grid, Group, Stack, Text } from '@mantine/core';
 
 import TitledCard from "@/components/client/TitledCard";
 import { getDispenses } from "@/service/db";
 import { DispenseModel, DispenseOperation } from "@/service/types";
-import { findDispenseOperation, toThousandsRounded } from "@/service/utils";
+import { DISPENSE_OPERATIONS, OPERATION_ICONS, findDispenseOperation, toThousandsRounded } from "@/service/utils";
 
 export default function MonthlyDispenseSummary() {
     const [dispenses, setDispenses] = useState<DispenseModel[]>([]);
@@ -34,22 +34,45 @@ export default function MonthlyDispenseSummary() {
     return (
         <TitledCard title="Erogazioni questo mese">
             <Grid mt="md">
-                {data.map((value, index) =>
-                    <Grid.Col key={index} span={4}>
-                        <Card shadow="md" padding="lg" radius="md">
-                            <Stack gap="xs" mt="md" mb="xs">
-                                <Text fw={500}>
-                                    {findDispenseOperation(index + 1)?.name}
-                                </Text>
-                                <Badge
-                                    size="xl"
-                                    variant="gradient"
-                                    gradient={{ from: 'blue', to: 'teal', deg: 165 }}>
-                                    {value} litri
-                                </Badge>
-                            </Stack>
-                        </Card>
-                    </Grid.Col>)}
+                {DISPENSE_OPERATIONS.map(op => {
+                    const Icon = OPERATION_ICONS[op.type];
+
+                    return (
+                        <Grid.Col key={op.type} span={4}>
+                            <Card
+                                shadow="md"
+                                padding="lg"
+                                radius="md"
+                                style={{
+                                    position: "relative",
+                                    overflow: "hidden",
+                                    // hex8: an 8 digit hex keeps this working without color-mix
+                                    backgroundColor: `${op.color}1f`,
+                                    borderTop: `4px solid ${op.color}`
+                                }}
+                            >
+                                <Icon
+                                    size={165}
+                                    stroke={1.2}
+                                    color={op.color}
+                                    style={{ position: "absolute", right: -30, bottom: -42, opacity: 0.35 }}
+                                />
+
+                                <Stack gap={2} style={{ position: "relative" }}>
+                                    <Text size="sm" c="dimmed">
+                                        {op.name}
+                                    </Text>
+                                    <Group gap={8} align="baseline">
+                                        <Text fw={700} style={{ fontSize: "2.5rem", lineHeight: 1.1 }}>
+                                            {data[op.type - 1]}
+                                        </Text>
+                                        <Text size="sm" c="dimmed">litri</Text>
+                                    </Group>
+                                </Stack>
+                            </Card>
+                        </Grid.Col>
+                    );
+                })}
             </Grid>
         </TitledCard >
     );

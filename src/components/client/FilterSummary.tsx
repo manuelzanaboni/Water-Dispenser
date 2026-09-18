@@ -2,13 +2,15 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 
-import { Badge, Stack, Text } from "@mantine/core";
+import { Blockquote, Text } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
 
+import TitledCard from "@/components/client/TitledCard";
 import { getAggregateDispensesForFilter, getCurrentFilter } from "@/service/db";
 import { AggregateDispenseFilterModel, DispenseOperation, FilterModel } from "@/service/types";
-import { findDispenseOperation, toThousandsRounded } from "@/service/utils";
+import { buildDateTimestamp, findDispenseOperation, toThousandsRounded } from "@/service/utils";
 
-const FilterPanel = () => {
+export default function FilterSummary() {
     const [currentFilter, setCurrentFilter] = useState<FilterModel | null>(null);
     const [aggregateDispenses, setAggregateDispenses] = useState<AggregateDispenseFilterModel[]>([]);
 
@@ -24,8 +26,6 @@ const FilterPanel = () => {
     }, [currentFilter, aggregateDispenses]);
 
     const fetchData = useCallback(async () => {
-        // const data = await (await fetch("/api/filters")).json();
-        // setCurrentFilter(data ?? null);
         setCurrentFilter(await getCurrentFilter() ?? null);
         setAggregateDispenses(await getAggregateDispensesForFilter() ?? [])
     }, [setCurrentFilter]);
@@ -35,18 +35,20 @@ const FilterPanel = () => {
     }, [fetchData]);
 
     return (
-        <Stack gap="xs" align="center">
-            <Text size="xl">
-                Filtraggio residuo
-            </Text>
-            <Badge
-                size="xl"
-                variant="gradient"
-                gradient={{ from: 'blue', to: 'teal', deg: 165 }}>
-                {capacity} litri
-            </Badge>
-        </Stack>
+        <TitledCard title="Filtraggio">
+            <>
+                {currentFilter &&
+                    <Blockquote
+                        color="blue"
+                        cite={`Sostituito il ${buildDateTimestamp(currentFilter.ts)} - ${currentFilter.qty} litri`}
+                        icon={<IconInfoCircle />}
+                        mt="xl"
+                    >
+                        Filtraggio residuo per questo filtro:
+                        <Text size="lg" fw={700}>{capacity} litri</Text>
+                    </Blockquote>
+                }
+            </>
+        </TitledCard>
     );
 }
-
-export default FilterPanel;

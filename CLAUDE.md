@@ -61,8 +61,8 @@ Uses the Next.js `register()` instrumentation hook: on Node runtime startup, if 
 
 ### Pages (`src/app/`)
 
-- `/` (`page.tsx`) — the main kiosk screen (`Dispenser` component): pick a water type (`OperationSelector`), then tap the central animated glass (`DispenseControl` + `WaterAnimation`) to open/close the valve. On stop it calls `turnOFF` + `insertDispense` together, using a client-tracked start timestamp to compute duration. `FilterPanel` and `RefrigeratorPanel` still exist but are deliberately not mounted anywhere since the home redesign — they are waiting to be placed on another screen.
-- `/stats` — monthly dispense summary, tank (sparkling) usage chart, refrigerator temperature chart (Mantine charts / Recharts).
+- `/` (`page.tsx`) — the main kiosk screen (`Dispenser` component): pick a water type (`OperationSelector`), then tap the central animated glass (`DispenseControl` + `WaterAnimation`) to open/close the valve. On stop it calls `turnOFF` + `insertDispense` together, using a client-tracked start timestamp to compute duration. `RefrigeratorPanel` still exists but is deliberately not mounted anywhere since the home redesign — it is waiting to be placed on another screen.
+- `/stats` — monthly dispense summary, remaining filter capacity, tank (sparkling) usage chart, refrigerator temperature chart (Mantine charts / Recharts).
 - `/settings` — filter replacement logging, tank refill logging, theme toggle, fullscreen toggle, and the app version (read from `next.config.ts`'s `publicRuntimeConfig`, sourced from `package.json`).
 
 All page-level components are Server Components (`"use server"`) that compose client components (`"use client"`, under `src/components/client/`) for interactivity.
