@@ -28,8 +28,6 @@ const DispenseControl = (props: DispenseControlProps) => {
             aria-pressed={active}
             aria-label={`${active ? "Interrompi" : "Avvia"} erogazione ${operation.name}`}
             style={{
-                opacity: disabled ? 0.45 : 1,
-                transition: "opacity 150ms",
                 borderRadius: "var(--mantine-radius-md)",
                 // the kiosk browser paints a grey box over the whole button on touch
                 WebkitTapHighlightColor: "transparent",
