@@ -2,8 +2,6 @@
 
 import sqlite3 from "sqlite3";
 
-import { revalidatePath } from "next/cache";
-
 import { isValidQuantity } from "@/service/keypad";
 
 import { AggregateDispenseFilterModel, AggregateDispenseTankModel, DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel, TankModel } from "@/service/types";
@@ -205,7 +203,6 @@ export const insertFilter = async (qty: number): Promise<void> =>
                 reject(err);
             } else {
                 console.log("Inserted new filter entry:\n", this.lastID);
-                revalidatePath("/");
                 resolve();
             }
         });
@@ -233,7 +230,6 @@ export const insertTank = async (qty: number): Promise<void> =>
                 reject(err);
             } else {
                 console.log("Inserted new tank entry:\n", this.lastID);
-                revalidatePath("/");
                 resolve();
             }
         });
