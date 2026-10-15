@@ -29,6 +29,8 @@
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
     transition: background-color 200ms ease-out, opacity 200ms ease-out, transform 100ms ease-out;
+    /* the content shrinks with the button, see the container query below */
+    container-type: inline-size;
 }
 
 :global(html[data-button-layout="row"]) .button {
@@ -105,6 +107,35 @@
     flex-shrink: 0;
     width: 1.75rem;
     height: 1.75rem;
+}
+
+/* narrow buttons (small screens, or three in a row): tighter spacing and no
+   check mark, the filled background already marks the selection */
+@container (max-width: 17.5rem) {
+    .iconBox {
+        width: 3rem;
+    }
+
+    .icon {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .text {
+        margin-left: calc(var(--kiosk-space-2) * -1);
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: var(--kiosk-font-sm);
+    }
+
+    .check {
+        display: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
