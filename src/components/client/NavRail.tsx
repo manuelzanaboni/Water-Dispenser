@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import { IconAdjustmentsHorizontal, IconChartBar, IconGlass, IconLock } from "@tabler/icons-react";
 
+import Clock from "@/components/client/Clock";
 import { useDispenseLock } from "@/components/client/DispenseLock";
 import FridgeChip from "@/components/client/FridgeChip";
 import styles from "@/components/client/NavRail.module.css";
@@ -55,6 +56,7 @@ export default function NavRail({ isTemperatureEnabled }: NavRailProps) {
 
             <div className={styles.spacer} />
             <FridgeChip isEnabled={isTemperatureEnabled} />
+            <Clock />
 
             {isLocked &&
                 <div className={styles.lock}>

@@ -56,5 +56,9 @@ export const toThousandsRounded = (value: number) => Math.round(value / 1000 * 1
 
 const TEMPERATURE_FORMAT = new Intl.NumberFormat("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 
+const CLOCK_FORMAT = new Intl.DateTimeFormat("it-IT", { hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+
+export const formatClock = (date: Date): string => CLOCK_FORMAT.format(date);
+
 export const formatTemperature = (celsius: number | null): string =>
     celsius === null ? "—" : `${TEMPERATURE_FORMAT.format(celsius)}°`;

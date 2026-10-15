@@ -1,6 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { DISPENSE_OPERATIONS, findDispenseOperation, formatTemperature, toThousandsRounded } from "@/service/utils";
+import { DISPENSE_OPERATIONS, findDispenseOperation, formatClock, formatTemperature, toThousandsRounded } from "@/service/utils";
+
+describe("formatClock", () => {
+    test("shows hours and minutes in 24h format", () => {
+        expect(formatClock(new Date(2026, 9, 15, 14, 32, 59))).toBe("14:32");
+    });
+
+    test("pads single digit hours and minutes", () => {
+        expect(formatClock(new Date(2026, 9, 15, 9, 5))).toBe("09:05");
+    });
+});
 
 describe("formatTemperature", () => {
     test("shows one decimal with the Italian comma and a degree sign", () => {

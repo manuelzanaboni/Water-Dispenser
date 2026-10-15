@@ -1,0 +1,8 @@
+.clock {
+    /* reserves its line before the first tick so the rail does not jump */
+    min-height: 1.5em;
+    font-size: var(--kiosk-font-md);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--kiosk-text-muted);
+}
