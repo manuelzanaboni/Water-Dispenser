@@ -1,0 +1,110 @@
+.selector {
+    display: flex;
+    flex-direction: column;
+    gap: var(--kiosk-space-3);
+    height: 100%;
+}
+
+:global(html[data-button-layout="row"]) .selector {
+    flex-direction: row;
+    height: auto;
+}
+
+.button {
+    flex: 1;
+    min-width: 0;
+    min-height: var(--kiosk-touch-min);
+    display: flex;
+    align-items: center;
+    gap: var(--kiosk-space-4);
+    padding: var(--kiosk-space-3) var(--kiosk-space-5);
+    box-sizing: border-box;
+    border: 2px solid var(--kiosk-line);
+    border-radius: var(--kiosk-radius-lg);
+    background: var(--kiosk-surface);
+    color: var(--kiosk-text);
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: background-color 200ms ease-out, opacity 200ms ease-out, transform 100ms ease-out;
+}
+
+.button:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+.button:focus-visible {
+    outline: 3px solid var(--water-strong);
+    outline-offset: 2px;
+}
+
+.button[aria-pressed="true"] {
+    border-color: var(--water);
+    background: var(--water);
+    color: var(--kiosk-on-water);
+}
+
+.button:disabled {
+    opacity: 0.3;
+    cursor: default;
+}
+
+.iconBox {
+    flex-shrink: 0;
+    width: 4rem;
+    aspect-ratio: 1;
+    display: grid;
+    place-items: center;
+    border-radius: var(--kiosk-radius-md);
+    background: color-mix(in srgb, var(--water) 14%, transparent);
+    color: var(--water-strong);
+}
+
+.button[aria-pressed="true"] .iconBox {
+    background: color-mix(in srgb, var(--kiosk-on-water) 12%, transparent);
+    color: currentColor;
+}
+
+.icon {
+    width: 2.25rem;
+    height: 2.25rem;
+}
+
+.text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+}
+
+.title {
+    font-size: 1.5625rem;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.subtitle {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.button[aria-pressed="true"] .subtitle {
+    color: currentColor;
+    opacity: 0.8;
+}
+
+.check {
+    flex-shrink: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .button {
+        transition: none;
+    }
+}
