@@ -4,6 +4,8 @@ import sqlite3 from "sqlite3";
 
 import { revalidatePath } from "next/cache";
 
+import { isValidQuantity } from "@/service/keypad";
+
 import { AggregateDispenseFilterModel, AggregateDispenseTankModel, DispenseModel, DispenseOperation, FilterModel, RefrigeratorModel, TankModel } from "@/service/types";
 
 const DB = process.env.DB_FILE ?? "water-dispenser.db";
@@ -192,6 +194,7 @@ export const getCurrentFilter = async (): Promise<FilterModel> =>
 
 export const insertFilter = async (qty: number): Promise<void> =>
     new Promise((resolve, reject) => {
+        if (!isValidQuantity(qty)) return reject(new Error(`Invalid filter capacity: ${qty}`));
 
         const insertSql = `INSERT INTO ${FILTERS_TABLE}(qty) VALUES(?)`;
         const values = [qty];
@@ -219,6 +222,7 @@ export const getTanks = async (): Promise<TankModel[]> =>
 
 export const insertTank = async (qty: number): Promise<void> =>
     new Promise((resolve, reject) => {
+        if (!isValidQuantity(qty)) return reject(new Error(`Invalid tank weight: ${qty}`));
 
         const insertSql = `INSERT INTO ${TANKS_TABLE}(qty) VALUES(?)`;
         const values = [qty];
