@@ -4,7 +4,7 @@ networks:
 
 services:
   water-dispenser:
-    image: 192.168.1.254:5000/water-dispenser:1.0.0
+    image: 192.168.1.254:5000/water-dispenser:3.0.0
     container_name: water-dispenser
     privileged: true
     volumes:
