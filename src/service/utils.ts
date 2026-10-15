@@ -51,10 +51,6 @@ export const OPERATION_ICONS: Record<number, typeof IconDroplet> = {
 
 export const findDispenseOperation = (type: number) => DISPENSE_OPERATIONS.find(d => d.type === type);
 
-export const buildTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleString("it-IT")}`;
-
-export const buildDateTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleDateString("it-IT")}`;
-
 export const toThousandsRounded = (value: number) => Math.round(value / 1000 * 10) / 10;
 
 const TEMPERATURE_FORMAT = new Intl.NumberFormat("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
