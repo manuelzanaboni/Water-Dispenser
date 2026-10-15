@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
+import { Manrope } from "next/font/google";
 
 import "@mantine/charts/styles.css";
 
+import "@/app/tokens.css";
 import "@/app/globals.css";
 
 // Import styles of packages that you've installed.
@@ -15,7 +17,18 @@ export const metadata: Metadata = {
     description: "Water Dispenser App companion for BWT AQA drink U20 CAS",
 };
 
+// downloaded at build time and served by Next: the kiosk needs no network for fonts
+const manrope = Manrope({
+    subsets: ["latin"],
+    weight: ["500", "600", "700", "800"],
+    variable: "--font-manrope",
+});
+
+const FONT_FAMILY = "var(--font-manrope), sans-serif";
+
 const theme = createTheme({
+    fontFamily: FONT_FAMILY,
+    headings: { fontFamily: FONT_FAMILY },
     // the water type colors are light shades: keep labels readable on filled surfaces
     autoContrast: true,
     fontSizes: {
@@ -38,7 +51,7 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="it" {...mantineHtmlProps}>
+        <html lang="it" className={manrope.variable} {...mantineHtmlProps}>
             <head>
                 <ColorSchemeScript />
             </head>

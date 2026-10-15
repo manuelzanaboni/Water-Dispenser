@@ -1,0 +1,62 @@
+/* Kiosk design tokens. Sizes are in rem so the layout scales with the display;
+   colours flip with the Mantine colour scheme attribute set on <html>. */
+
+:root {
+    /* spacing */
+    --kiosk-space-1: 0.25rem;
+    --kiosk-space-2: 0.5rem;
+    --kiosk-space-3: 0.75rem;
+    --kiosk-space-4: 1rem;
+    --kiosk-space-5: 1.5rem;
+    --kiosk-space-6: 2rem;
+
+    /* radii */
+    --kiosk-radius-sm: 0.75rem;
+    --kiosk-radius-md: 1.25rem;
+    --kiosk-radius-lg: 1.625rem;
+    --kiosk-radius-pill: 999rem;
+
+    /* type scale */
+    --kiosk-font-xs: 0.8125rem;
+    --kiosk-font-sm: 0.9375rem;
+    --kiosk-font-md: 1.125rem;
+    --kiosk-font-lg: 1.5rem;
+    --kiosk-font-xl: 1.875rem;
+    --kiosk-font-display: 5.75rem;
+
+    /* smallest comfortable touch target */
+    --kiosk-touch-min: 3rem;
+
+    /* water types: the fill is the same in both schemes, the strong shade is used
+       for icons, rings and borders drawn on a surface */
+    --kiosk-water-ambiente: #E3C99A;
+    --kiosk-water-fredda: #8FD0FA;
+    --kiosk-water-frizzante: #36C2A3;
+    --kiosk-accent-filter: #9FB8FF;
+
+    /* light scheme (default) */
+    --kiosk-bg: #EDF3F7;
+    --kiosk-rail: #E3EBF1;
+    --kiosk-surface: #FFFFFF;
+    --kiosk-surface-active: #FFFFFF;
+    --kiosk-line: #D3DFE8;
+    --kiosk-text: #0A1520;
+    --kiosk-text-muted: #4E6275;
+    --kiosk-on-water: #0A1520;
+    --kiosk-water-ambiente-strong: #8A6A2E;
+    --kiosk-water-fredda-strong: #1C7FC0;
+    --kiosk-water-frizzante-strong: #13866D;
+}
+
+[data-mantine-color-scheme="dark"] {
+    --kiosk-bg: #0A1520;
+    --kiosk-rail: #0E1B28;
+    --kiosk-surface: #122131;
+    --kiosk-surface-active: #1D3249;
+    --kiosk-line: #233A52;
+    --kiosk-text: #EAF2F8;
+    --kiosk-text-muted: #93A9BD;
+    --kiosk-water-ambiente-strong: var(--kiosk-water-ambiente);
+    --kiosk-water-fredda-strong: var(--kiosk-water-fredda);
+    --kiosk-water-frizzante-strong: var(--kiosk-water-frizzante);
+}
