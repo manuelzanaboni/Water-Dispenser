@@ -101,6 +101,22 @@ describe("Dispenser", () => {
         expect(screen.getByRole("status")).toHaveTextContent("Erogati 259 ml · Frizzante · Fredda");
     });
 
+    test("hides the summary again after a few seconds", async () => {
+        const user = renderDispenser();
+
+        await user.click(dial());
+        await wait(DEBOUNCE_PASSED_MS);
+        await user.click(dial());
+        expect(screen.getByRole("status")).toBeInTheDocument();
+
+        await wait(4_000);
+        expect(screen.getByRole("status")).toBeInTheDocument();
+
+        await wait(1_100);
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+        expect(screen.getByText("Scegli l’acqua, poi tocca il cerchio")).toBeInTheDocument();
+    });
+
     test("clears the summary when another water type is picked", async () => {
         const user = renderDispenser();
 

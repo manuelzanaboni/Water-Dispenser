@@ -20,6 +20,8 @@ import { DISPENSE_OPERATIONS } from "@/service/utils";
 const DEBOUNCE_MS = 1_000;
 /* how often the timer and the water level move while the valve is open */
 const TICK_MS = 200;
+/* how long the "Erogati … ml" summary stays under the dial */
+const SUMMARY_VISIBLE_MS = 5_000;
 
 type LastDispense = {
     operation: DispenseOperation;
@@ -51,6 +53,13 @@ export default function Dispenser() {
     }, [startedAt]);
 
     useEffect(() => () => clearTimeout(debounceTimer.current), []);
+
+    useEffect(() => {
+        if (lastDispense === null) return;
+
+        const id = setTimeout(() => setLastDispense(null), SUMMARY_VISIBLE_MS);
+        return () => clearTimeout(id);
+    }, [lastDispense]);
 
     const debounce = useCallback(() => {
         setDebouncing(true);
