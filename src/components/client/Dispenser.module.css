@@ -27,13 +27,56 @@
     gap: var(--kiosk-space-5);
 }
 
+/* one line under the dial, always reserved so the dial never jumps */
 .status {
-    min-height: 1.5em;
-    margin: 0;
+    min-height: 3.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: var(--kiosk-font-md);
+    text-align: center;
+}
+
+.hint {
+    margin: 0;
     font-weight: 600;
     color: var(--kiosk-text-muted);
-    text-align: center;
+}
+
+.summary {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--kiosk-space-3);
+    padding: var(--kiosk-space-3) var(--kiosk-space-5);
+    border: 1px solid var(--kiosk-line);
+    border-radius: var(--kiosk-radius-pill);
+    background: var(--kiosk-surface);
+    font-weight: 700;
+    animation: summary-in 200ms ease-out both;
+}
+
+.summaryIcon {
+    flex-shrink: 0;
+    width: 1.375rem;
+    height: 1.375rem;
+    color: var(--kiosk-water-frizzante-strong);
+}
+
+@keyframes summary-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .summary {
+        animation: none;
+    }
 }
 
 .types {

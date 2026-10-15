@@ -90,6 +90,28 @@ describe("Dispenser", () => {
         expect(dial()).toHaveAttribute("aria-pressed", "false");
     });
 
+    test("sums up the last dispense once the valve closes", async () => {
+        const user = renderDispenser();
+
+        await user.click(screen.getByRole("button", { name: "Frizzante Fredda" }));
+        await user.click(dial());
+        await wait(7_000);
+        await user.click(dial());
+
+        expect(screen.getByRole("status")).toHaveTextContent("Erogati 259 ml · Frizzante · Fredda");
+    });
+
+    test("clears the summary when another water type is picked", async () => {
+        const user = renderDispenser();
+
+        await user.click(dial());
+        await wait(DEBOUNCE_PASSED_MS);
+        await user.click(dial());
+        await user.click(screen.getByRole("button", { name: "Naturale Fredda" }));
+
+        expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
     test("ignores a second tap right after starting", async () => {
         const user = renderDispenser();
 

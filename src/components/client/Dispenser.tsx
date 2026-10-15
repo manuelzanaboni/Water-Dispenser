@@ -2,12 +2,15 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { IconCheck } from "@tabler/icons-react";
+
 import DispenseDial from "@/components/client/DispenseDial";
 import { useDispenseLock } from "@/components/client/DispenseLock";
 import styles from "@/components/client/Dispenser.module.css";
 import WaterTypeSelector from "@/components/client/WaterTypeSelector";
 
 import { insertDispense } from "@/service/db";
+import { estimateMl, splitOperationName } from "@/service/dispense";
 import { turnOFF, turnON } from "@/service/gpio";
 import { DispenseOperation } from "@/service/types";
 import { DISPENSE_OPERATIONS } from "@/service/utils";
@@ -18,8 +21,19 @@ const DEBOUNCE_MS = 1_000;
 /* how often the timer and the water level move while the valve is open */
 const TICK_MS = 200;
 
+type LastDispense = {
+    operation: DispenseOperation;
+    durationSec: number;
+};
+
+const describeDispense = ({ operation, durationSec }: LastDispense) => {
+    const { title, subtitle } = splitOperationName(operation.name);
+    return `Erogati ${estimateMl(durationSec, operation.factor)} ml · ${title} · ${subtitle}`;
+};
+
 export default function Dispenser() {
     const [selected, setSelected] = useState<DispenseOperation>(DISPENSE_OPERATIONS[0]);
+    const [lastDispense, setLastDispense] = useState<LastDispense | null>(null);
     const [startedAt, setStartedAt] = useState<number | null>(null);
     const [now, setNow] = useState(0);
     const [isDebouncing, setDebouncing] = useState(false);
@@ -44,10 +58,16 @@ export default function Dispenser() {
         debounceTimer.current = setTimeout(() => setDebouncing(false), DEBOUNCE_MS);
     };
 
+    const selectType = (operation: DispenseOperation) => {
+        setSelected(operation);
+        setLastDispense(null);
+    };
+
     const start = async () => {
         const openedAt = Date.now();
         setStartedAt(openedAt);
         setNow(openedAt);
+        setLastDispense(null);
         setLocked(true);
         debounce();
 
@@ -59,6 +79,7 @@ export default function Dispenser() {
 
         const durationSec = Math.round((Date.now() - startedAt) / 1000);
         setStartedAt(null);
+        setLastDispense({ operation: selected, durationSec });
         setLocked(false);
         debounce();
 
@@ -80,13 +101,19 @@ export default function Dispenser() {
                     onToggle={isActive ? stop : start}
                 />
 
-                <p className={styles.status}>
-                    {!isActive && "Scegli l’acqua, poi tocca il cerchio"}
-                </p>
+                <div className={styles.status}>
+                    {lastDispense
+                        ? <p role="status" className={styles.summary}>
+                            <IconCheck className={styles.summaryIcon} stroke={2.4} aria-hidden />
+                            {describeDispense(lastDispense)}
+                        </p>
+                        : !isActive && <p className={styles.hint}>Scegli l’acqua, poi tocca il cerchio</p>
+                    }
+                </div>
             </section>
 
             <div className={styles.types}>
-                <WaterTypeSelector selected={selected} isLocked={isActive} onSelect={setSelected} />
+                <WaterTypeSelector selected={selected} isLocked={isActive} onSelect={selectType} />
             </div>
         </div>
     );
