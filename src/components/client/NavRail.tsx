@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { IconAdjustmentsHorizontal, IconChartBar, IconGlass, IconLock } from "@tabler/icons-react";
 
 import { useDispenseLock } from "@/components/client/DispenseLock";
+import FridgeChip from "@/components/client/FridgeChip";
 import styles from "@/components/client/NavRail.module.css";
 
 type Destination = {
@@ -23,7 +24,11 @@ const DESTINATIONS: Destination[] = [
 const isCurrent = (href: string, pathname: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
-export default function NavRail() {
+type NavRailProps = {
+    isTemperatureEnabled: boolean;
+};
+
+export default function NavRail({ isTemperatureEnabled }: NavRailProps) {
     const pathname = usePathname();
     const { isLocked } = useDispenseLock();
 
@@ -47,6 +52,9 @@ export default function NavRail() {
                     {label}
                 </Link>
             ))}
+
+            <div className={styles.spacer} />
+            <FridgeChip isEnabled={isTemperatureEnabled} />
 
             {isLocked &&
                 <div className={styles.lock}>

@@ -3,14 +3,15 @@ import { DispenseLockProvider } from "@/components/client/DispenseLock";
 import NavRail from "@/components/client/NavRail";
 
 type AppShellProps = {
+    isTemperatureEnabled: boolean;
     children: React.ReactNode;
 };
 
-export default function AppShell({ children }: AppShellProps) {
+export default function AppShell({ isTemperatureEnabled, children }: AppShellProps) {
     return (
         <DispenseLockProvider>
             <div className={styles.shell}>
-                <NavRail />
+                <NavRail isTemperatureEnabled={isTemperatureEnabled} />
                 <main className={styles.content}>{children}</main>
             </div>
         </DispenseLockProvider>

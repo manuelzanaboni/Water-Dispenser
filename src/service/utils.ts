@@ -53,3 +53,8 @@ export const buildTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleStr
 export const buildDateTimestamp = (ts: number) => `${new Date(ts * 1000).toLocaleDateString("it-IT")}`;
 
 export const toThousandsRounded = (value: number) => Math.round(value / 1000 * 10) / 10;
+
+const TEMPERATURE_FORMAT = new Intl.NumberFormat("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+
+export const formatTemperature = (celsius: number | null): string =>
+    celsius === null ? "—" : `${TEMPERATURE_FORMAT.format(celsius)}°`;

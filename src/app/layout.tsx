@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
+import { connection } from "next/server";
 
 import "@mantine/charts/styles.css";
 
@@ -50,11 +51,16 @@ const theme = createTheme({
     }
 });
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;
 }>) {
+    // render per request: READ_TEMP_ENABLED must come from the container's env,
+    // not from the one the image was built with
+    await connection();
+    const isTemperatureEnabled = process.env.READ_TEMP_ENABLED === "true";
+
     return (
         <html lang="it" className={manrope.variable} {...mantineHtmlProps}>
             <head>
@@ -62,7 +68,7 @@ export default function RootLayout({
             </head>
             <body>
                 <MantineProvider theme={theme} defaultColorScheme={DEFAULT_COLOR_SCHEME}>
-                    <AppShell>{children}</AppShell>
+                    <AppShell isTemperatureEnabled={isTemperatureEnabled}>{children}</AppShell>
                 </MantineProvider>
             </body>
         </html>

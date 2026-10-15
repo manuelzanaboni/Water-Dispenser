@@ -16,7 +16,7 @@ describe("NavRail", () => {
     });
 
     test("links to the dispenser, stats and settings screens", () => {
-        render(<NavRail />);
+        render(<NavRail isTemperatureEnabled={false} />);
 
         expect(screen.getByRole("link", { name: "Eroga" })).toHaveAttribute("href", "/");
         expect(screen.getByRole("link", { name: "Statistiche" })).toHaveAttribute("href", "/stats");
@@ -24,7 +24,7 @@ describe("NavRail", () => {
     });
 
     test("marks only the dispenser as current on the home route", () => {
-        render(<NavRail />);
+        render(<NavRail isTemperatureEnabled={false} />);
 
         expect(screen.getByRole("link", { name: "Eroga" })).toHaveAttribute("aria-current", "page");
         expect(screen.getByRole("link", { name: "Statistiche" })).not.toHaveAttribute("aria-current");
@@ -33,7 +33,7 @@ describe("NavRail", () => {
     test("marks the stats link as current on the stats route", () => {
         mockPathname("/stats");
 
-        render(<NavRail />);
+        render(<NavRail isTemperatureEnabled={false} />);
 
         expect(screen.getByRole("link", { name: "Statistiche" })).toHaveAttribute("aria-current", "page");
         expect(screen.getByRole("link", { name: "Eroga" })).not.toHaveAttribute("aria-current");
@@ -49,7 +49,7 @@ const ValveSwitch = () => {
 
 const renderWithLock = () => render(
     <DispenseLockProvider>
-        <NavRail />
+        <NavRail isTemperatureEnabled={false} />
         <ValveSwitch />
     </DispenseLockProvider>
 );

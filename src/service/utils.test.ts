@@ -1,6 +1,20 @@
 import { describe, expect, test } from "vitest";
 
-import { DISPENSE_OPERATIONS, findDispenseOperation, toThousandsRounded } from "@/service/utils";
+import { DISPENSE_OPERATIONS, findDispenseOperation, formatTemperature, toThousandsRounded } from "@/service/utils";
+
+describe("formatTemperature", () => {
+    test("shows one decimal with the Italian comma and a degree sign", () => {
+        expect(formatTemperature(4.23)).toBe("4,2°");
+    });
+
+    test("keeps the decimal on whole degrees", () => {
+        expect(formatTemperature(5)).toBe("5,0°");
+    });
+
+    test("shows a dash when there is no reading", () => {
+        expect(formatTemperature(null)).toBe("—");
+    });
+});
 
 describe("findDispenseOperation", () => {
     test("returns the operation matching the given type", () => {
