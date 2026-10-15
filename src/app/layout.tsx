@@ -14,6 +14,7 @@ import "@mantine/core/styles.css";
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from "@mantine/core";
 
 import AppShell from "@/components/client/AppShell";
+import { BUTTON_LAYOUT_SCRIPT } from "@/service/buttonLayout";
 
 export const metadata: Metadata = {
     title: "Water Dispenser",
@@ -65,6 +66,8 @@ export default async function RootLayout({
         <html lang="it" className={manrope.variable} {...mantineHtmlProps}>
             <head>
                 <ColorSchemeScript defaultColorScheme={DEFAULT_COLOR_SCHEME} />
+                {/* static string built from constants: applies the saved button layout before paint */}
+                <script dangerouslySetInnerHTML={{ __html: BUTTON_LAYOUT_SCRIPT }} />
             </head>
             <body>
                 <MantineProvider theme={theme} defaultColorScheme={DEFAULT_COLOR_SCHEME}>
