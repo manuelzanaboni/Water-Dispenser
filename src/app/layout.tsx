@@ -12,6 +12,8 @@ import "@mantine/core/styles.css";
 
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from "@mantine/core";
 
+import AppShell from "@/components/client/AppShell";
+
 export const metadata: Metadata = {
     title: "Water Dispenser",
     description: "Water Dispenser App companion for BWT AQA drink U20 CAS",
@@ -59,7 +61,9 @@ export default function RootLayout({
                 <ColorSchemeScript defaultColorScheme={DEFAULT_COLOR_SCHEME} />
             </head>
             <body>
-                <MantineProvider theme={theme} defaultColorScheme={DEFAULT_COLOR_SCHEME}>{children}</MantineProvider>
+                <MantineProvider theme={theme} defaultColorScheme={DEFAULT_COLOR_SCHEME}>
+                    <AppShell>{children}</AppShell>
+                </MantineProvider>
             </body>
         </html>
     );

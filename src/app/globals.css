@@ -11,7 +11,3 @@ html, body {
 [data-mantine-color-scheme="dark"] .glass-tint {
     fill: rgba(255, 255, 255, 0.07);
 }
-
-body {
-    padding: 1rem;
-}

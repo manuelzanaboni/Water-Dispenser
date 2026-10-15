@@ -1,10 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { useState } from "react";
 
-import { ActionIcon, Center, Group, Stack } from "@mantine/core";
-import { IconDeviceAnalytics, IconSettings } from "@tabler/icons-react";
+import { Center, Stack } from "@mantine/core";
 
 import DispenseControl from "@/components/client/DispenseControl";
 import OperationSelector from "@/components/client/OperationSelector";
@@ -29,8 +27,6 @@ const DEAFULT_STATE: DispenserState = {
     startStopDisabled: false,
     timestampTracker: -1
 }
-
-const SCREEN_HEIGHT = "calc(100dvh - 2rem)";
 
 export default function Dispenser() {
 
@@ -70,31 +66,7 @@ export default function Dispenser() {
     }
 
     return (
-        <Stack h={SCREEN_HEIGHT} gap="md" justify="space-between">
-            {/* Top row */}
-            <Group justify="space-between">
-                <ActionIcon
-                    variant="light"
-                    size={60}
-                    component={Link}
-                    href="/stats"
-                    disabled={dispenserState.isPending}
-                    onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
-                >
-                    <IconDeviceAnalytics size={40} />
-                </ActionIcon>
-                <ActionIcon
-                    variant="light"
-                    size={60}
-                    component={Link}
-                    href="/settings"
-                    disabled={dispenserState.isPending}
-                    onClick={(e) => { if (dispenserState.isPending) e.preventDefault() }}
-                >
-                    <IconSettings size={40} />
-                </ActionIcon>
-            </Group>
-
+        <Stack h="100%" gap="md" justify="space-between">
             {/* Mid row */}
             <Center style={{ flex: 1, minHeight: 0 }}>
                 <DispenseControl

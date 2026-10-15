@@ -1,5 +1,6 @@
 /* route change fade: opacity only, so it stays cheap on the Orange Pi GPU */
 .page {
+    height: 100%;
     animation: page-fade-in 200ms ease-out both;
 }
 
