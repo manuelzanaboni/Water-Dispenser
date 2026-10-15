@@ -6,7 +6,6 @@ import { useState } from "react";
 import { ActionIcon, Center, Group, Stack } from "@mantine/core";
 import { IconDeviceAnalytics, IconSettings } from "@tabler/icons-react";
 
-import DispenseBackground from "@/components/client/DispenseBackground";
 import DispenseControl from "@/components/client/DispenseControl";
 import OperationSelector from "@/components/client/OperationSelector";
 
@@ -72,11 +71,6 @@ export default function Dispenser() {
 
     return (
         <Stack h={SCREEN_HEIGHT} gap="md" justify="space-between">
-            <DispenseBackground
-                color={dispenserState.selectedOperation.color}
-                active={dispenserState.isPending}
-            />
-
             {/* Top row */}
             <Group justify="space-between">
                 <ActionIcon
