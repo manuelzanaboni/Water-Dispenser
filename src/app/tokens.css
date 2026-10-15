@@ -46,6 +46,7 @@
     --kiosk-water-ambiente-strong: #8A6A2E;
     --kiosk-water-fredda-strong: #1C7FC0;
     --kiosk-water-frizzante-strong: #13866D;
+    --kiosk-warning: #B3261E;
 }
 
 [data-mantine-color-scheme="dark"] {
@@ -59,4 +60,5 @@
     --kiosk-water-ambiente-strong: var(--kiosk-water-ambiente);
     --kiosk-water-fredda-strong: var(--kiosk-water-fredda);
     --kiosk-water-frizzante-strong: var(--kiosk-water-frizzante);
+    --kiosk-warning: #FFB4A8;
 }

@@ -1,0 +1,90 @@
+.gauge {
+    --gauge-color: var(--kiosk-accent-filter);
+
+    position: relative;
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    place-items: center;
+    container-type: size;
+}
+
+.gauge[data-low] {
+    --gauge-color: var(--kiosk-warning);
+}
+
+/* the ring takes the largest square that fits the space left in the card */
+.ring {
+    width: min(100cqw, 100cqh);
+    height: min(100cqw, 100cqh);
+    transform: rotate(-90deg);
+}
+
+.track,
+.progress {
+    fill: none;
+    stroke-width: 8;
+}
+
+.track {
+    stroke: var(--kiosk-line);
+}
+
+.progress {
+    stroke: var(--gauge-color);
+    stroke-linecap: round;
+}
+
+.center {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.value {
+    font-size: clamp(1.5rem, 13cqmin, 2.25rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.caption {
+    font-size: var(--kiosk-font-xs);
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.gauge[data-low] .caption {
+    color: var(--kiosk-warning);
+    font-weight: 700;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    gap: var(--kiosk-space-2);
+    font-size: var(--kiosk-font-sm);
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.empty {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--kiosk-space-1);
+    text-align: center;
+    font-size: var(--kiosk-font-sm);
+    color: var(--kiosk-text-muted);
+}
+
+.emptyTitle {
+    font-size: var(--kiosk-font-md);
+    font-weight: 700;
+    color: var(--kiosk-text);
+}
