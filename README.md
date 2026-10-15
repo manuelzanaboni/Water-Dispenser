@@ -21,12 +21,13 @@ Captured at 1024×600, the resolution of the dispenser's display (`npm run scree
 
 ## How it works
 
-- **Dispensing**: from the home screen you pick a water type (`Naturale Ambiente`, `Naturale Fredda`, `Frizzante Fredda`), press *Avvio* to open the corresponding relay and *Stop* to close it; the dispense duration is recorded and the quantity (ml) is estimated as `duration × flow factor (ml/sec)` for that relay (see `src/service/utils.ts`).
-- **Filter**: from Settings you can log a filter replacement by entering the liters dispensed; the stats page shows consumption per dispense type since the last replacement.
-- **Tank (sparkling)**: from Settings you log a refill of the CO₂/sparkling water tank; the stats page shows daily sparkling water consumption.
-- **Fridge temperature**: a background process periodically reads the 1-Wire temperature sensor and stores the readings, shown in a chart on the Stats page.
+- **Navigation**: a rail on the left switches between *Eroga*, *Statistiche* and *Impostazioni* with large buttons, and shows the fridge temperature and the time. It is locked while water is running.
+- **Dispensing**: pick a water type (`Naturale Ambiente`, `Naturale Fredda`, `Frizzante Fredda`), then tap the round dial to open the corresponding relay and tap it again to close it. The dial shows the running time and the estimated quantity, `duration × flow factor (ml/sec)` for that relay (see `src/service/utils.ts`); the valve closes on its own after 120 seconds. The water type buttons can sit on the right or in a row at the bottom (Settings → Schermo).
+- **Filter**: from Settings you register a new filter with its capacity in litres (confirmed before saving); the stats show the litres left since then.
+- **CO₂ tank (sparkling)**: from Settings you register a new tank with its weight in grams; the stats show the sparkling water poured from each tank, day by day.
+- **Fridge temperature**: a background process periodically reads the 1-Wire temperature sensor and stores the readings, shown in the rail and in the stats (last 12 hours). With `READ_TEMP_ENABLED=false` both stay visible but disabled.
 - All data is persisted in a local **SQLite** database (no external services required).
-- The app is designed to be shown full-screen on the dispenser's display (see the *Fullscreen* toggle in Settings).
+- The app is designed to be shown full-screen on the dispenser's 1024×600 display (see *Schermo intero* in Settings), with a dark and a light theme.
 
 ## Configuration
 
@@ -43,27 +44,25 @@ In development, without real hardware attached, the app still works: any GPIO co
 
 ## Getting Started
 
-First, run the development server:
+Requires Node 24. Run the development server and open [http://localhost:3000](http://localhost:3000):
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Other scripts:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm test             # unit and component tests (Vitest + Testing Library)
+npm run lint         # ESLint
+npm run screenshots  # refresh screenshots/ from the running dev server (uses the local Google Chrome)
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The UI font, Manrope, is loaded through [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) and bundled at build time, so the device needs no network for it.
 
 ## Build Docker image
 
-The Docker image is meant to run on the dispenser's board: in the final stage of the `Dockerfile`, `wiringOP-next` (the `gpio` tool used to drive the relays) is compiled and installed, in addition to the Next.js standalone build.
+The Docker image (based on `node:24-bookworm-slim`) is meant to run on the dispenser's board: in the final stage of the `Dockerfile`, `wiringOP-next` (the `gpio` tool used to drive the relays) is compiled and installed, in addition to the Next.js standalone build.
 
 To build the image and publish it to the local registry, use the `build-push.sh` script:
 
