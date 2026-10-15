@@ -8,12 +8,16 @@ export enum GPIO_STATE {
     HIGH = "1",
 }
 
+/* picks the --kiosk-water-<slug> design tokens for a water type */
+export type WaterSlug = "ambiente" | "fredda" | "frizzante";
+
 export interface DispenseOperation {
     relay: number;
     name: string;
     type: number;
     factor: number; // ml/sec
     color: string; // hex
+    slug: WaterSlug;
 }
 
 export interface DispenseModel {

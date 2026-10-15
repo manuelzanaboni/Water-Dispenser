@@ -19,7 +19,8 @@ export const SPARKLING_OPERATION: DispenseOperation = {
     name: "Frizzante Fredda",
     type: 3,
     factor: 37, // ml/sec
-    color: "#36C2A3" // aquamarine, --kiosk-water-frizzante
+    color: "#36C2A3", // aquamarine, --kiosk-water-frizzante
+    slug: "frizzante"
 };
 
 export const DISPENSE_OPERATIONS: DispenseOperation[] = [
@@ -28,13 +29,15 @@ export const DISPENSE_OPERATIONS: DispenseOperation[] = [
         name: "Naturale Ambiente",
         type: 1,
         factor: 32, // ml/sec
-        color: "#E3C99A" // sand, --kiosk-water-ambiente
+        color: "#E3C99A", // sand, --kiosk-water-ambiente
+        slug: "ambiente"
     }, {
         relay: COLD,
         name: "Naturale Fredda",
         type: 2,
         factor: 32, // ml/sec
-        color: "#8FD0FA" // ice, --kiosk-water-fredda
+        color: "#8FD0FA", // ice, --kiosk-water-fredda
+        slug: "fredda"
     },
     SPARKLING_OPERATION
 ];

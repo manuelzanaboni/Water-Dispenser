@@ -1,0 +1,227 @@
+/* The dial is a square sized by the screen; everything inside is laid out in
+   container units, so it scales with the dial instead of the viewport.
+   Animations only touch transform and opacity to stay cheap on the Orange Pi. */
+
+.dial {
+    --dial-size: min(64dvh, 44vw);
+    --water-tint: color-mix(in srgb, var(--water) 40%, transparent);
+
+    position: relative;
+    width: var(--dial-size);
+    aspect-ratio: 1;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--kiosk-text);
+    font: inherit;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+.dial:disabled {
+    cursor: default;
+}
+
+.dial:focus-visible {
+    outline: 3px solid var(--water-strong);
+    outline-offset: 0.5rem;
+}
+
+.halo {
+    position: absolute;
+    inset: -4.5%;
+    border: 3px solid var(--water-strong);
+    border-radius: 50%;
+    opacity: 0.9;
+}
+
+.dial[aria-pressed="false"] .halo {
+    animation: breathe 3.2s ease-in-out infinite;
+}
+
+.disc {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    box-sizing: border-box;
+    border: 1.5cqw solid var(--water-strong);
+    border-radius: 50%;
+    background: var(--kiosk-surface);
+    container-type: size;
+    transition: transform 100ms ease-out;
+}
+
+.dial:active:not(:disabled) .disc {
+    transform: scale(0.98);
+}
+
+.water {
+    position: absolute;
+    inset: 0;
+    background: var(--water-tint);
+    transition: transform 300ms linear;
+}
+
+.wave {
+    position: absolute;
+    left: 0;
+    top: -6.9cqh;
+    width: 200%;
+    height: 7cqh;
+    animation: wave 3.2s linear infinite;
+}
+
+.dial[aria-pressed="true"] .wave {
+    animation-duration: 1.6s;
+}
+
+.waveFill {
+    fill: var(--water-tint);
+}
+
+.waveCrest {
+    fill: none;
+    stroke: var(--water-strong);
+    stroke-width: 3px;
+    vector-effect: non-scaling-stroke;
+}
+
+.bubble {
+    position: absolute;
+    bottom: 7%;
+    aspect-ratio: 1;
+    border: 2px solid rgb(255 255 255 / 0.75);
+    border-radius: 50%;
+    opacity: 0;
+    animation: rise linear infinite;
+}
+
+.content {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5cqw;
+    text-align: center;
+}
+
+.icon {
+    width: 24cqw;
+    height: 24cqw;
+    margin-top: -6cqh;
+    color: var(--water-strong);
+}
+
+.prompt {
+    font-size: 7.5cqw;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+.name {
+    font-size: 4.5cqw;
+    font-weight: 700;
+    color: var(--water-strong);
+}
+
+.timer {
+    font-size: 23cqw;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+}
+
+.quantity {
+    font-size: 7.5cqw;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    color: var(--water-strong);
+}
+
+.stopHint {
+    display: flex;
+    align-items: center;
+    gap: 2cqw;
+    margin-top: 3cqh;
+    padding: 2.5cqw 4.5cqw;
+    border-radius: var(--kiosk-radius-pill);
+    background: color-mix(in srgb, var(--kiosk-bg) 70%, transparent);
+    font-size: 4.5cqw;
+    font-weight: 700;
+}
+
+.stopMark {
+    width: 3cqw;
+    height: 3cqw;
+    border-radius: 0.75cqw;
+    background: currentColor;
+    animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes breathe {
+    0%, 100% {
+        opacity: 0.25;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.75;
+        transform: scale(1.035);
+    }
+}
+
+@keyframes wave {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes rise {
+    0% {
+        transform: translateY(0);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: translateY(-75cqh);
+        opacity: 0;
+    }
+}
+
+@keyframes blink {
+    0%, 100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .halo,
+    .wave,
+    .bubble,
+    .stopMark {
+        animation: none;
+    }
+
+    .water {
+        transition: none;
+    }
+}
