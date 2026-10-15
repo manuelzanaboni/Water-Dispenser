@@ -11,7 +11,7 @@ import "@mantine/core/styles.css";
 
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from "@mantine/core";
 
-import AppShell from "@/components/client/AppShell";
+import AppShell from "@/components/client/shell/AppShell";
 import { BUTTON_LAYOUT_SCRIPT } from "@/service/buttonLayout";
 
 export const metadata: Metadata = {

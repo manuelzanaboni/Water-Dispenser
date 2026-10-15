@@ -2,10 +2,10 @@
 
 import { connection } from "next/server";
 
-import FilterGauge from "@/components/client/FilterGauge";
-import MonthlyTiles from "@/components/client/MonthlyTiles";
-import FridgeCard from "@/components/client/FridgeCard";
-import TankCard from "@/components/client/TankCard";
+import FilterGauge from "@/components/client/stats/FilterGauge";
+import MonthlyTiles from "@/components/client/stats/MonthlyTiles";
+import FridgeCard from "@/components/client/stats/FridgeCard";
+import TankCard from "@/components/client/stats/TankCard";
 
 import styles from "@/app/stats/page.module.css";
 import {

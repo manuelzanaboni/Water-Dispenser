@@ -1,6 +1,6 @@
 "use server";
 
-import Dispenser from "@/components/client/Dispenser";
+import Dispenser from "@/components/client/dispenser/Dispenser";
 
 // https://github.com/pacocoursey/next-themes
 export default async function Home() {

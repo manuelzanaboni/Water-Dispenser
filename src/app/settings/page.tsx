@@ -2,7 +2,7 @@
 
 import { connection } from "next/server";
 
-import SettingsScreen from "@/components/client/SettingsScreen";
+import SettingsScreen from "@/components/client/settings/SettingsScreen";
 import { getCurrentFilter, getTanks } from "@/service/db";
 import { loadSafely } from "@/service/loadSafely";
 
