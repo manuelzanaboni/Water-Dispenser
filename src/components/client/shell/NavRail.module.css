@@ -62,7 +62,8 @@
     justify-content: center;
     gap: var(--kiosk-space-3);
     padding: 0 var(--kiosk-space-3);
-    background: color-mix(in srgb, var(--kiosk-rail) 90%, transparent);
+    /* opaque: the labels underneath must not show through the lock message */
+    background: var(--kiosk-rail);
     color: var(--kiosk-text-muted);
     font-size: var(--kiosk-font-xs);
     font-weight: 700;
