@@ -5,6 +5,7 @@ import { useState } from "react";
 import { Center, Stack } from "@mantine/core";
 
 import DispenseControl from "@/components/client/DispenseControl";
+import { useDispenseLock } from "@/components/client/DispenseLock";
 import OperationSelector from "@/components/client/OperationSelector";
 
 import { insertDispense } from "@/service/db";
@@ -31,11 +32,13 @@ const DEAFULT_STATE: DispenserState = {
 export default function Dispenser() {
 
     const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
+    const { setLocked } = useDispenseLock();
 
     const setSelectedOperation = (selectedOperation: DispenseOperation) =>
         setDispenserState(prev => ({ ...prev, selectedOperation }));
 
     const handleStart = async () => {
+        setLocked(true);
         setDispenserState(prev => ({
             ...prev,
             isPending: true,
@@ -50,6 +53,7 @@ export default function Dispenser() {
 
     const handleStop = async () => {
         const { selectedOperation, timestampTracker } = dispenserState;
+        setLocked(false);
         setDispenserState(prev => ({
             ...prev,
             isPending: false,

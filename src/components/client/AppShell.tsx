@@ -1,4 +1,5 @@
 import styles from "@/components/client/AppShell.module.css";
+import { DispenseLockProvider } from "@/components/client/DispenseLock";
 import NavRail from "@/components/client/NavRail";
 
 type AppShellProps = {
@@ -7,9 +8,11 @@ type AppShellProps = {
 
 export default function AppShell({ children }: AppShellProps) {
     return (
-        <div className={styles.shell}>
-            <NavRail />
-            <main className={styles.content}>{children}</main>
-        </div>
+        <DispenseLockProvider>
+            <div className={styles.shell}>
+                <NavRail />
+                <main className={styles.content}>{children}</main>
+            </div>
+        </DispenseLockProvider>
     );
 }

@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { IconAdjustmentsHorizontal, IconChartBar, IconGlass } from "@tabler/icons-react";
+import { IconAdjustmentsHorizontal, IconChartBar, IconGlass, IconLock } from "@tabler/icons-react";
 
+import { useDispenseLock } from "@/components/client/DispenseLock";
 import styles from "@/components/client/NavRail.module.css";
 
 type Destination = {
@@ -24,6 +25,11 @@ const isCurrent = (href: string, pathname: string) =>
 
 export default function NavRail() {
     const pathname = usePathname();
+    const { isLocked } = useDispenseLock();
+
+    const blockWhileLocked = (event: React.MouseEvent) => {
+        if (isLocked) event.preventDefault();
+    };
 
     return (
         <nav aria-label="Navigazione principale" className={styles.rail}>
@@ -33,11 +39,21 @@ export default function NavRail() {
                     href={href}
                     className={styles.item}
                     aria-current={isCurrent(href, pathname) ? "page" : undefined}
+                    aria-disabled={isLocked || undefined}
+                    tabIndex={isLocked ? -1 : undefined}
+                    onClick={blockWhileLocked}
                 >
                     <Icon className={styles.icon} stroke={1.8} aria-hidden />
                     {label}
                 </Link>
             ))}
+
+            {isLocked &&
+                <div className={styles.lock}>
+                    <IconLock className={styles.lockIcon} stroke={1.8} aria-hidden />
+                    Bloccato durante l’erogazione
+                </div>
+            }
         </nav>
     );
 }
