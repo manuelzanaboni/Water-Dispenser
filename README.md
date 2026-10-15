@@ -2,6 +2,23 @@
 
 Companion app for the **BWT AQA drink U20 CAS**: a touchscreen interface (Next.js) that runs directly on the board driving the dispenser (Orange Pi / Armbian), dispensing room-temperature still water, cold still water, and cold sparkling water by controlling relays, and tracking dispenses, filter changes, tank refills, and fridge temperature.
 
+## Screenshots
+
+Captured at 1024×600, the resolution of the dispenser's display (`npm run screenshots`, see below).
+
+| | |
+| --- | --- |
+| ![Dispensing screen at rest, water types on the right](screenshots/dispenser-idle-dark.png) | ![Sparkling water running: timer, estimated millilitres and locked navigation](screenshots/dispenser-active-dark.png) |
+| Dispensing, at rest | Dispensing, sparkling water running |
+| ![Dispensing screen with the water types in a row at the bottom](screenshots/dispenser-row-dark.png) | ![Dispensing screen in the light theme](screenshots/dispenser-idle-light.png) |
+| Water types in a row at the bottom | Light theme |
+| ![Stats: litres per water type this month, filter, CO₂ tank and fridge cards](screenshots/stats-dark.png) | ![Stats in the light theme](screenshots/stats-light.png) |
+| Stats | Stats, light theme |
+| ![Settings: theme, button layout and full screen](screenshots/settings-screen-dark.png) | ![Settings: keypad for a new filter](screenshots/settings-keypad-dark.png) |
+| Settings, screen | Settings, new filter keypad |
+| ![Settings: confirmation before registering a filter](screenshots/settings-confirm-dark.png) | ![Settings in the light theme](screenshots/settings-screen-light.png) |
+| Confirmation before registering | Settings, light theme |
+
 ## How it works
 
 - **Dispensing**: from the home screen you pick a water type (`Naturale Ambiente`, `Naturale Fredda`, `Frizzante Fredda`), press *Avvio* to open the corresponding relay and *Stop* to close it; the dispense duration is recorded and the quantity (ml) is estimated as `duration × flow factor (ml/sec)` for that relay (see `src/service/utils.ts`).

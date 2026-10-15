@@ -1,0 +1,4 @@
+# screenshots and other images: never diffed or merged as text
+*.png binary
+*.webp binary
+*.ico binary
