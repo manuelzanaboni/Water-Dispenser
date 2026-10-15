@@ -16,6 +16,7 @@ import {
     getRefrigerators,
     getTanks,
 } from "@/service/db";
+import { loadSafely } from "@/service/loadSafely";
 import {
     filterStatus,
     formatLitres,
@@ -25,16 +26,6 @@ import {
     monthlySummary,
     tankPeriods,
 } from "@/service/stats";
-
-/* one failing query must not take the whole screen down: log it and show empty data */
-const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T): Promise<T> => {
-    try {
-        return await load();
-    } catch (error) {
-        console.error(`Stats: could not load ${what}`, error);
-        return fallback;
-    }
-};
 
 export default async function Stats() {
     // live data and the container's env: never prerender this page at build time
