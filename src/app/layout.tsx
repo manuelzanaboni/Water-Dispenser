@@ -26,6 +26,9 @@ const manrope = Manrope({
 
 const FONT_FAMILY = "var(--font-manrope), sans-serif";
 
+// the kiosk is designed dark first; a scheme chosen in the settings still wins
+const DEFAULT_COLOR_SCHEME = "dark";
+
 const theme = createTheme({
     fontFamily: FONT_FAMILY,
     headings: { fontFamily: FONT_FAMILY },
@@ -53,10 +56,10 @@ export default function RootLayout({
     return (
         <html lang="it" className={manrope.variable} {...mantineHtmlProps}>
             <head>
-                <ColorSchemeScript />
+                <ColorSchemeScript defaultColorScheme={DEFAULT_COLOR_SCHEME} />
             </head>
             <body>
-                <MantineProvider theme={theme}>{children}</MantineProvider>
+                <MantineProvider theme={theme} defaultColorScheme={DEFAULT_COLOR_SCHEME}>{children}</MantineProvider>
             </body>
         </html>
     );
