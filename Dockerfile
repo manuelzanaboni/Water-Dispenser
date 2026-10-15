@@ -60,8 +60,6 @@ RUN apt update && apt install -y build-essential wget unzip \
 # set user
 # RUN addgroup --system --gid 1001 nodejs && adduser --system --uid 1001 nextjs
 
-COPY --from=builder /app/public ./public
-
 # Set the correct permission for prerender cache
 RUN mkdir .next
 RUN chown 1000:1000 .next
