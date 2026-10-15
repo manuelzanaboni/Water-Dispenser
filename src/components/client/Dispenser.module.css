@@ -1,0 +1,42 @@
+/* Two layouts for the same screen, picked by <html data-button-layout>:
+   "column" puts the water types on the right, "row" lines them up below. */
+
+.screen {
+    --dial-size: min(64dvh, 44vw);
+
+    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(15rem, 30vw, 20rem);
+    gap: var(--kiosk-space-5);
+}
+
+:global(html[data-button-layout="row"]) .screen {
+    --dial-size: min(52dvh, 44vw);
+
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: minmax(0, 1fr) auto;
+}
+
+.stage {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--kiosk-space-5);
+}
+
+.status {
+    min-height: 1.5em;
+    margin: 0;
+    font-size: var(--kiosk-font-md);
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+    text-align: center;
+}
+
+.types {
+    min-width: 0;
+    min-height: 0;
+}

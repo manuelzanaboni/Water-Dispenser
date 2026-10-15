@@ -1,95 +1,93 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
-import { Center, Stack } from "@mantine/core";
-
-import DispenseControl from "@/components/client/DispenseControl";
+import DispenseDial from "@/components/client/DispenseDial";
 import { useDispenseLock } from "@/components/client/DispenseLock";
-import OperationSelector from "@/components/client/OperationSelector";
+import styles from "@/components/client/Dispenser.module.css";
+import WaterTypeSelector from "@/components/client/WaterTypeSelector";
 
 import { insertDispense } from "@/service/db";
 import { turnOFF, turnON } from "@/service/gpio";
 import { DispenseOperation } from "@/service/types";
 import { DISPENSE_OPERATIONS } from "@/service/utils";
 
-type DispenserState = {
-    selectedOperation: DispenseOperation;
-    selectedPreset: null;
-    isPending: boolean;
-    startStopDisabled: boolean;
-    timestampTracker: number;
-}
-
-const DEAFULT_STATE: DispenserState = {
-    selectedOperation: DISPENSE_OPERATIONS[0],
-    selectedPreset: null,
-    isPending: false,
-    startStopDisabled: false,
-    timestampTracker: -1
-}
+/* the dial ignores taps for this long after a start or a stop, so a double
+   tap cannot open and close the valve in the same breath */
+const DEBOUNCE_MS = 1_000;
+/* how often the timer and the water level move while the valve is open */
+const TICK_MS = 200;
 
 export default function Dispenser() {
-
-    const [dispenserState, setDispenserState] = useState<DispenserState>(DEAFULT_STATE);
+    const [selected, setSelected] = useState<DispenseOperation>(DISPENSE_OPERATIONS[0]);
+    const [startedAt, setStartedAt] = useState<number | null>(null);
+    const [now, setNow] = useState(0);
+    const [isDebouncing, setDebouncing] = useState(false);
+    const debounceTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
     const { setLocked } = useDispenseLock();
 
-    const setSelectedOperation = (selectedOperation: DispenseOperation) =>
-        setDispenserState(prev => ({ ...prev, selectedOperation }));
+    const isActive = startedAt !== null;
+    const elapsedSec = isActive ? Math.max(0, (now - startedAt) / 1000) : null;
 
-    const handleStart = async () => {
+    useEffect(() => {
+        if (startedAt === null) return;
+
+        const id = setInterval(() => setNow(Date.now()), TICK_MS);
+        return () => clearInterval(id);
+    }, [startedAt]);
+
+    useEffect(() => () => clearTimeout(debounceTimer.current), []);
+
+    const debounce = () => {
+        setDebouncing(true);
+        clearTimeout(debounceTimer.current);
+        debounceTimer.current = setTimeout(() => setDebouncing(false), DEBOUNCE_MS);
+    };
+
+    const start = async () => {
+        const openedAt = Date.now();
+        setStartedAt(openedAt);
+        setNow(openedAt);
         setLocked(true);
-        setDispenserState(prev => ({
-            ...prev,
-            isPending: true,
-            startStopDisabled: true,
-            timestampTracker: new Date().getTime()
-        }));
+        debounce();
 
-        setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
+        await turnON(selected);
+    };
 
-        await turnON(dispenserState.selectedOperation);
-    }
+    const stop = async () => {
+        if (startedAt === null) return;
 
-    const handleStop = async () => {
-        const { selectedOperation, timestampTracker } = dispenserState;
+        const durationSec = Math.round((Date.now() - startedAt) / 1000);
+        setStartedAt(null);
         setLocked(false);
-        setDispenserState(prev => ({
-            ...prev,
-            isPending: false,
-            startStopDisabled: true,
-            timestampTracker: -1
-        }));
+        debounce();
 
-        setTimeout(() => setDispenserState(prev => ({ ...prev, startStopDisabled: false })), 1000);
-
-        await Promise.all([
-            turnOFF(selectedOperation),
-            insertDispense(selectedOperation, Math.round((new Date().getTime() - timestampTracker) / 1000))
-        ]);
-    }
+        try {
+            await Promise.all([turnOFF(selected), insertDispense(selected, durationSec)]);
+        } catch (error) {
+            // the valve command is already wrapped in gpio.ts: this is the db insert
+            console.error(`Dispense of ${durationSec}s (${selected.name}) not saved`, error);
+        }
+    };
 
     return (
-        <Stack h="100%" gap="md" justify="space-between">
-            {/* Mid row */}
-            <Center style={{ flex: 1, minHeight: 0 }}>
-                <DispenseControl
-                    operation={dispenserState.selectedOperation}
-                    active={dispenserState.isPending}
-                    disabled={dispenserState.startStopDisabled}
-                    onStart={handleStart}
-                    onStop={handleStop}
+        <div className={styles.screen}>
+            <section className={styles.stage} aria-label="Erogazione">
+                <DispenseDial
+                    operation={selected}
+                    elapsedSec={elapsedSec}
+                    isDisabled={isDebouncing}
+                    onToggle={isActive ? stop : start}
                 />
-            </Center>
 
-            {/* Bottom row */}
-            <Center>
-                <OperationSelector
-                    selectedOperation={dispenserState.selectedOperation}
-                    setSelectedOperation={setSelectedOperation}
-                    isPending={dispenserState.isPending}
-                />
-            </Center>
-        </Stack>
+                <p className={styles.status}>
+                    {!isActive && "Scegli l’acqua, poi tocca il cerchio"}
+                </p>
+            </section>
+
+            <div className={styles.types}>
+                <WaterTypeSelector selected={selected} isLocked={isActive} onSelect={setSelected} />
+            </div>
+        </div>
     );
 }

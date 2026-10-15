@@ -3,11 +3,11 @@
    Animations only touch transform and opacity to stay cheap on the Orange Pi. */
 
 .dial {
-    --dial-size: min(64dvh, 44vw);
     --water-tint: color-mix(in srgb, var(--water) 40%, transparent);
 
     position: relative;
-    width: var(--dial-size);
+    /* the screen around it picks the size through --dial-size */
+    width: var(--dial-size, min(64dvh, 44vw));
     aspect-ratio: 1;
     flex-shrink: 0;
     padding: 0;

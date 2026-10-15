@@ -31,6 +31,10 @@
     transition: background-color 200ms ease-out, opacity 200ms ease-out, transform 100ms ease-out;
 }
 
+:global(html[data-button-layout="row"]) .button {
+    min-height: clamp(5rem, 19dvh, 7.25rem);
+}
+
 .button:active:not(:disabled) {
     transform: scale(0.98);
 }
