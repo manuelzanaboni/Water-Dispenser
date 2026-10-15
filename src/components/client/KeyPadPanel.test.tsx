@@ -11,6 +11,7 @@ const renderPanel = (onSave = vi.fn().mockResolvedValue(undefined), initialValue
             prompt="Capacità del filtro installato"
             unit="litri"
             cta="Registra nuovo filtro"
+            question="Registrare un nuovo filtro da"
             doneLabel="Filtro registrato"
             initialValue={initialValue}
             onSave={onSave}
@@ -54,19 +55,42 @@ describe("KeyPadPanel", () => {
         expect(screen.getByRole("button", { name: "Registra nuovo filtro" })).toBeDisabled();
     });
 
-    test("saves the value and confirms it", async () => {
+    test("asks to confirm the value before saving anything", async () => {
         const { user, onSave } = renderPanel();
 
         await user.click(screen.getByRole("button", { name: "Registra nuovo filtro" }));
+
+        const dialog = screen.getByRole("alertdialog", { name: "Conferma registrazione" });
+        expect(dialog).toHaveTextContent("Registrare un nuovo filtro da");
+        expect(dialog).toHaveTextContent("1.500 litri");
+        expect(onSave).not.toHaveBeenCalled();
+    });
+
+    test("goes back to the keypad to correct the value", async () => {
+        const { user, onSave } = renderPanel();
+
+        await user.click(screen.getByRole("button", { name: "Registra nuovo filtro" }));
+        await user.click(screen.getByRole("button", { name: "Correggi" }));
+
+        expect(display()).toHaveTextContent("1.500 litri");
+        expect(onSave).not.toHaveBeenCalled();
+    });
+
+    test("saves the value once confirmed and says so", async () => {
+        const { user, onSave } = renderPanel();
+
+        await user.click(screen.getByRole("button", { name: "Registra nuovo filtro" }));
+        await user.click(screen.getByRole("button", { name: "Sì, registra" }));
 
         expect(onSave).toHaveBeenCalledWith(1500);
         expect(await screen.findByText("Filtro registrato: 1.500 litri")).toBeInTheDocument();
     });
 
-    test("goes back to the keypad after the confirmation", async () => {
+    test("goes back to the keypad after the registration", async () => {
         const { user } = renderPanel();
 
         await user.click(screen.getByRole("button", { name: "Registra nuovo filtro" }));
+        await user.click(screen.getByRole("button", { name: "Sì, registra" }));
         await user.click(await screen.findByRole("button", { name: "Fatto" }));
 
         expect(display()).toHaveTextContent("1.500 litri");
@@ -77,6 +101,7 @@ describe("KeyPadPanel", () => {
         const { user } = renderPanel(vi.fn().mockRejectedValue(new Error("SQLITE_BUSY")));
 
         await user.click(screen.getByRole("button", { name: "Registra nuovo filtro" }));
+        await user.click(screen.getByRole("button", { name: "Sì, registra" }));
 
         expect(await screen.findByRole("alert")).toHaveTextContent("Registrazione non riuscita. Riprova.");
         expect(display()).toHaveTextContent("1.500 litri");

@@ -2,7 +2,7 @@
 
 import { useReducer } from "react";
 
-import { IconBackspace, IconCheck } from "@tabler/icons-react";
+import { IconAlertTriangle, IconBackspace, IconCheck } from "@tabler/icons-react";
 
 import styles from "@/components/client/KeyPadPanel.module.css";
 import { initialKeypad, keypadQuantity, keypadReducer } from "@/service/keypad";
@@ -23,13 +23,15 @@ type KeyPadPanelProps = {
     prompt: string;
     unit: string;
     cta: string;
+    /* asked before saving, followed by the value: "Registrare un nuovo filtro da" */
+    question: string;
     doneLabel: string;
     /* the last registered quantity: most replacements use the same size again */
     initialValue: number;
     onSave: (quantity: number) => Promise<void>;
 };
 
-export default function KeyPadPanel({ prompt, unit, cta, doneLabel, initialValue, onSave }: KeyPadPanelProps) {
+export default function KeyPadPanel({ prompt, unit, cta, question, doneLabel, initialValue, onSave }: KeyPadPanelProps) {
     const [state, dispatch] = useReducer(keypadReducer, initialValue, initialKeypad);
     const quantity = keypadQuantity(state);
     const formatted = `${formatInteger(quantity)} ${unit}`;
@@ -60,7 +62,34 @@ export default function KeyPadPanel({ prompt, unit, cta, doneLabel, initialValue
         );
     }
 
-    const isSaving = state.step === "saving";
+    // a wrong capacity would skew the filter gauge until the next replacement:
+    // show the value big once more before it is written
+    if (state.step === "confirm" || state.step === "saving") {
+        const isSaving = state.step === "saving";
+
+        return (
+            <div role="alertdialog" aria-label="Conferma registrazione" className={styles.confirm}>
+                <span className={styles.confirmMark} aria-hidden>
+                    <IconAlertTriangle className={styles.confirmIcon} stroke={2} />
+                </span>
+                <p className={styles.question}>{question}</p>
+                <p className={styles.reading}>
+                    <span className={styles.confirmValue}>{formatInteger(quantity)}</span>{" "}
+                    <span className={styles.unit}>{unit}</span>
+                </p>
+                <p className={styles.hint}>Controlla il valore: non si può modificare dopo.</p>
+                <div className={styles.choices}>
+                    <button type="button" className={styles.secondary} disabled={isSaving} onClick={() => dispatch({ type: "cancel" })}>
+                        Correggi
+                    </button>
+                    <button type="button" className={styles.primary} disabled={isSaving} onClick={save}>
+                        <IconCheck className={styles.ctaIcon} stroke={2.6} aria-hidden />
+                        Sì, registra
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className={styles.panel}>
@@ -82,7 +111,6 @@ export default function KeyPadPanel({ prompt, unit, cta, doneLabel, initialValue
                         className={styles.key}
                         data-edit={isEdit || undefined}
                         aria-label={aria}
-                        disabled={isSaving}
                         onClick={() => dispatch({ type: "press", key })}
                     >
                         {key === "back" ? <IconBackspace className={styles.keyIcon} stroke={2} aria-hidden /> : label}
@@ -90,7 +118,7 @@ export default function KeyPadPanel({ prompt, unit, cta, doneLabel, initialValue
                 ))}
             </div>
 
-            <button type="button" className={styles.primary} disabled={quantity === 0 || isSaving} onClick={save}>
+            <button type="button" className={styles.primary} disabled={quantity === 0} onClick={() => dispatch({ type: "submit" })}>
                 <IconCheck className={styles.ctaIcon} stroke={2.6} aria-hidden />
                 {cta}
             </button>

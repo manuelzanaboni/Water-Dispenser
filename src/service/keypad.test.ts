@@ -37,6 +37,30 @@ describe("keypad entry", () => {
     });
 });
 
+describe("keypad confirmation", () => {
+    test("asks for confirmation before saving", () => {
+        expect(keypadReducer(initialKeypad(1500), { type: "submit" }).step).toBe("confirm");
+    });
+
+    test("does not ask for confirmation of zero", () => {
+        expect(keypadReducer(initialKeypad(), { type: "submit" }).step).toBe("entry");
+    });
+
+    test("goes back to the keypad with the value untouched", () => {
+        const confirming = keypadReducer(initialKeypad(1500), { type: "submit" });
+        const corrected = keypadReducer(confirming, { type: "cancel" });
+
+        expect(corrected.step).toBe("entry");
+        expect(corrected.value).toBe("1500");
+    });
+
+    test("ignores keys while asking for confirmation", () => {
+        const confirming = keypadReducer(initialKeypad(1500), { type: "submit" });
+
+        expect(press(confirming, "1").value).toBe("1500");
+    });
+});
+
 describe("keypad saving", () => {
     test("goes to done once saved", () => {
         const saving = keypadReducer(initialKeypad(1500), { type: "saving" });

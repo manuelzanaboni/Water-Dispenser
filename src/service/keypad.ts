@@ -1,11 +1,12 @@
 /* The on-screen keypad used to register a new filter or CO₂ tank, as a pure
-   state machine: entry → saving → done, back to entry when saving fails. */
+   state machine: entry → confirm → saving → done. Cancelling the confirmation
+   or a failed save goes back to the entry with the typed value kept. */
 
 export const MAX_DIGITS = 5;
 
 const DIGITS = new Set(["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]);
 
-export type KeypadStep = "entry" | "saving" | "done";
+export type KeypadStep = "entry" | "confirm" | "saving" | "done";
 
 export type KeypadState = {
     step: KeypadStep;
@@ -16,6 +17,8 @@ export type KeypadState = {
 
 export type KeypadAction =
     | { type: "press"; key: string }
+    | { type: "submit" }
+    | { type: "cancel" }
     | { type: "saving" }
     | { type: "saved" }
     | { type: "failed"; message: string }
@@ -42,6 +45,11 @@ export const keypadReducer = (state: KeypadState, action: KeypadAction): KeypadS
         case "press":
             if (state.step !== "entry") return state;
             return { ...state, value: typeKey(state.value, action.key), error: null };
+        case "submit":
+            if (state.step !== "entry" || !isValidQuantity(keypadQuantity(state))) return state;
+            return { ...state, step: "confirm", error: null };
+        case "cancel":
+            return state.step === "confirm" ? { ...state, step: "entry" } : state;
         case "saving":
             return { ...state, step: "saving", error: null };
         case "saved":
