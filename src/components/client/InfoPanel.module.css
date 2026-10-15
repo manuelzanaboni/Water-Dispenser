@@ -1,0 +1,22 @@
+.list {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: var(--kiosk-space-4) var(--kiosk-space-5);
+    font-size: 1.1875rem;
+}
+
+/* each term and detail pair stays one line of the grid */
+.row {
+    display: contents;
+}
+
+.term {
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.detail {
+    margin: 0;
+    font-weight: 800;
+}
