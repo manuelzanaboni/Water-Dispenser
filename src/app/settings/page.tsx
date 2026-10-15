@@ -1,30 +1,28 @@
 "use server";
 
-import { Group, Stack, Text, Title } from "@mantine/core";
+import { connection } from "next/server";
 
-import FilterManagement from "@/components/client/FilterManagement";
-import FullScreen from "@/components/client/FullScreen";
-import TankManagement from "@/components/client/TankManagement";
-import ToggleTheme from "@/components/client/ToggleTheme";
+import SettingsScreen from "@/components/client/SettingsScreen";
+import { getCurrentFilter, getTanks } from "@/service/db";
+import { loadSafely } from "@/service/loadSafely";
 
 import nextConfig from "../../../next.config";
 
 export default async function Settings() {
-    return (
-        <>
-            <Title order={1} mb="md">Impostazioni</Title>
+    // reads the db on every visit: the last filter and tank change from this very page
+    await connection();
 
-            <Stack gap="md" align="stretch">
-                <ToggleTheme />
-                <FullScreen />
-                <FilterManagement />
-                <TankManagement />
-                {/* Version */}
-                <Group gap="xs">
-                    <Text>Version:</Text>
-                    <Text fw={700}>{nextConfig?.publicRuntimeConfig?.version}</Text>
-                </Group>
-            </Stack>
-        </>
+    const [filter, tanks] = await Promise.all([
+        loadSafely("the current filter", getCurrentFilter, undefined),
+        loadSafely("the CO₂ tanks", getTanks, []),
+    ]);
+    const lastTank = tanks.reduce<typeof tanks[number] | null>((last, tank) => (!last || tank.ts > last.ts ? tank : last), null);
+
+    return (
+        <SettingsScreen
+            version={String(nextConfig?.publicRuntimeConfig?.version ?? "")}
+            lastFilter={filter ? { qty: filter.qty, ts: filter.ts } : null}
+            lastTank={lastTank ? { qty: lastTank.qty, ts: lastTank.ts } : null}
+        />
     );
 }
