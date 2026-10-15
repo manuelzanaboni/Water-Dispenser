@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { IconCheck } from "@tabler/icons-react";
 
@@ -10,7 +10,7 @@ import styles from "@/components/client/Dispenser.module.css";
 import WaterTypeSelector from "@/components/client/WaterTypeSelector";
 
 import { insertDispense } from "@/service/db";
-import { estimateMl, splitOperationName } from "@/service/dispense";
+import { estimateMl, MAX_DISPENSE_SEC, splitOperationName } from "@/service/dispense";
 import { turnOFF, turnON } from "@/service/gpio";
 import { DispenseOperation } from "@/service/types";
 import { DISPENSE_OPERATIONS } from "@/service/utils";
@@ -52,11 +52,11 @@ export default function Dispenser() {
 
     useEffect(() => () => clearTimeout(debounceTimer.current), []);
 
-    const debounce = () => {
+    const debounce = useCallback(() => {
         setDebouncing(true);
         clearTimeout(debounceTimer.current);
         debounceTimer.current = setTimeout(() => setDebouncing(false), DEBOUNCE_MS);
-    };
+    }, []);
 
     const selectType = (operation: DispenseOperation) => {
         setSelected(operation);
@@ -74,10 +74,11 @@ export default function Dispenser() {
         await turnON(selected);
     };
 
-    const stop = async () => {
+    const stop = useCallback(async () => {
         if (startedAt === null) return;
 
-        const durationSec = Math.round((Date.now() - startedAt) / 1000);
+        // the safety stop may fire a tick past the limit: record the limit itself
+        const durationSec = Math.min(Math.round((Date.now() - startedAt) / 1000), MAX_DISPENSE_SEC);
         setStartedAt(null);
         setLastDispense({ operation: selected, durationSec });
         setLocked(false);
@@ -89,7 +90,12 @@ export default function Dispenser() {
             // the valve command is already wrapped in gpio.ts: this is the db insert
             console.error(`Dispense of ${durationSec}s (${selected.name}) not saved`, error);
         }
-    };
+    }, [startedAt, selected, setLocked, debounce]);
+
+    // safety net: never leave the valve open if nobody taps stop
+    useEffect(() => {
+        if (elapsedSec !== null && elapsedSec >= MAX_DISPENSE_SEC) stop();
+    }, [elapsedSec, stop]);
 
     return (
         <div className={styles.screen}>
@@ -107,7 +113,11 @@ export default function Dispenser() {
                             <IconCheck className={styles.summaryIcon} stroke={2.4} aria-hidden />
                             {describeDispense(lastDispense)}
                         </p>
-                        : !isActive && <p className={styles.hint}>Scegli l’acqua, poi tocca il cerchio</p>
+                        : <p className={styles.hint}>
+                            {isActive
+                                ? `Il rubinetto si chiude da solo dopo ${MAX_DISPENSE_SEC} s`
+                                : "Scegli l’acqua, poi tocca il cerchio"}
+                        </p>
                     }
                 </div>
             </section>

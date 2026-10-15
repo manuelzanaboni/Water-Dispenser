@@ -6,7 +6,7 @@ import { DispenseLockProvider, useDispenseLock } from "@/components/client/Dispe
 import Dispenser from "@/components/client/Dispenser";
 import { insertDispense } from "@/service/db";
 import { turnOFF, turnON } from "@/service/gpio";
-import { SPARKLING_OPERATION } from "@/service/utils";
+import { DISPENSE_OPERATIONS, SPARKLING_OPERATION } from "@/service/utils";
 
 vi.mock("@/service/gpio", () => ({ turnON: vi.fn(), turnOFF: vi.fn() }));
 vi.mock("@/service/db", () => ({ insertDispense: vi.fn() }));
@@ -110,6 +110,36 @@ describe("Dispenser", () => {
         await user.click(screen.getByRole("button", { name: "Naturale Fredda" }));
 
         expect(screen.queryByRole("status")).not.toBeInTheDocument();
+    });
+
+    test("tells that the valve closes on its own while water runs", async () => {
+        const user = renderDispenser();
+
+        await user.click(dial());
+
+        expect(screen.getByText("Il rubinetto si chiude da solo dopo 60 s")).toBeInTheDocument();
+    });
+
+    test("closes the valve on its own after 60 seconds", async () => {
+        const user = renderDispenser();
+
+        await user.click(dial());
+        await wait(60_500);
+
+        expect(turnOFF).toHaveBeenCalledOnce();
+        expect(insertDispense).toHaveBeenCalledWith(DISPENSE_OPERATIONS[0], 60);
+        expect(dial()).toHaveAttribute("aria-pressed", "false");
+        expect(screen.getByText("navigazione libera")).toBeInTheDocument();
+    });
+
+    test("does not close the valve early", async () => {
+        const user = renderDispenser();
+
+        await user.click(dial());
+        await wait(59_000);
+
+        expect(turnOFF).not.toHaveBeenCalled();
+        expect(dial()).toHaveAttribute("aria-pressed", "true");
     });
 
     test("ignores a second tap right after starting", async () => {
