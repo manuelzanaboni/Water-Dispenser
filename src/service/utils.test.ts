@@ -13,6 +13,10 @@ describe("findDispenseOperation", () => {
 });
 
 describe("DISPENSE_OPERATIONS", () => {
+    test("uses the kiosk palette: sand, ice and aquamarine", () => {
+        expect(DISPENSE_OPERATIONS.map(op => op.color)).toEqual(["#E3C99A", "#8FD0FA", "#36C2A3"]);
+    });
+
     test("gives every water type its own color", () => {
         const colors = DISPENSE_OPERATIONS.map(op => op.color.toLowerCase());
 
