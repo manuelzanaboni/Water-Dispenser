@@ -7,6 +7,7 @@ import {
     DispenseModel,
     DispenseOperation,
     FilterModel,
+    RefrigeratorModel,
     TankModel,
 } from "@/service/types";
 import { DISPENSE_OPERATIONS, findDispenseOperation, SPARKLING_OPERATION, toThousandsRounded } from "@/service/utils";
@@ -120,6 +121,40 @@ export const tankPeriods = (
 
         return { id: tank.id, qtyGrams: tank.qty, from: tank.ts, to, litres: sparklingLitres(totalSec), bars };
     });
+};
+
+/* the fridge card covers the last 12 hours of readings */
+const FRIDGE_WINDOW_SEC = 12 * 60 * 60;
+/* READ_TEMP_DELTA_SEC in production, used when the setting is missing */
+const DEFAULT_READ_INTERVAL_SEC = 120;
+
+export const fridgeReadingsLimit = (readIntervalSec: number | undefined): number => {
+    const interval = readIntervalSec && readIntervalSec > 0 ? readIntervalSec : DEFAULT_READ_INTERVAL_SEC;
+    return Math.ceil(FRIDGE_WINDOW_SEC / interval);
+};
+
+export type FridgeSeries = {
+    current: number;
+    min: number;
+    max: number;
+    /* oldest first, for the sparkline */
+    temperatures: number[];
+};
+
+export const fridgeSeries = (readings: RefrigeratorModel[]): FridgeSeries | null => {
+    const temperatures = [...readings]
+        .sort((a, b) => a.ts - b.ts)
+        .map(reading => reading.temperature)
+        .filter((temperature): temperature is number => temperature !== null);
+
+    if (temperatures.length === 0) return null;
+
+    return {
+        current: temperatures[temperatures.length - 1],
+        min: Math.min(...temperatures),
+        max: Math.max(...temperatures),
+        temperatures,
+    };
 };
 
 /* below this share of its capacity the filter gauge turns to the warning color */

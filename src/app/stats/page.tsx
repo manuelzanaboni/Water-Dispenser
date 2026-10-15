@@ -2,7 +2,7 @@
 
 import FilterGauge from "@/components/client/FilterGauge";
 import MonthlyTiles from "@/components/client/MonthlyTiles";
-import RefrigeratorChart from "@/components/client/RefrigeratorChart";
+import FridgeCard from "@/components/client/FridgeCard";
 import TankCard from "@/components/client/TankCard";
 
 import styles from "@/app/stats/page.module.css";
@@ -11,9 +11,18 @@ import {
     getAggregateDispensesForTank,
     getCurrentFilter,
     getDispenses,
+    getRefrigerators,
     getTanks,
 } from "@/service/db";
-import { filterStatus, formatLitres, formatMonth, monthlySummary, tankPeriods } from "@/service/stats";
+import {
+    filterStatus,
+    formatLitres,
+    formatMonth,
+    fridgeReadingsLimit,
+    fridgeSeries,
+    monthlySummary,
+    tankPeriods,
+} from "@/service/stats";
 
 /* one failing query must not take the whole screen down: log it and show empty data */
 const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T): Promise<T> => {
@@ -27,14 +36,20 @@ const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T)
 
 export default async function Stats() {
     const nowTs = Math.floor(Date.now() / 1000);
+    const isTemperatureEnabled = process.env.READ_TEMP_ENABLED === "true";
+    const readingsLimit = fridgeReadingsLimit(Number(process.env.READ_TEMP_DELTA_SEC));
 
-    const [dispenses, filter, filterUsage, tanks, sparklingDays] = await Promise.all([
+    const [dispenses, filter, filterUsage, tanks, sparklingDays, readings] = await Promise.all([
         loadSafely("this month's dispenses", getDispenses, []),
         loadSafely("the current filter", getCurrentFilter, undefined),
         loadSafely("the filter usage", getAggregateDispensesForFilter, []),
         loadSafely("the CO₂ tanks", getTanks, []),
         // every sparkling day ever: tankPeriods splits them between the tanks
         loadSafely("the sparkling water per day", () => getAggregateDispensesForTank(0, nowTs), []),
+        // nothing to read while the sensor loop is off
+        isTemperatureEnabled
+            ? loadSafely("the fridge readings", () => getRefrigerators(readingsLimit), [])
+            : Promise.resolve([]),
     ]);
     const summary = monthlySummary(dispenses);
 
@@ -52,7 +67,7 @@ export default async function Stats() {
             <div className={styles.cards}>
                 <FilterGauge status={filterStatus(filter, filterUsage)} />
                 <TankCard periods={tankPeriods(tanks, sparklingDays, nowTs)} />
-                <RefrigeratorChart />
+                <FridgeCard isEnabled={isTemperatureEnabled} series={fridgeSeries(readings)} />
             </div>
         </div>
     );

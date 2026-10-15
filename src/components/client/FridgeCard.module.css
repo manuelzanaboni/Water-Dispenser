@@ -1,0 +1,72 @@
+.amount {
+    display: flex;
+    align-items: baseline;
+    gap: var(--kiosk-space-2);
+}
+
+.value {
+    font-size: clamp(1.5rem, 3.3vw, 2.125rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.caption {
+    font-size: var(--kiosk-font-sm);
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.chart {
+    flex: 1;
+    min-height: 3rem;
+    width: 100%;
+}
+
+.area {
+    fill: color-mix(in srgb, var(--kiosk-water-fredda-strong) 12%, transparent);
+}
+
+.line {
+    fill: none;
+    stroke: var(--kiosk-water-fredda-strong);
+    stroke-width: 2.5px;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+}
+
+.footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: var(--kiosk-font-sm);
+    font-weight: 600;
+    color: var(--kiosk-text-muted);
+}
+
+.badge {
+    padding: var(--kiosk-space-1) var(--kiosk-space-3);
+    border-radius: var(--kiosk-radius-pill);
+    background: var(--kiosk-line);
+    font-size: var(--kiosk-font-xs);
+    font-weight: 800;
+}
+
+/* empty chart rows standing in for the sparkline while the sensor is off */
+.placeholder {
+    flex: 1;
+    min-height: 2rem;
+    background:
+        linear-gradient(var(--kiosk-line) 0 0) top / 100% 1px no-repeat,
+        linear-gradient(var(--kiosk-line) 0 0) center / 100% 1px no-repeat,
+        linear-gradient(var(--kiosk-line) 0 0) bottom / 100% 1px no-repeat;
+    opacity: 0.6;
+}
+
+.note {
+    margin: 0;
+    font-size: var(--kiosk-font-sm);
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--kiosk-text-muted);
+}

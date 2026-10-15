@@ -1,6 +1,16 @@
 import { describe, expect, test } from "vitest";
 
-import { filterStatus, formatDate, formatInteger, formatLitres, formatMonth, monthlySummary, tankPeriods } from "@/service/stats";
+import {
+    filterStatus,
+    formatDate,
+    formatInteger,
+    formatLitres,
+    formatMonth,
+    fridgeReadingsLimit,
+    fridgeSeries,
+    monthlySummary,
+    tankPeriods,
+} from "@/service/stats";
 
 describe("tankPeriods", () => {
     const DAY = 86_400;
@@ -52,6 +62,42 @@ describe("tankPeriods", () => {
 
     test("is empty when no tank was ever registered", () => {
         expect(tankPeriods([], days, NOW + DAY)).toEqual([]);
+    });
+});
+
+describe("fridge readings", () => {
+    test("asks for twelve hours worth of readings at the configured interval", () => {
+        expect(fridgeReadingsLimit(120)).toBe(360);
+        expect(fridgeReadingsLimit(5)).toBe(8640);
+    });
+
+    test("falls back to the production interval for a missing or broken setting", () => {
+        expect(fridgeReadingsLimit(undefined)).toBe(360);
+        expect(fridgeReadingsLimit(Number.NaN)).toBe(360);
+        expect(fridgeReadingsLimit(0)).toBe(360);
+    });
+
+    test("orders the readings in time and keeps the latest as current", () => {
+        const series = fridgeSeries([
+            { ts: 30, temperature: 4.2, state: 1 },
+            { ts: 10, temperature: 3.8, state: 1 },
+            { ts: 20, temperature: 5.1, state: 0 },
+        ]);
+
+        expect(series).toEqual({ current: 4.2, min: 3.8, max: 5.1, temperatures: [3.8, 5.1, 4.2] });
+    });
+
+    test("skips readings the sensor could not take", () => {
+        const series = fridgeSeries([
+            { ts: 10, temperature: null, state: 0 },
+            { ts: 20, temperature: 4, state: 1 },
+        ]);
+
+        expect(series?.temperatures).toEqual([4]);
+    });
+
+    test("is empty without any valid reading", () => {
+        expect(fridgeSeries([{ ts: 10, temperature: null, state: 0 }])).toBeNull();
     });
 });
 
