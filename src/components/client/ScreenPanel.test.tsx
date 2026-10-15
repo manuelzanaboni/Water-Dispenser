@@ -58,7 +58,8 @@ describe("ScreenPanel", () => {
         const user = userEvent.setup();
         render(<ScreenPanel />);
 
-        const toggle = screen.getByRole("switch", { name: /Schermo intero/ });
+        const toggle = screen.getByRole("switch", { name: "Schermo intero Nasconde le barre del browser" });
+        expect(screen.getByRole("button", { name: "A destra in colonna" })).toBeInTheDocument();
         expect(toggle).toHaveAttribute("aria-checked", "false");
         await user.click(toggle);
 

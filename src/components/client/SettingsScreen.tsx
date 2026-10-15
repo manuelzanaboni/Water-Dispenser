@@ -88,7 +88,7 @@ export default function SettingsScreen({ version, lastFilter, lastTank }: Settin
                                 <Icon className={styles.icon} stroke={1.8} />
                             </span>
                             <span className={styles.itemText}>
-                                <span className={styles.itemTitle}>{title}</span>
+                                <span className={styles.itemTitle}>{title}</span>{" "}
                                 <span className={styles.itemSubtitle}>{subtitle}</span>
                             </span>
                         </button>

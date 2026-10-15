@@ -21,6 +21,7 @@ describe("TankCard", () => {
         expect(screen.getByText("#4")).toBeInTheDocument();
         expect(screen.getByText("86,4")).toBeInTheDocument();
         expect(screen.getByText("In uso dal 12/09/2026")).toBeInTheDocument();
+        expect(screen.getByRole("region", { name: "Bombola CO₂" })).toHaveTextContent("#4 In uso dal 12/09/2026 86,4 litri frizzante");
         expect(screen.getByRole("button", { name: "Bombola successiva" })).toBeDisabled();
     });
 

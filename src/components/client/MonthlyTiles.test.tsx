@@ -17,6 +17,7 @@ describe("MonthlyTiles", () => {
         expect(tiles).toHaveLength(3);
         expect(within(tiles[0]).getByText("Naturale · Ambiente")).toBeInTheDocument();
         expect(within(tiles[0]).getByText("38,4")).toBeInTheDocument();
+        expect(tiles[0]).toHaveTextContent("Naturale · Ambiente 38,4 litri");
         expect(within(tiles[1]).getByText("0,0")).toBeInTheDocument();
         expect(within(tiles[2]).getByText("27,6")).toBeInTheDocument();
     });

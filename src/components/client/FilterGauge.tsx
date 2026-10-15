@@ -36,14 +36,14 @@ export default function FilterGauge({ status }: FilterGaugeProps) {
                         pathLength={100}
                         strokeDasharray={`${percent} 100`}
                     />
-                </svg>
+                </svg>{" "}
                 <span className={styles.center}>
-                    <span className={styles.value}>{formatInteger(status.remainingLitres)}</span>
+                    <span className={styles.value}>{formatInteger(status.remainingLitres)}</span>{" "}
                     <span className={styles.caption}>{status.isLow ? "Da sostituire presto" : "litri residui"}</span>
                 </span>
-            </div>
+            </div>{" "}
             <footer className={styles.footer}>
-                <span>Dal {formatDate(status.since)}</span>
+                <span>Dal {formatDate(status.since)}</span>{" "}
                 <span>su {formatInteger(status.capacityLitres)} l</span>
             </footer>
         </StatsCard>

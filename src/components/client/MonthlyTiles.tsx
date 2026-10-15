@@ -28,9 +28,9 @@ export default function MonthlyTiles({ summary }: MonthlyTilesProps) {
                                 <Icon className={styles.icon} stroke={1.8} />
                             </span>
                             {title} · {subtitle}
-                        </span>
+                        </span>{" "}
                         <span className={styles.amount}>
-                            <span className={styles.value}>{formatLitres(litres)}</span>
+                            <span className={styles.value}>{formatLitres(litres)}</span>{" "}
                             <span className={styles.unit}>litri</span>
                         </span>
                         <span className={styles.track} role="img" aria-label={`${percent}% del mese`}>

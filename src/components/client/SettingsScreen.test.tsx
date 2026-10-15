@@ -55,7 +55,7 @@ describe("SettingsScreen", () => {
     test("lists the last filter and tank under their entries", () => {
         renderScreen();
 
-        expect(menuItem(/^Nuovo filtro/)).toHaveTextContent("Ultimo: 02/09/2026 · 1.500 l");
+        expect(menuItem(/^Nuovo filtro/)).toHaveAccessibleName("Nuovo filtro Ultimo: 02/09/2026 · 1.500 l");
         expect(menuItem(/^Nuova bombola/)).toHaveTextContent("Ultima: 12/09/2026 · 600 g");
     });
 

@@ -41,7 +41,7 @@ const ChoiceGroup = ({ title, choices }: { title: string; choices: Choice[] }) =
                     {icon}
                     <span className={styles.choiceText}>
                         <span className={styles.choiceLabel}>{label}</span>
-                        {detail && <span className={styles.choiceDetail}>{detail}</span>}
+                        {detail && <>{" "}<span className={styles.choiceDetail}>{detail}</span></>}
                     </span>
                 </button>
             ))}
@@ -96,7 +96,7 @@ export default function ScreenPanel() {
 
             <button type="button" role="switch" aria-checked={fullscreen} className={styles.switchRow} onClick={toggle}>
                 <span className={styles.choiceText}>
-                    <span className={styles.choiceLabel}>Schermo intero</span>
+                    <span className={styles.choiceLabel}>Schermo intero</span>{" "}
                     <span className={styles.choiceDetail}>Nasconde le barre del browser</span>
                 </span>
                 <span className={styles.switch} aria-hidden>

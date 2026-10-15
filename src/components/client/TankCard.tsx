@@ -52,7 +52,7 @@ export default function TankCard({ periods }: TankCardProps) {
                 <IconChevronLeft className={styles.navIcon} stroke={2.2} aria-hidden />
             </button>
             <span className={styles.navLabel}>
-                <span className={styles.tankId}>#{period.id ?? index + 1}</span>
+                <span className={styles.tankId}>#{period.id ?? index + 1}</span>{" "}
                 <span className={styles.period}>{describePeriod(period)}</span>
             </span>
             <button
@@ -69,10 +69,10 @@ export default function TankCard({ periods }: TankCardProps) {
 
     return (
         <StatsCard title="Bombola CO₂" Icon={IconCylinder} accent={ACCENT}>
-            {navigation}
+            {navigation}{" "}
 
             <span className={styles.amount}>
-                <span className={styles.value}>{formatLitres(period.litres)}</span>
+                <span className={styles.value}>{formatLitres(period.litres)}</span>{" "}
                 <span className={styles.unit}>litri frizzante</span>
             </span>
 

@@ -19,6 +19,7 @@ describe("FridgeCard", () => {
         render(<FridgeCard isEnabled series={SERIES} />);
 
         expect(screen.getByText("4,2 °C")).toBeInTheDocument();
+        expect(screen.getByRole("region", { name: "Frigorifero" })).toHaveTextContent("4,2 °C adesso");
         expect(screen.getByText("min 3,8°")).toBeInTheDocument();
         expect(screen.getByText("max 5,1°")).toBeInTheDocument();
         expect(screen.getByRole("img", { name: "Temperatura del frigorifero nelle ultime 12 ore, tra 3,8° e 5,1°" })).toBeInTheDocument();

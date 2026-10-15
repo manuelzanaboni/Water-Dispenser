@@ -19,6 +19,7 @@ describe("FilterGauge", () => {
         expect(screen.getByText("1.188")).toBeInTheDocument();
         expect(screen.getByText("Dal 02/09/2026")).toBeInTheDocument();
         expect(screen.getByText("su 1.500 l")).toBeInTheDocument();
+        expect(screen.getByRole("region", { name: "Filtro" })).toHaveTextContent("1.188 litri residui Dal 02/09/2026 su 1.500 l");
         expect(screen.getByRole("img", { name: "Filtro: 79% di capacità residua" })).toBeInTheDocument();
     });
 

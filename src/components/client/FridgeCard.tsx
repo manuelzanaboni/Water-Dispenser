@@ -61,7 +61,7 @@ export default function FridgeCard({ isEnabled, series }: FridgeCardProps) {
     return (
         <StatsCard title="Frigorifero" Icon={IconTemperature} accent={ACCENT}>
             <span className={styles.amount}>
-                <span className={styles.value}>{formatTemperature(series.current).replace("°", " °C")}</span>
+                <span className={styles.value}>{formatTemperature(series.current).replace("°", " °C")}</span>{" "}
                 <span className={styles.caption}>adesso</span>
             </span>
             <svg
@@ -75,7 +75,7 @@ export default function FridgeCard({ isEnabled, series }: FridgeCardProps) {
                 <polyline className={styles.line} points={points} />
             </svg>
             <footer className={styles.footer}>
-                <span>min {low}</span>
+                <span>min {low}</span>{" "}
                 <span>max {high}</span>
             </footer>
         </StatsCard>
