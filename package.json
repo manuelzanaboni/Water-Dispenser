@@ -11,14 +11,12 @@
         "test:watch": "vitest"
     },
     "dependencies": {
-        "@mantine/charts": "^8.2.2",
         "@mantine/core": "^8.2.2",
         "@mantine/hooks": "^8.2.2",
         "@tabler/icons-react": "^3.34.1",
         "next": "15.4.5",
         "react": "19.1.1",
         "react-dom": "19.1.1",
-        "recharts": "^3.1.0",
         "sqlite3": "^5.1.7"
     },
     "devDependencies": {

@@ -32,7 +32,6 @@
     --kiosk-water-ambiente: #E3C99A;
     --kiosk-water-fredda: #8FD0FA;
     --kiosk-water-frizzante: #36C2A3;
-    --kiosk-accent-filter: #9FB8FF;
 
     /* light scheme (default) */
     --kiosk-bg: #EDF3F7;
@@ -47,6 +46,7 @@
     --kiosk-water-fredda-strong: #1C7FC0;
     --kiosk-water-frizzante-strong: #13866D;
     --kiosk-warning: #B3261E;
+    --kiosk-accent-filter: #4F6FD6;
 }
 
 [data-mantine-color-scheme="dark"] {
@@ -61,4 +61,5 @@
     --kiosk-water-fredda-strong: var(--kiosk-water-fredda);
     --kiosk-water-frizzante-strong: var(--kiosk-water-frizzante);
     --kiosk-warning: #FFB4A8;
+    --kiosk-accent-filter: #9FB8FF;
 }

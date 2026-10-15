@@ -45,3 +45,19 @@
 .card[data-disabled] .icon {
     color: currentColor;
 }
+
+@media (max-height: 34rem) {
+    .card {
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-3) var(--kiosk-space-4);
+    }
+
+    /* the header holds no buttons, so it can drop the touch-target height */
+    .header {
+        min-height: 0;
+    }
+
+    .title {
+        font-size: var(--kiosk-font-sm);
+    }
+}

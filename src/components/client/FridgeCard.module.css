@@ -70,3 +70,14 @@
     line-height: 1.35;
     color: var(--kiosk-text-muted);
 }
+
+@media (max-height: 34rem) {
+    .chart,
+    .placeholder {
+        min-height: 1.5rem;
+    }
+
+    .note {
+        font-size: var(--kiosk-font-xs);
+    }
+}

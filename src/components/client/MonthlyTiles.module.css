@@ -15,6 +15,14 @@
     padding: var(--kiosk-space-4) var(--kiosk-space-5);
     border-radius: var(--kiosk-radius-lg);
     background: var(--kiosk-surface);
+    container-type: inline-size;
+}
+
+@media (max-height: 34rem) {
+    .tile {
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-3) var(--kiosk-space-4);
+    }
 }
 
 .label {
@@ -69,6 +77,18 @@
     overflow: hidden;
     border-radius: var(--kiosk-radius-pill);
     background: var(--kiosk-line);
+}
+
+/* narrow tiles: the label must stay on one line, the icon is the first to go */
+@container (max-width: 14rem) {
+    .iconBox {
+        display: none;
+    }
+
+    .label {
+        font-size: var(--kiosk-font-xs);
+        white-space: nowrap;
+    }
 }
 
 .bar {

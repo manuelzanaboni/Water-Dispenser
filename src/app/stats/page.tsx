@@ -1,5 +1,7 @@
 "use server";
 
+import { connection } from "next/server";
+
 import FilterGauge from "@/components/client/FilterGauge";
 import MonthlyTiles from "@/components/client/MonthlyTiles";
 import FridgeCard from "@/components/client/FridgeCard";
@@ -35,6 +37,9 @@ const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T)
 };
 
 export default async function Stats() {
+    // live data and the container's env: never prerender this page at build time
+    await connection();
+
     const nowTs = Math.floor(Date.now() / 1000);
     const isTemperatureEnabled = process.env.READ_TEMP_ENABLED === "true";
     const readingsLimit = fridgeReadingsLimit(Number(process.env.READ_TEMP_DELTA_SEC));

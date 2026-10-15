@@ -22,7 +22,8 @@
     padding: 0;
     border: none;
     border-radius: var(--kiosk-radius-sm);
-    background: var(--kiosk-surface-active);
+    /* a wash of the text color reads on the card in both schemes */
+    background: color-mix(in srgb, var(--kiosk-text) 9%, transparent);
     color: var(--kiosk-text);
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
@@ -120,6 +121,17 @@
     font-size: var(--kiosk-font-md);
     font-weight: 700;
     color: var(--kiosk-text);
+}
+
+@media (max-height: 34rem) {
+    .bars {
+        min-height: 1.5rem;
+    }
+
+    /* the bars still read left to right without their captions */
+    .footer {
+        display: none;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

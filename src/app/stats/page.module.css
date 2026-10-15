@@ -35,3 +35,20 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--kiosk-space-4);
 }
+
+/* short displays (800×480 and the like): same screen, tighter rhythm */
+@media (max-height: 34rem) {
+    .page,
+    .cards {
+        gap: var(--kiosk-space-3);
+    }
+
+    .title {
+        font-size: var(--kiosk-font-lg);
+    }
+
+    .period {
+        padding: var(--kiosk-space-2) var(--kiosk-space-3);
+        font-size: var(--kiosk-font-xs);
+    }
+}

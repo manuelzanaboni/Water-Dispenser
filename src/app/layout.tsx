@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import { Manrope } from "next/font/google";
 import { connection } from "next/server";
 
-import "@mantine/charts/styles.css";
-
 import "@/app/tokens.css";
 import "@/app/globals.css";
 
