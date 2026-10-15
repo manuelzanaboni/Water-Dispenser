@@ -117,17 +117,17 @@ describe("Dispenser", () => {
 
         await user.click(dial());
 
-        expect(screen.getByText("Il rubinetto si chiude da solo dopo 60 s")).toBeInTheDocument();
+        expect(screen.getByText("Il rubinetto si chiude da solo dopo 120 s")).toBeInTheDocument();
     });
 
-    test("closes the valve on its own after 60 seconds", async () => {
+    test("closes the valve on its own after 120 seconds", async () => {
         const user = renderDispenser();
 
         await user.click(dial());
-        await wait(60_500);
+        await wait(120_500);
 
         expect(turnOFF).toHaveBeenCalledOnce();
-        expect(insertDispense).toHaveBeenCalledWith(DISPENSE_OPERATIONS[0], 60);
+        expect(insertDispense).toHaveBeenCalledWith(DISPENSE_OPERATIONS[0], 120);
         expect(dial()).toHaveAttribute("aria-pressed", "false");
         expect(screen.getByText("navigazione libera")).toBeInTheDocument();
     });
@@ -136,7 +136,7 @@ describe("Dispenser", () => {
         const user = renderDispenser();
 
         await user.click(dial());
-        await wait(59_000);
+        await wait(119_000);
 
         expect(turnOFF).not.toHaveBeenCalled();
         expect(dial()).toHaveAttribute("aria-pressed", "true");

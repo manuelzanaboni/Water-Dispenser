@@ -2,7 +2,7 @@
    that roughly is, and how high the water in the dial sits. */
 
 /* the valve closes on its own after this long, in case nobody taps stop */
-export const MAX_DISPENSE_SEC = 60;
+export const MAX_DISPENSE_SEC = 120;
 
 /* seconds of flow after which the dial looks full: a glass, not the real volume */
 const FILL_SECONDS = 12;
