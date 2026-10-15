@@ -17,7 +17,8 @@ export default function StatsCard({ title, Icon, accent, aside, isDisabled, chil
         <section
             className={styles.card}
             aria-label={title}
-            aria-disabled={isDisabled || undefined}
+            // styling hook only: a region cannot be aria-disabled, the card says it in words
+            data-disabled={isDisabled || undefined}
             style={{ "--card-accent": accent } as React.CSSProperties}
         >
             <header className={styles.header}>

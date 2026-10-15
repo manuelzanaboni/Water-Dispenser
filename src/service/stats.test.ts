@@ -1,6 +1,59 @@
 import { describe, expect, test } from "vitest";
 
-import { filterStatus, formatDate, formatInteger, formatLitres, formatMonth, monthlySummary } from "@/service/stats";
+import { filterStatus, formatDate, formatInteger, formatLitres, formatMonth, monthlySummary, tankPeriods } from "@/service/stats";
+
+describe("tankPeriods", () => {
+    const DAY = 86_400;
+    const ts = (iso: string) => Date.parse(`${iso}T12:00:00Z`) / 1000;
+    const NOW = ts("2026-10-15");
+
+    const tanks = [
+        { id: 4, qty: 600, ts: ts("2026-10-10") },
+        { id: 3, qty: 600, ts: ts("2026-09-01") },
+    ];
+    // sparkling seconds per day, as the aggregate_dispenses_tanks view returns them
+    const days = [
+        { day: "2026-09-20", duration: 100 },
+        { day: "2026-10-12", duration: 200 },
+        { day: "2026-10-15", duration: 50 },
+    ];
+
+    test("orders the tanks from the oldest to the one in use", () => {
+        const periods = tankPeriods(tanks, days, NOW);
+
+        expect(periods.map(p => p.id)).toEqual([3, 4]);
+        expect(periods[0].to).toBe(tanks[0].ts);
+        expect(periods[1].to).toBeNull();
+    });
+
+    test("sums the sparkling water poured from each tank", () => {
+        const [older, current] = tankPeriods(tanks, days, NOW);
+
+        // 100s × 37 ml/s
+        expect(older.litres).toBe(3.7);
+        // (200 + 50)s × 37 ml/s
+        expect(current.litres).toBe(9.3);
+    });
+
+    test("gives fourteen daily bars ending today for the tank in use", () => {
+        const current = tankPeriods(tanks, days, NOW)[1];
+
+        expect(current.bars).toHaveLength(14);
+        expect(current.bars.at(-1)).toEqual({ day: "2026-10-15", litres: 1.9 });
+        expect(current.bars.at(-4)).toEqual({ day: "2026-10-12", litres: 7.4 });
+        expect(current.bars[0].day).toBe("2026-10-02");
+    });
+
+    test("ends the bars of a replaced tank on the day it was replaced", () => {
+        const older = tankPeriods(tanks, days, NOW)[0];
+
+        expect(older.bars.at(-1)?.day).toBe("2026-10-10");
+    });
+
+    test("is empty when no tank was ever registered", () => {
+        expect(tankPeriods([], days, NOW + DAY)).toEqual([]);
+    });
+});
 
 describe("filterStatus", () => {
     const filter = { id: 4, qty: 1500, ts: 1_788_000_000 };

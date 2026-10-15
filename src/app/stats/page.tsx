@@ -3,11 +3,17 @@
 import FilterGauge from "@/components/client/FilterGauge";
 import MonthlyTiles from "@/components/client/MonthlyTiles";
 import RefrigeratorChart from "@/components/client/RefrigeratorChart";
-import TankDispenseSummary from "@/components/client/TankDispenseSummary";
+import TankCard from "@/components/client/TankCard";
 
 import styles from "@/app/stats/page.module.css";
-import { getAggregateDispensesForFilter, getCurrentFilter, getDispenses } from "@/service/db";
-import { filterStatus, formatLitres, formatMonth, monthlySummary } from "@/service/stats";
+import {
+    getAggregateDispensesForFilter,
+    getAggregateDispensesForTank,
+    getCurrentFilter,
+    getDispenses,
+    getTanks,
+} from "@/service/db";
+import { filterStatus, formatLitres, formatMonth, monthlySummary, tankPeriods } from "@/service/stats";
 
 /* one failing query must not take the whole screen down: log it and show empty data */
 const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T): Promise<T> => {
@@ -20,10 +26,15 @@ const loadSafely = async <T,>(what: string, load: () => Promise<T>, fallback: T)
 };
 
 export default async function Stats() {
-    const [dispenses, filter, filterUsage] = await Promise.all([
+    const nowTs = Math.floor(Date.now() / 1000);
+
+    const [dispenses, filter, filterUsage, tanks, sparklingDays] = await Promise.all([
         loadSafely("this month's dispenses", getDispenses, []),
         loadSafely("the current filter", getCurrentFilter, undefined),
         loadSafely("the filter usage", getAggregateDispensesForFilter, []),
+        loadSafely("the CO₂ tanks", getTanks, []),
+        // every sparkling day ever: tankPeriods splits them between the tanks
+        loadSafely("the sparkling water per day", () => getAggregateDispensesForTank(0, nowTs), []),
     ]);
     const summary = monthlySummary(dispenses);
 
@@ -40,7 +51,7 @@ export default async function Stats() {
 
             <div className={styles.cards}>
                 <FilterGauge status={filterStatus(filter, filterUsage)} />
-                <TankDispenseSummary />
+                <TankCard periods={tankPeriods(tanks, sparklingDays, nowTs)} />
                 <RefrigeratorChart />
             </div>
         </div>

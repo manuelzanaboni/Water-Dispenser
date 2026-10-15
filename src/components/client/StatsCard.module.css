@@ -12,7 +12,7 @@
 }
 
 /* a feature that is switched off on this machine: still there, clearly inert */
-.card[aria-disabled="true"] {
+.card[data-disabled] {
     border-style: dashed;
     border-color: var(--kiosk-line);
     background: transparent;
@@ -42,6 +42,6 @@
     color: var(--card-accent);
 }
 
-.card[aria-disabled="true"] .icon {
+.card[data-disabled] .icon {
     color: currentColor;
 }

@@ -1,8 +1,15 @@
 /* Pure calculations and formatting behind the stats screen. The page loads the
    rows from the db and hands them here; components only render the results. */
 
-import { AggregateDispenseFilterModel, DispenseModel, DispenseOperation, FilterModel } from "@/service/types";
-import { DISPENSE_OPERATIONS, findDispenseOperation, toThousandsRounded } from "@/service/utils";
+import {
+    AggregateDispenseFilterModel,
+    AggregateDispenseTankModel,
+    DispenseModel,
+    DispenseOperation,
+    FilterModel,
+    TankModel,
+} from "@/service/types";
+import { DISPENSE_OPERATIONS, findDispenseOperation, SPARKLING_OPERATION, toThousandsRounded } from "@/service/utils";
 
 const LITRES_FORMAT = new Intl.NumberFormat("it-IT", { minimumFractionDigits: 1, maximumFractionDigits: 1 });
 const DATE_FORMAT = new Intl.DateTimeFormat("it-IT", { day: "2-digit", month: "2-digit", year: "numeric" });
@@ -60,6 +67,59 @@ export const monthlySummary = (dispenses: DispenseModel[]): MonthlySummary => {
         }),
         totalLitres: toThousandsRounded(totalMl),
     };
+};
+
+/* how many days of bars the CO₂ card shows */
+const TANK_BAR_DAYS = 14;
+const DAY_SEC = 86_400;
+
+/* the db groups by strftime('%Y-%m-%d', ts, 'unixepoch'): a UTC calendar day */
+const dayKey = (ts: number): string => new Date(ts * 1000).toISOString().slice(0, 10);
+
+const sparklingLitres = (durationSec: number): number => toThousandsRounded(durationSec * SPARKLING_OPERATION.factor);
+
+export type TankBar = {
+    day: string;
+    litres: number;
+};
+
+export type TankPeriod = {
+    id?: number;
+    qtyGrams: number;
+    from: number;
+    /* when the next tank replaced it; null for the tank in use */
+    to: number | null;
+    litres: number;
+    bars: TankBar[];
+};
+
+export const tankPeriods = (
+    tanks: TankModel[],
+    sparklingDays: AggregateDispenseTankModel[],
+    nowTs: number,
+): TankPeriod[] => {
+    const ordered = [...tanks].sort((a, b) => a.ts - b.ts);
+
+    return ordered.map((tank, index) => {
+        const to = ordered[index + 1]?.ts ?? null;
+        const endTs = to ?? nowTs;
+        const [fromDay, endDay] = [dayKey(tank.ts), dayKey(endTs)];
+
+        // both ends included, as the previous screen's BETWEEN query did
+        const secondsByDay = new Map(
+            sparklingDays
+                .filter(({ day }) => day >= fromDay && day <= endDay)
+                .map(({ day, duration }) => [day, duration])
+        );
+        const totalSec = [...secondsByDay.values()].reduce((sum, sec) => sum + sec, 0);
+
+        const bars = Array.from({ length: TANK_BAR_DAYS }, (_, i) => {
+            const day = dayKey(endTs - (TANK_BAR_DAYS - 1 - i) * DAY_SEC);
+            return { day, litres: sparklingLitres(secondsByDay.get(day) ?? 0) };
+        });
+
+        return { id: tank.id, qtyGrams: tank.qty, from: tank.ts, to, litres: sparklingLitres(totalSec), bars };
+    });
 };
 
 /* below this share of its capacity the filter gauge turns to the warning color */
