@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import { connection } from "next/server";
 
 import "@/app/tokens.css";
@@ -19,10 +19,13 @@ export const metadata: Metadata = {
     description: "Water Dispenser App companion for BWT AQA drink U20 CAS",
 };
 
-// downloaded at build time and served by Next: the kiosk needs no network for fonts
-const manrope = Manrope({
-    subsets: ["latin"],
-    weight: ["500", "600", "700", "800"],
+// Manrope (SIL OFL, see fonts/Manrope-OFL.txt) ships in the repo: neither the
+// docker build nor the kiosk needs network access to Google Fonts.
+// One variable file, latin subset, covers every weight from 200 to 800.
+const manrope = localFont({
+    src: "./fonts/manrope-latin-variable.woff2",
+    weight: "200 800",
+    display: "swap",
     variable: "--font-manrope",
 });
 
