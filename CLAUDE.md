@@ -78,7 +78,7 @@ Every screen sits inside `shell/AppShell` (mounted by the root layout): a left `
 
 ### UI stack and styling
 
-Components are custom, styled with CSS Modules next to each component. Mantine v8 (`@mantine/core`, `@mantine/hooks`) is kept only as infrastructure: `MantineProvider` and its persisted color scheme (dark by default), `useMantineColorScheme` and `useFullscreen`. Design tokens (colors per scheme, spacing, radii, type scale, touch target size) are CSS custom properties in `src/app/tokens.css`, switched by Mantine's `data-mantine-color-scheme` attribute. Manrope is loaded through `next/font` (downloaded at build time, no network on the device).
+Components are custom, styled with CSS Modules next to each component. Mantine v8 (`@mantine/core`, `@mantine/hooks`) is kept only as infrastructure: `MantineProvider` and its persisted color scheme (dark by default), `useMantineColorScheme` and `useFullscreen`. Design tokens (colors per scheme, spacing, radii, type scale, touch target size) are CSS custom properties in `src/app/tokens.css`, switched by Mantine's `data-mantine-color-scheme` attribute. Manrope is vendored in `src/app/fonts/` (one latin variable woff2, SIL OFL) and loaded with `next/font/local`; do not switch back to `next/font/google`, the Docker build must not depend on Google Fonts being reachable.
 
 Rules the redesign follows — keep them when changing screens:
 

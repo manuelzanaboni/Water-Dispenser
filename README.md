@@ -58,7 +58,7 @@ npm run lint         # ESLint
 npm run screenshots  # refresh screenshots/ from the running dev server (uses the local Google Chrome)
 ```
 
-The UI font, Manrope, is loaded through [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) and bundled at build time, so the device needs no network for it.
+The UI font, Manrope (SIL Open Font License), ships in the repo at `src/app/fonts/` and is loaded through [`next/font/local`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts#local-fonts): neither the Docker build nor the device needs network access for it.
 
 ## Build Docker image
 
