@@ -40,3 +40,6 @@ next-env.d.ts
 
 # claude code
 /.claude/
+
+# device setup notes and scripts (local only)
+/deploy/
