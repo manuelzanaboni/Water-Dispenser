@@ -37,3 +37,35 @@
     font-weight: 600;
     color: var(--kiosk-text-muted);
 }
+
+/* phone: compact, icon and value only, the label does not fit the bar */
+@media (max-width: $kiosk-phone-narrow) {
+    .chip {
+        width: auto;
+        flex-direction: row;
+        gap: var(--kiosk-space-1);
+        padding: 0 var(--kiosk-space-3);
+    }
+
+    .value {
+        font-size: 1.0625rem;
+    }
+
+    .label {
+        display: none;
+    }
+}
+
+@media (max-height: $kiosk-phone-short) {
+    .chip {
+        padding: var(--kiosk-space-2) 0;
+    }
+
+    .value {
+        font-size: 1rem;
+    }
+
+    .label {
+        display: none;
+    }
+}

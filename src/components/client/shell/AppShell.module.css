@@ -14,3 +14,35 @@
     box-sizing: border-box;
     padding: var(--kiosk-space-5);
 }
+
+/* Phone on the LAN: the document scrolls instead of .content, because iOS only
+   shrinks the browser bars when the page itself scrolls. The kiosk never gets here. */
+@media (max-width: $kiosk-phone-narrow) {
+    /* portrait: content on top, the rail becomes a bar at the bottom (see NavRail) */
+    .shell {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: minmax(0, 1fr) auto;
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    .content {
+        grid-row: 1;
+        overflow: visible;
+        padding: var(--kiosk-space-3);
+    }
+}
+
+@media (max-height: $kiosk-phone-short) {
+    .shell {
+        height: auto;
+        min-height: 100dvh;
+        overflow: visible;
+    }
+
+    .content {
+        overflow: visible;
+        padding: var(--kiosk-space-3);
+    }
+}

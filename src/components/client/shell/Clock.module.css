@@ -6,3 +6,10 @@
     font-variant-numeric: tabular-nums;
     color: var(--kiosk-text-muted);
 }
+
+/* a phone shows its own clock: the rail keeps the room for the destinations */
+@media (max-width: $kiosk-phone-narrow), (max-height: $kiosk-phone-short) {
+    .clock {
+        display: none;
+    }
+}

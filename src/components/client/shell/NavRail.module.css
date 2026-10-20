@@ -86,6 +86,80 @@
     }
 }
 
+/* phone, portrait: a bar at the bottom that stays put while the page scrolls */
+@media (max-width: $kiosk-phone-narrow) {
+    .rail {
+        grid-row: 2;
+        position: sticky;
+        bottom: 0;
+        z-index: 1;
+        flex-direction: row;
+        width: auto;
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-2) var(--kiosk-space-3);
+        border-right: none;
+        border-top: 1px solid var(--kiosk-line);
+    }
+
+    .item {
+        flex: 1;
+        min-width: 0;
+        min-height: var(--kiosk-touch-min);
+        aspect-ratio: auto;
+        padding: var(--kiosk-space-2) 0;
+        font-size: 0.75rem;
+    }
+
+    .icon {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+
+    .spacer {
+        display: none;
+    }
+
+    .lock {
+        flex-direction: row;
+    }
+
+    .lockIcon {
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+}
+
+/* phone, landscape: still on the left, narrower and with shorter items so the
+   three destinations and the fridge fit ~320px; sticky while the page scrolls */
+@media (max-height: $kiosk-phone-short) {
+    .rail {
+        position: sticky;
+        top: 0;
+        align-self: start;
+        height: 100dvh;
+        width: 4.75rem;
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-2);
+    }
+
+    .item {
+        min-height: 3.5rem;
+        aspect-ratio: auto;
+        border-radius: var(--kiosk-radius-md);
+        font-size: 0.625rem;
+    }
+
+    .icon {
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+
+    .lock {
+        padding: 0 var(--kiosk-space-2);
+        font-size: 0.625rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .lock {
         animation: none;
