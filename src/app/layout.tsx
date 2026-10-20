@@ -3,7 +3,6 @@ import localFont from "next/font/local";
 import { connection } from "next/server";
 
 import "@/app/tokens.css";
-import "@/app/globals.css";
 
 // Mantine renders no component here (only the provider and its color scheme),
 // so only its base styles ship: reset, default --mantine-* variables, global classes.
@@ -11,6 +10,8 @@ import "@/app/globals.css";
 import "@mantine/core/styles/baseline.css";
 import "@mantine/core/styles/default-css-variables.css";
 import "@mantine/core/styles/global.css";
+// after Mantine's baseline, so the kiosk background wins over --mantine-color-body
+import "@/app/globals.css";
 
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from "@mantine/core";
 

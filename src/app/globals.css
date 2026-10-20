@@ -1,3 +1,6 @@
+/* the kiosk background behind the whole page, not only the shell: on a phone in
+   landscape iOS leaves bands beside the Dynamic Island, and they show the page */
 html, body {
     height: 100%;
+    background: var(--kiosk-bg);
 }
