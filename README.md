@@ -19,15 +19,36 @@ Captured at 1024×600, the resolution of the dispenser's display (`npm run scree
 | ![Settings: confirmation before registering a filter](screenshots/settings-confirm-dark.png) | ![Settings in the light theme](screenshots/settings-screen-light.png) |
 | Confirmation before registering | Settings, light theme |
 
+### On a phone
+
+The same app opened from a phone on the local network, captured as an iPhone 15 with the browser bars shown (393×660 in portrait, 852×330 in landscape). The kiosk layout above does not change.
+
+| | | |
+| --- | --- | --- |
+| ![Phone, portrait: dial above the three water types, navigation bar at the bottom](screenshots/phone-dispenser-idle-dark.png) | ![Phone, portrait: sparkling water running, navigation locked](screenshots/phone-dispenser-active-dark.png) | ![Phone, portrait: stats tiles and cards in one scrolling column](screenshots/phone-stats-dark.png) |
+| Dispensing | Sparkling water running | Stats (the page scrolls) |
+| ![Phone, portrait: settings menu as a grid, theme below](screenshots/phone-settings-screen-dark.png) | ![Phone, portrait: new filter keypad](screenshots/phone-settings-keypad-dark.png) | |
+| Settings: only the theme, the button layout is kiosk-only | New filter keypad | |
+
+| |
+| --- |
+| ![Phone, landscape: dial in the middle, water types on the right, slim rail on the left](screenshots/phone-landscape-dispenser-idle-dark.png) |
+| Dispensing, landscape |
+| ![Phone, landscape: stats in three columns, the page scrolls](screenshots/phone-landscape-stats-dark.png) |
+| Stats, landscape |
+| ![Phone, landscape: settings with the new filter keypad](screenshots/phone-landscape-settings-keypad-dark.png) |
+| New filter keypad, landscape |
+
 ## How it works
 
 - **Navigation**: a rail on the left switches between *Eroga*, *Statistiche* and *Impostazioni* with large buttons, and shows the fridge temperature and the time. It is locked while water is running.
-- **Dispensing**: pick a water type (`Naturale Ambiente`, `Naturale Fredda`, `Frizzante Fredda`), then tap the round dial to open the corresponding relay and tap it again to close it. The dial shows the running time and the estimated quantity, `duration × flow factor (ml/sec)` for that relay (see `src/service/utils.ts`); the valve closes on its own after 120 seconds. The water type buttons can sit on the right or in a row at the bottom (Settings → Schermo).
+- **Dispensing**: pick a water type (`Naturale Ambiente`, `Naturale Fredda`, `Frizzante Fredda`), then tap the round dial to open the corresponding relay and tap it again to close it. The dial shows the running time and the estimated quantity, `duration × flow factor (ml/sec)` for that relay (see `src/service/utils.ts`); the valve closes on its own after 120 seconds. On the kiosk the water type buttons can sit on the right or in a row at the bottom (Settings → Schermo).
 - **Filter**: from Settings you register a new filter with its capacity in litres (confirmed before saving); the stats show the litres left since then.
 - **CO₂ tank (sparkling)**: from Settings you register a new tank with its weight in grams; the stats show the sparkling water poured from each tank, day by day.
 - **Fridge temperature**: a background process periodically reads the 1-Wire temperature sensor and stores the readings, shown in the rail and in the stats (last 12 hours). With `READ_TEMP_ENABLED=false` both stay visible but disabled.
 - All data is persisted in a local **SQLite** database (no external services required).
 - The app is designed to be shown full-screen, in the browser's kiosk mode, on the dispenser's 1024×600 display, with a dark and a light theme.
+- Opened from a phone on the local network it adapts to portrait and landscape (bottom bar, stacked dispenser, scrolling stats and settings); the water type buttons follow the orientation, so their layout setting is only offered on the kiosk. The kiosk layout does not change.
 
 ## Configuration
 
@@ -55,7 +76,7 @@ Other scripts:
 ```bash
 npm test             # unit and component tests (Vitest + Testing Library)
 npm run lint         # ESLint
-npm run screenshots  # refresh screenshots/ from the running dev server (uses the local Google Chrome)
+npm run screenshots  # refresh screenshots/ (kiosk and phone) from the running dev server (uses the local Google Chrome)
 ```
 
 The UI font, Manrope (SIL Open Font License), ships in the repo at `src/app/fonts/` and is loaded through [`next/font/local`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts#local-fonts): neither the Docker build nor the device needs network access for it.

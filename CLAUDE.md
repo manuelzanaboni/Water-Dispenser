@@ -15,7 +15,7 @@ npm run start        # run the production build
 npm run lint         # next lint (eslint-config-next)
 npm test             # Vitest + Testing Library (jsdom), once
 npm run test:watch   # same, in watch mode
-npm run screenshots  # regenerate screenshots/ from a running dev server (needs local Chrome)
+npm run screenshots  # regenerate screenshots/ (kiosk 1024×600 and iPhone 15 portrait/landscape) from a running dev server (needs local Chrome)
 ```
 
 Tests sit next to the code they cover (`*.test.ts(x)`). GPIO and SQLite are never touched by tests: `@/service/gpio` and `@/service/db` are mocked with `vi.mock`. Pure logic lives in small modules under `src/service/` (`dispense.ts`, `stats.ts`, `keypad.ts`, `buttonLayout.ts`) so it can be tested without React.
@@ -83,5 +83,6 @@ Components are custom, styled with CSS Modules next to each component. Mantine v
 Rules the redesign follows — keep them when changing screens:
 
 - Responsive, not pixel-fixed: rem for type and spacing, flex/grid, `dvh`/`vw` with `clamp()`/`min()`, container queries inside components; 1024×600 is the reference, 800×480 and 1280×800 must still fit one screen. A `max-height: 34rem` media query tightens the rhythm on short displays.
+- Phone on the LAN (a check from an iPhone 15 or similar, never the kiosk): `$kiosk-phone-narrow` (portrait, `max-width: 36rem`) and `$kiosk-phone-short` (landscape, `max-height: 28rem`), PostCSS variables in `postcss.config.cjs`, used as `@media (max-width: $kiosk-phone-narrow)`. Under them the document scrolls instead of `.content` (iOS only shrinks the browser bars when the page itself scrolls), the rail becomes a sticky bottom bar in portrait and a slimmer sticky column in landscape, the clock is hidden, and pages drop `height: 100%`. The dispenser always shows dial over types in portrait and types on the right in landscape: these rules use `:global(html[data-button-layout]) .x` to match the specificity of the button-layout rules, and never change the saved preference; for the same reason the settings hide the button layout group on a phone (`data-kiosk-only` on its fieldset). Phone sizes use `svh` so nothing resizes while the browser bars slide. Check 393×660 and 852×330 (iPhone 15 with the bars shown) besides the kiosk sizes.
 - Animations only on `transform` and `opacity` (the Orange Pi GPU is weak), all turned off under `prefers-reduced-motion`.
 - Touch targets at least `--kiosk-touch-min` (3rem); UI text in Italian.
