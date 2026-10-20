@@ -27,11 +27,13 @@
     gap: var(--kiosk-space-3);
 }
 
-.choice,
-.switchRow {
+.choice {
+    min-height: 4.5rem;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--kiosk-space-3);
+    padding: 0 var(--kiosk-space-4);
     box-sizing: border-box;
     border: 2px solid var(--kiosk-line);
     border-radius: var(--kiosk-radius-md);
@@ -45,24 +47,16 @@
     transition: border-color 150ms ease-out, background-color 150ms ease-out, transform 100ms ease-out;
 }
 
-.choice {
-    min-height: 4.5rem;
-    justify-content: center;
-    padding: 0 var(--kiosk-space-4);
-}
-
 .choice[aria-pressed="true"] {
     border-color: var(--kiosk-water-fredda-strong);
     background: var(--kiosk-surface-active);
 }
 
-.choice:active,
-.switchRow:active {
+.choice:active {
     transform: scale(0.98);
 }
 
-.choice:focus-visible,
-.switchRow:focus-visible {
+.choice:focus-visible {
     outline: 3px solid var(--kiosk-water-fredda-strong);
     outline-offset: 2px;
 }
@@ -96,41 +90,6 @@
     color: var(--kiosk-text-muted);
 }
 
-.switchRow {
-    min-height: 5.5rem;
-    justify-content: space-between;
-    padding: 0 var(--kiosk-space-5);
-}
-
-.switch {
-    flex-shrink: 0;
-    position: relative;
-    width: 4.75rem;
-    height: 2.75rem;
-    border-radius: var(--kiosk-radius-pill);
-    background: var(--kiosk-line);
-    transition: background-color 200ms ease-out;
-}
-
-.switchRow[aria-checked="true"] .switch {
-    background: var(--kiosk-water-frizzante);
-}
-
-.knob {
-    position: absolute;
-    top: 0.25rem;
-    left: 0.25rem;
-    width: 2.25rem;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    background: #FFFFFF;
-    transition: transform 200ms ease-out;
-}
-
-.switchRow[aria-checked="true"] .knob {
-    transform: translateX(2rem);
-}
-
 @media (max-height: 34rem) {
     .panel {
         gap: var(--kiosk-space-3);
@@ -139,17 +98,10 @@
     .choice {
         min-height: 3.75rem;
     }
-
-    .switchRow {
-        min-height: 4.25rem;
-    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .choice,
-    .switchRow,
-    .switch,
-    .knob {
+    .choice {
         transition: none;
     }
 }

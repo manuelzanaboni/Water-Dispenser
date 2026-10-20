@@ -42,7 +42,7 @@ export default function SettingsScreen({ version, lastFilter, lastTank }: Settin
         {
             key: "schermo" as const,
             title: "Schermo",
-            subtitle: "Tema, pulsanti, schermo intero",
+            subtitle: "Tema e pulsanti",
             Icon: IconDeviceDesktop,
             accent: "var(--kiosk-water-fredda-strong)",
         },

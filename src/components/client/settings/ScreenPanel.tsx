@@ -1,7 +1,6 @@
 "use client";
 
 import { useMantineColorScheme } from "@mantine/core";
-import { useFullscreen } from "@mantine/hooks";
 import { IconMoon, IconSun } from "@tabler/icons-react";
 
 import styles from "@/components/client/settings/ScreenPanel.module.css";
@@ -52,7 +51,6 @@ const ChoiceGroup = ({ title, choices }: { title: string; choices: Choice[] }) =
 export default function ScreenPanel() {
     const { colorScheme, setColorScheme } = useMantineColorScheme();
     const [buttonLayout, setButtonLayout] = useButtonLayout();
-    const { fullscreen, toggle } = useFullscreen();
 
     return (
         <div className={styles.panel}>
@@ -93,16 +91,6 @@ export default function ScreenPanel() {
                     },
                 ]}
             />
-
-            <button type="button" role="switch" aria-checked={fullscreen} className={styles.switchRow} onClick={toggle}>
-                <span className={styles.choiceText}>
-                    <span className={styles.choiceLabel}>Schermo intero</span>{" "}
-                    <span className={styles.choiceDetail}>Nasconde le barre del browser</span>
-                </span>
-                <span className={styles.switch} aria-hidden>
-                    <span className={styles.knob} />
-                </span>
-            </button>
         </div>
     );
 }

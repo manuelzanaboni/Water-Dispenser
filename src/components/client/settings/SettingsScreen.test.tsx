@@ -1,5 +1,4 @@
 import { useMantineColorScheme } from "@mantine/core";
-import { useFullscreen } from "@mantine/hooks";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { useRouter } from "next/navigation";
@@ -9,7 +8,6 @@ import SettingsScreen from "@/components/client/settings/SettingsScreen";
 import { insertFilter, insertTank } from "@/service/db";
 
 vi.mock("@mantine/core", () => ({ useMantineColorScheme: vi.fn() }));
-vi.mock("@mantine/hooks", () => ({ useFullscreen: vi.fn() }));
 vi.mock("next/navigation", () => ({ useRouter: vi.fn() }));
 vi.mock("@/service/db", () => ({ insertFilter: vi.fn(), insertTank: vi.fn() }));
 
@@ -37,9 +35,6 @@ describe("SettingsScreen", () => {
         vi.mocked(useMantineColorScheme).mockReturnValue(
             { colorScheme: "dark", setColorScheme: vi.fn() } as unknown as ReturnType<typeof useMantineColorScheme>
         );
-        vi.mocked(useFullscreen).mockReturnValue(
-            { fullscreen: false, toggle: vi.fn() } as unknown as ReturnType<typeof useFullscreen>
-        );
         vi.mocked(useRouter).mockReturnValue({ refresh } as unknown as ReturnType<typeof useRouter>);
         vi.mocked(insertFilter).mockResolvedValue(undefined);
         vi.mocked(insertTank).mockResolvedValue(undefined);
@@ -49,6 +44,7 @@ describe("SettingsScreen", () => {
         renderScreen();
 
         expect(menuItem(/^Schermo/)).toHaveAttribute("aria-pressed", "true");
+        expect(menuItem(/^Schermo/)).toHaveAccessibleName("Schermo Tema e pulsanti");
         expect(screen.getByText("Tema")).toBeInTheDocument();
     });
 

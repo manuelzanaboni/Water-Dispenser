@@ -14,7 +14,7 @@ Captured at 1024×600, the resolution of the dispenser's display (`npm run scree
 | Water types in a row at the bottom | Light theme |
 | ![Stats: litres per water type this month, filter, CO₂ tank and fridge cards](screenshots/stats-dark.png) | ![Stats in the light theme](screenshots/stats-light.png) |
 | Stats | Stats, light theme |
-| ![Settings: theme, button layout and full screen](screenshots/settings-screen-dark.png) | ![Settings: keypad for a new filter](screenshots/settings-keypad-dark.png) |
+| ![Settings: theme and button layout](screenshots/settings-screen-dark.png) | ![Settings: keypad for a new filter](screenshots/settings-keypad-dark.png) |
 | Settings, screen | Settings, new filter keypad |
 | ![Settings: confirmation before registering a filter](screenshots/settings-confirm-dark.png) | ![Settings in the light theme](screenshots/settings-screen-light.png) |
 | Confirmation before registering | Settings, light theme |
@@ -27,7 +27,7 @@ Captured at 1024×600, the resolution of the dispenser's display (`npm run scree
 - **CO₂ tank (sparkling)**: from Settings you register a new tank with its weight in grams; the stats show the sparkling water poured from each tank, day by day.
 - **Fridge temperature**: a background process periodically reads the 1-Wire temperature sensor and stores the readings, shown in the rail and in the stats (last 12 hours). With `READ_TEMP_ENABLED=false` both stay visible but disabled.
 - All data is persisted in a local **SQLite** database (no external services required).
-- The app is designed to be shown full-screen on the dispenser's 1024×600 display (see *Schermo intero* in Settings), with a dark and a light theme.
+- The app is designed to be shown full-screen, in the browser's kiosk mode, on the dispenser's 1024×600 display, with a dark and a light theme.
 
 ## Configuration
 
