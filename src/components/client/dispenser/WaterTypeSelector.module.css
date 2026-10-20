@@ -138,6 +138,46 @@
     }
 }
 
+/* phone: always a column (see Dispenser.module.css) and slimmer buttons, so the
+   dial and all three types fit above the bottom bar in portrait */
+@media (max-width: $kiosk-phone-narrow), (max-height: $kiosk-phone-short) {
+    .selector,
+    :global(html[data-button-layout]) .selector {
+        flex-direction: column;
+        gap: var(--kiosk-space-2);
+    }
+
+    .button,
+    :global(html[data-button-layout]) .button {
+        min-height: var(--kiosk-touch-min);
+        padding: var(--kiosk-space-2) var(--kiosk-space-4);
+    }
+
+    .iconBox {
+        width: 3rem;
+    }
+
+    .icon {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+
+    .title {
+        font-size: 1.25rem;
+    }
+
+    .subtitle {
+        font-size: var(--kiosk-font-sm);
+    }
+}
+
+@media (max-width: $kiosk-phone-narrow) {
+    .selector,
+    :global(html[data-button-layout]) .selector {
+        height: auto;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .button {
         transition: none;

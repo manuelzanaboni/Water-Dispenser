@@ -83,3 +83,51 @@
     min-width: 0;
     min-height: 0;
 }
+
+/* Phone: one layout per orientation, whatever the saved button layout says
+   (the html[data-button-layout] selector matches the specificity of the rules
+   above; the preference itself is left untouched). Sizes use svh, the viewport
+   with the browser bars shown, so the dial does not resize while they slide. */
+@media (max-width: $kiosk-phone-narrow) {
+    /* portrait: dial on top, the three water types stacked below */
+    .screen,
+    :global(html[data-button-layout]) .screen {
+        --dial-size: min(68vw, 34svh);
+
+        height: auto;
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto auto;
+        gap: var(--kiosk-space-3);
+    }
+
+    .stage {
+        gap: var(--kiosk-space-3);
+        padding-top: var(--kiosk-space-2);
+    }
+
+    .status {
+        font-size: var(--kiosk-font-sm);
+    }
+}
+
+@media (max-height: $kiosk-phone-short) {
+    /* landscape: the water types always on the right, there is no room for a row */
+    .screen,
+    :global(html[data-button-layout]) .screen {
+        --dial-size: min(62svh, 40vw);
+
+        height: calc(100svh - 2 * var(--kiosk-space-3));
+        grid-template-columns: minmax(0, 1fr) clamp(13rem, 34vw, 18rem);
+        grid-template-rows: minmax(0, 1fr);
+        gap: var(--kiosk-space-3);
+    }
+
+    .stage {
+        gap: var(--kiosk-space-2);
+    }
+
+    .status {
+        min-height: 2.5rem;
+        font-size: var(--kiosk-font-sm);
+    }
+}
