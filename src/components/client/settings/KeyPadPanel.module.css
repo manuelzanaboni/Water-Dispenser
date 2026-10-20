@@ -260,6 +260,36 @@
     }
 }
 
+/* phone: the panel grows with its content and the page scrolls, so the keys
+   keep a touch-sized row instead of sharing a fixed height */
+@media (max-width: $kiosk-phone-narrow), (max-height: $kiosk-phone-short) {
+    .panel,
+    .done,
+    .confirm {
+        height: auto;
+    }
+
+    .display {
+        min-height: 3.5rem;
+        padding: 0 var(--kiosk-space-4);
+    }
+
+    .keys {
+        flex: none;
+        grid-auto-rows: 3.25rem;
+    }
+
+    .key {
+        font-size: 1.5rem;
+    }
+
+    .primary,
+    .secondary {
+        min-height: 3.5rem;
+        font-size: 1.125rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .key,
     .primary,

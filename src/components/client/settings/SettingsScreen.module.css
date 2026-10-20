@@ -123,6 +123,95 @@
     }
 }
 
+/* phone, portrait: menu as a 2×2 grid of compact entries, the chosen panel below;
+   the page scrolls (see AppShell) */
+@media (max-width: $kiosk-phone-narrow) {
+    .screen {
+        height: auto;
+        gap: var(--kiosk-space-3);
+    }
+
+    .title {
+        font-size: var(--kiosk-font-lg);
+    }
+
+    .body {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--kiosk-space-3);
+    }
+
+    .menu {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: var(--kiosk-space-2);
+    }
+
+    .item {
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-2) var(--kiosk-space-3);
+    }
+
+    .itemIcon {
+        width: 2.25rem;
+    }
+
+    .icon {
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+
+    .itemTitle {
+        font-size: var(--kiosk-font-sm);
+    }
+
+    .itemSubtitle {
+        display: none;
+    }
+
+    .panel {
+        overflow: visible;
+        padding: var(--kiosk-space-4);
+    }
+}
+
+/* phone, landscape: master-detail stays, with a narrower menu of titles only */
+@media (max-height: $kiosk-phone-short) {
+    .screen {
+        height: auto;
+    }
+
+    .body {
+        grid-template-columns: clamp(11rem, 28vw, 14rem) minmax(0, 1fr);
+    }
+
+    .item {
+        flex: none;
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-2) var(--kiosk-space-3);
+    }
+
+    .itemIcon {
+        width: 2.25rem;
+    }
+
+    .icon {
+        width: 1.375rem;
+        height: 1.375rem;
+    }
+
+    .itemTitle {
+        font-size: var(--kiosk-font-sm);
+    }
+
+    .itemSubtitle {
+        display: none;
+    }
+
+    .panel {
+        overflow: visible;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .item {
         transition: none;

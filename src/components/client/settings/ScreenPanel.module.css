@@ -100,6 +100,27 @@
     }
 }
 
+/* phone: the two choices stay side by side, just lower */
+@media (max-width: $kiosk-phone-narrow), (max-height: $kiosk-phone-short) {
+    /* the button layout is ignored on a phone (see Dispenser.module.css) */
+    .group[data-kiosk-only] {
+        display: none;
+    }
+
+    .panel {
+        gap: var(--kiosk-space-3);
+    }
+
+    .choice {
+        min-height: 3.5rem;
+        padding: 0 var(--kiosk-space-3);
+    }
+
+    .choiceLabel {
+        font-size: 1.0625rem;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     .choice {
         transition: none;

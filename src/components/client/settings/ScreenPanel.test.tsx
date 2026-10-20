@@ -56,6 +56,13 @@ describe("ScreenPanel", () => {
         expect(screen.getByRole("button", { name: "Scuro" })).toHaveAttribute("aria-pressed", "false");
     });
 
+    test("marks the button layout as a kiosk-only setting, hidden on a phone", () => {
+        render(<ScreenPanel />);
+
+        expect(screen.getByRole("group", { name: "Pulsanti tipo di acqua" })).toHaveAttribute("data-kiosk-only");
+        expect(screen.getByRole("group", { name: "Tema" })).not.toHaveAttribute("data-kiosk-only");
+    });
+
     test("offers no full screen switch: the kiosk browser is already full screen", () => {
         render(<ScreenPanel />);
 

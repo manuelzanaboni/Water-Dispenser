@@ -31,8 +31,15 @@ type Choice = {
     onSelect: () => void;
 };
 
-const ChoiceGroup = ({ title, choices }: { title: string; choices: Choice[] }) => (
-    <fieldset className={styles.group}>
+type ChoiceGroupProps = {
+    title: string;
+    choices: Choice[];
+    /* a setting that only means something on the kiosk display: hidden on a phone */
+    isKioskOnly?: boolean;
+};
+
+const ChoiceGroup = ({ title, choices, isKioskOnly = false }: ChoiceGroupProps) => (
+    <fieldset className={styles.group} data-kiosk-only={isKioskOnly || undefined}>
         <legend className={styles.legend}>{title}</legend>
         <div className={styles.choices}>
             {choices.map(({ label, detail, icon, isSelected, onSelect }) => (
@@ -72,7 +79,9 @@ export default function ScreenPanel() {
                 ]}
             />
 
+            {/* a phone always lays the dispenser out by its orientation */}
             <ChoiceGroup
+                isKioskOnly
                 title="Pulsanti tipo di acqua"
                 choices={[
                     {
