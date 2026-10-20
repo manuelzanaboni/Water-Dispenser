@@ -79,6 +79,29 @@
     background: var(--kiosk-line);
 }
 
+/* phone, portrait: three narrow tiles, tighter so the litres keep their line */
+@media (max-width: $kiosk-phone-narrow) {
+    .tiles {
+        gap: var(--kiosk-space-2);
+    }
+
+    .tile {
+        gap: var(--kiosk-space-2);
+        padding: var(--kiosk-space-3);
+    }
+
+    .value {
+        font-size: 1.5rem;
+    }
+
+    /* "Naturale · Ambiente" cannot fit a third of a phone: two lines instead of
+       the single clipped one the narrow-tile rule below asks for */
+    .tiles .label {
+        align-items: flex-start;
+        white-space: normal;
+    }
+}
+
 /* narrow tiles: the label must stay on one line, the icon is the first to go */
 @container (max-width: 14rem) {
     .iconBox {

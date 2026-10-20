@@ -52,3 +52,31 @@
         font-size: var(--kiosk-font-xs);
     }
 }
+
+/* phone: the page grows and scrolls (see AppShell), the cards stack in portrait */
+@media (max-width: $kiosk-phone-narrow) {
+    .page {
+        height: auto;
+        gap: var(--kiosk-space-3);
+    }
+
+    .header {
+        flex-wrap: wrap;
+        gap: var(--kiosk-space-2);
+    }
+
+    .title {
+        font-size: var(--kiosk-font-lg);
+    }
+
+    .cards {
+        grid-template-columns: minmax(0, 1fr);
+        gap: var(--kiosk-space-3);
+    }
+}
+
+@media (max-height: $kiosk-phone-short) {
+    .page {
+        height: auto;
+    }
+}

@@ -61,3 +61,17 @@
         font-size: var(--kiosk-font-sm);
     }
 }
+
+/* phone: the page scrolls, so a card gets a height of its own instead of a share
+   of the screen; the filter ring and the charts inside grow into it */
+@media (max-width: $kiosk-phone-narrow) {
+    .card {
+        min-height: 15rem;
+    }
+}
+
+@media (max-height: $kiosk-phone-short) {
+    .card {
+        min-height: 14rem;
+    }
+}
