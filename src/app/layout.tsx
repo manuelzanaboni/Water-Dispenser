@@ -5,9 +5,12 @@ import { connection } from "next/server";
 import "@/app/tokens.css";
 import "@/app/globals.css";
 
-// Import styles of packages that you've installed.
-// All packages except `@mantine/hooks` require styles imports
-import "@mantine/core/styles.css";
+// Mantine renders no component here (only the provider and its color scheme),
+// so only its base styles ship: reset, default --mantine-* variables, global classes.
+// A Mantine component used later needs its own sheet: @mantine/core/styles/<Component>.css
+import "@mantine/core/styles/baseline.css";
+import "@mantine/core/styles/default-css-variables.css";
+import "@mantine/core/styles/global.css";
 
 import { ColorSchemeScript, MantineProvider, createTheme, mantineHtmlProps } from "@mantine/core";
 
