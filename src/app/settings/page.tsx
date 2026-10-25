@@ -6,7 +6,7 @@ import SettingsScreen from "@/components/client/settings/SettingsScreen";
 import { getCurrentFilter, getTanks } from "@/service/db";
 import { loadSafely } from "@/service/loadSafely";
 
-import nextConfig from "../../../next.config";
+import packageJson from "../../../package.json";
 
 export default async function Settings() {
     // reads the db on every visit: the last filter and tank change from this very page
@@ -20,7 +20,7 @@ export default async function Settings() {
 
     return (
         <SettingsScreen
-            version={String(nextConfig?.publicRuntimeConfig?.version ?? "")}
+            version={packageJson.version}
             lastFilter={filter ? { qty: filter.qty, ts: filter.ts } : null}
             lastTank={lastTank ? { qty: lastTank.qty, ts: lastTank.ts } : null}
         />

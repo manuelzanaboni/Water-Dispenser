@@ -10,9 +10,9 @@ A touchscreen kiosk web app that runs *on* a physical water dispenser (BWT AQA d
 
 ```bash
 npm run dev          # dev server with Turbopack (uses .env.development — mocked GPIO/temperature)
-npm run build        # production build (standalone output)
+npm run build        # production build with Turbopack (standalone output)
 npm run start        # run the production build
-npm run lint         # next lint (eslint-config-next)
+npm run lint         # eslint . (flat config in eslint.config.mjs, eslint-config-next core-web-vitals)
 npm test             # Vitest + Testing Library (jsdom), once
 npm run test:watch   # same, in watch mode
 npm run screenshots  # regenerate screenshots/ (kiosk 1024×600 and iPhone 15 portrait/landscape) from a running dev server (needs local Chrome)
@@ -20,7 +20,7 @@ npm run screenshots  # regenerate screenshots/ (kiosk 1024×600 and iPhone 15 po
 
 Tests sit next to the code they cover (`*.test.ts(x)`). GPIO and SQLite are never touched by tests: `@/service/gpio` and `@/service/db` are mocked with `vi.mock`. Pure logic lives in small modules under `src/service/` (`dispense.ts`, `stats.ts`, `keypad.ts`, `buttonLayout.ts`) so it can be tested without React.
 
-Do not run `npm run build` while `npm run dev` is running: both write `.next/` and the dev server breaks until restarted.
+`next dev` writes to `.next/dev` and `next build` to `.next/`, so a build no longer breaks a running dev server. Inside the Claude Code sandbox `next build` hangs at "Creating an optimized production build" (Turbopack needs local IPC): run it outside the sandbox.
 
 ### Docker (production deploy to the device)
 
@@ -72,7 +72,7 @@ Every screen sits inside `shell/AppShell` (mounted by the root layout): a left `
 
 - `/` — `dispenser/Dispenser`: the `DispenseDial` (a round tap target with a CSS water animation, timer and estimated ml) and the `WaterTypeSelector`. Starting locks the navigation and the water type; a 1s guard ignores double taps; the valve closes by itself after `MAX_DISPENSE_SEC` (120s, `src/service/dispense.ts`); after a stop a summary shows for a few seconds. The water type buttons sit in a column on the right or in a row at the bottom, from the button layout preference.
 - `/stats` — a server page that loads everything and hands the computed results (`src/service/stats.ts`) to `stats/` cards: `MonthlyTiles`, `FilterGauge`, `TankCard` (client, steps through the tanks) and `FridgeCard`, all on one screen with no scrolling.
-- `/settings` — a server page loading the last filter and tank, rendering `settings/SettingsScreen`: a master-detail with `ScreenPanel` (theme and button layout; first and selected by default — there is no full screen switch, the kiosk browser already runs full screen), two `KeyPadPanel`s (new filter in litres, new CO₂ tank in grams, each asking for confirmation before saving) and `InfoPanel` (app version from `next.config.ts`'s `publicRuntimeConfig`, sourced from `package.json`).
+- `/settings` — a server page loading the last filter and tank, rendering `settings/SettingsScreen`: a master-detail with `ScreenPanel` (theme and button layout; first and selected by default — there is no full screen switch, the kiosk browser already runs full screen), two `KeyPadPanel`s (new filter in litres, new CO₂ tank in grams, each asking for confirmation before saving) and `InfoPanel` (app version imported from `package.json` by the settings page; Next 16 removed `publicRuntimeConfig`).
 
 `preferences/useButtonLayout` keeps the button layout (`column` / `row`) in `localStorage`; `BUTTON_LAYOUT_SCRIPT` (in the layout `<head>`) mirrors it on `<html data-button-layout>` before the first paint, and the dispenser CSS lays itself out from that attribute.
 
