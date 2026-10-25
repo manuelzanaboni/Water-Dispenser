@@ -12,8 +12,8 @@
         "screenshots": "node scripts/screenshots.mjs"
     },
     "dependencies": {
-        "@mantine/core": "^8.3.18",
-        "@mantine/hooks": "^8.3.18",
+        "@mantine/core": "^9.7.4",
+        "@mantine/hooks": "^9.7.4",
         "@tabler/icons-react": "^3.49.0",
         "next": "16.4.3",
         "react": "19.2.9",
