@@ -83,7 +83,7 @@ The UI font, Manrope (SIL Open Font License), ships in the repo at `src/app/font
 
 ## Build Docker image
 
-The Docker image (based on `node:24-bookworm-slim`) is meant to run on the dispenser's board: in the final stage of the `Dockerfile`, `wiringOP-next` (the `gpio` tool used to drive the relays) is compiled and installed, in addition to the Next.js standalone build.
+The Docker image (based on `node:24-trixie-slim`) is meant to run on the dispenser's board: in the final stage of the `Dockerfile`, `wiringOP-next` (the `gpio` tool used to drive the relays) is compiled and installed, in addition to the Next.js standalone build.
 
 To build the image and publish it to the local registry, use the `build-push.sh` script:
 

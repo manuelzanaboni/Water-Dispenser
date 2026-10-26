@@ -1,8 +1,9 @@
-FROM node:24-bookworm-slim AS base
+FROM node:24-trixie-slim AS base
 
 # Install dependencies only when needed
 FROM base AS deps
-# needed for sqlite3
+# sqlite3 installs its prebuilt binary (it needs glibc >= 2.38, trixie ships 2.41);
+# python3 and build-essential let node-gyp compile it when the download fails
 RUN apt update && apt install -y python3 build-essential
 WORKDIR /app
 

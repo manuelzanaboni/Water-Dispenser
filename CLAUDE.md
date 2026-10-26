@@ -28,7 +28,7 @@ Tests sit next to the code they cover (`*.test.ts(x)`). GPIO and SQLite are neve
 ./build-push.sh   # docker build, tag from package.json version, push to local registry 192.168.1.254:5000
 ```
 
-`Dockerfile` is a multi-stage build on `node:24-bookworm-slim`: the final `runner` stage additionally compiles and installs `wiringOP-next` (the `gpio` CLI used to control relays) and runs as UID 1000 on port 80. `docker-compose.yml` runs the container `privileged: true` and bind-mounts `/sys/bus/w1/devices` (temperature sensor) and `/etc/armbian-release`, so GPIO/temperature access only works when actually deployed to the SBC. `.claude/` and `screenshots/` are excluded from the build context.
+`Dockerfile` is a multi-stage build on `node:24-trixie-slim` (Debian 13: the prebuilt linux-arm64 binary of sqlite3 6 needs glibc >= 2.38, bookworm only has 2.36): the final `runner` stage additionally compiles and installs `wiringOP-next` (the `gpio` CLI used to control relays) and runs as UID 1000 on port 80. `docker-compose.yml` runs the container `privileged: true` and bind-mounts `/sys/bus/w1/devices` (temperature sensor) and `/etc/armbian-release`, so GPIO/temperature access only works when actually deployed to the SBC. `.claude/` and `screenshots/` are excluded from the build context.
 
 ## Environment configuration
 
